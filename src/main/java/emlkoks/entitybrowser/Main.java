@@ -1,35 +1,28 @@
 package emlkoks.entitybrowser;
 
+import emlkoks.entitybrowser.connection.SavedConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Main extends Application {
     static String driverClass = "com.mysql.jdbc.Driver.class";
     static String slang = "lang/pl_Polski.properties";
     public static Properties lang = new Properties();
+    public static Map<String, SavedConnection> savedConnections = new HashMap<>();
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
         ResourceBundle bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
         Parent root = FXMLLoader.load(getClass().getResource("/view/chooseEntities.fxml"), bundle);
-        final StackPane sp = new StackPane();
         Scene scene = new Scene(root, 500, 500);
 
 
-//
-//        sp.getChildren().add(bJarChooser);
 //        sp.getChildren().add(tJarChosed);
         primaryStage.setTitle("Entity Browser");
         primaryStage.setScene(scene);
@@ -38,6 +31,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        initialize();
 //        loadPropierties();
         launch(args);
 //        printDrivers();
@@ -74,6 +68,15 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void initialize(){
+        SavedConnection newsc = new SavedConnection();
+        newsc.setName("Test");
+        savedConnections.put(newsc.getName(), newsc);
+        SavedConnection newsc2 = new SavedConnection();
+        newsc2.setName("Test2");
+        savedConnections.put(newsc2.getName(), newsc2);
     }
 
 

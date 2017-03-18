@@ -1,12 +1,18 @@
 package emlkoks.entitybrowser.controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,5 +41,23 @@ public class ChooseEntities implements Initializable{
             File file = fileChooser.showOpenDialog(bChooseLib.getContextMenu());
             tChoosedLib.setText(file.getName());
         });
+    }
+
+    @FXML
+    private void newConnection(){
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(bChooseLib.getContextMenu());
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/view/newConnection.fxml"), resources);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene dialogScene = new Scene(root, 300, 200);
+        dialog.setTitle(resources.getString("newConnection.title"));
+        dialog.setScene(dialogScene);
+        dialog.show();
+        System.out.println("newConnection");
     }
 }

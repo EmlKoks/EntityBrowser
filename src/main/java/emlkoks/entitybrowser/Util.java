@@ -12,11 +12,11 @@ import java.util.zip.ZipInputStream;
  * Created by koks on 10.03.17.
  */
 public class Util {
-    public static String driversDir = "drivers/";
+    public static String driversDir = "connection/";
 
     static List<File> driverList(){
         List<File> driverList = new ArrayList<>();
-        for(File file : new File("./../drivers").listFiles()){
+        for(File file : new File("./../connection").listFiles()){
             String fileName = file.getName();
             if ("JAR".equals(fileName.substring(fileName.lastIndexOf(".")+1).toUpperCase()))
                 driverList.add(file);

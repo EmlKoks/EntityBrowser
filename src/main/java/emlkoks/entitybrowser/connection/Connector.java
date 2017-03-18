@@ -1,16 +1,14 @@
-package emlkoks.entitybrowser;
+package emlkoks.entitybrowser.connection;
 
-import emlkoks.entitybrowser.drivers.Driver;
+import emlkoks.entitybrowser.connection.Driver;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by koks on 10.03.17.
+ * Created by EmlKoks on 10.03.17.
  */
 public class Connector {
     public static EntityManagerFactory createConnection(Driver driver, String user, String pass, String url){

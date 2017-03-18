@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.drivers;
+package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Util;

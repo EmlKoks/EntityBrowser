@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emlkoks.entitybrowser.controllers.ChooseEntities">
-   <children>
-      <Button fx:id="bChooseLib" mnemonicParsing="false" text="%choose.lib" />
-      <TextField fx:id="tChoosedLib" editable="false" prefHeight="26.0" prefWidth="179.0" GridPane.columnIndex="1" />
-   </children>
-   <columnConstraints>
-      <ColumnConstraints />
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-   </rowConstraints>
-</GridPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emlkoks.entitybrowser.controllers.ChooseEntities">
+   <center>
+      <GridPane alignment="CENTER">
+         <children>
+            <Button fx:id="bChooseLib" mnemonicParsing="false" text="%choose.lib" />
+            <TextField fx:id="tChoosedLib" editable="false" prefHeight="26.0" prefWidth="179.0" GridPane.columnIndex="1" />
+         </children>
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+         </rowConstraints>
+      </GridPane>
+   </center>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="%menu.file">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#newConnection" text="%menu.file.new_connection" />
+               </items></Menu>
+          <Menu mnemonicParsing="false" text="%menu.help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="%menu.help.about" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
