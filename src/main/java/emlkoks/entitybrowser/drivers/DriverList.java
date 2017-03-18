@@ -3,9 +3,7 @@ package emlkoks.entitybrowser.drivers;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by koks on 10.03.17.
- */
+
 public class DriverList {
     private static Map<String, Driver> drivers = new HashMap<>();
 
