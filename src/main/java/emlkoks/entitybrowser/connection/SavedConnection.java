@@ -1,5 +1,7 @@
 package emlkoks.entitybrowser.connection;
 
+import javax.xml.bind.annotation.*;
+
 /**
  * Created by EmlKoks on 18.03.17.
  */

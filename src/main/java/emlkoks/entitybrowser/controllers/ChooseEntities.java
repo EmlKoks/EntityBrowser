@@ -54,7 +54,7 @@ public class ChooseEntities implements Initializable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene dialogScene = new Scene(root, 300, 200);
+        Scene dialogScene = new Scene(root);
         dialog.setTitle(resources.getString("newConnection.title"));
         dialog.setScene(dialogScene);
         dialog.show();

@@ -1,12 +1,17 @@
 package emlkoks.entitybrowser;
 
-import emlkoks.entitybrowser.connection.SavedConnection;
+import emlkoks.entitybrowser.connection.DriverList;
+import emlkoks.entitybrowser.connection.SavedConnectionList;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.util.*;
 
@@ -14,7 +19,8 @@ public class Main extends Application {
     static String driverClass = "com.mysql.jdbc.Driver.class";
     static String slang = "lang/pl_Polski.properties";
     public static Properties lang = new Properties();
-    public static Map<String, SavedConnection> savedConnections = new HashMap<>();
+    public static SavedConnectionList savedConnections = new SavedConnectionList();
+    public static DriverList driverList = new DriverList();
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
@@ -31,9 +37,9 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        initialize();
-//        loadPropierties();
-        launch(args);
+        try {
+            initialize();
+            launch(args);
 //        printDrivers();
 //        Driver driver = DriverList.getDriver("MySQL");
 //        String url = "jdbc:mysql://localhost/adress_book";
@@ -47,6 +53,9 @@ public class Main extends Application {
 //        EntityManager em = factory.createEntityManager();
 //        List<Object[]> res = em.createNativeQuery("Select * from users").getResultList();
 //        System.out.println("res = " + res);
+        } catch (Exception e){
+            System.out.println("dupa");
+        }
     }
 
     private static void loadPropierties(){
@@ -71,13 +80,37 @@ public class Main extends Application {
     }
 
     private static void initialize(){
-        SavedConnection newsc = new SavedConnection();
-        newsc.setName("Test");
-        savedConnections.put(newsc.getName(), newsc);
-        SavedConnection newsc2 = new SavedConnection();
-        newsc2.setName("Test2");
-        savedConnections.put(newsc2.getName(), newsc2);
+        unmarshal();
+//        loadPropierties();
     }
+
+    public static void marshal(){
+        try {
+            File file = new File(Util.savedConnection);
+            JAXBContext jaxbContext = JAXBContext.newInstance(SavedConnectionList.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(savedConnections, file);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void unmarshal(){
+        try {
+            File file = new File(Util.savedConnection);
+            JAXBContext jaxbContext = JAXBContext.newInstance(SavedConnectionList.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            savedConnections = (SavedConnectionList) jaxbUnmarshaller.unmarshal(file);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

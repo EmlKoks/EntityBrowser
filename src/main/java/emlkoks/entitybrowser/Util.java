@@ -13,6 +13,7 @@ import java.util.zip.ZipInputStream;
  */
 public class Util {
     public static String driversDir = "connection/";
+    public static String savedConnection = "conf/savedConnection.xml";
 
     static List<File> driverList(){
         List<File> driverList = new ArrayList<>();
@@ -35,5 +36,8 @@ public class Util {
                 System.out.println("className = " + className);
             }
         }
+    }
+    public static boolean isNullOrEmpty(String s){
+        return s==null || s.isEmpty();
     }
 }

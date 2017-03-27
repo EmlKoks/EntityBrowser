@@ -1,9 +1,6 @@
 package emlkoks.entitybrowser.connection;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class DriverList {
@@ -23,6 +20,10 @@ public class DriverList {
 
     public Driver getDriver(String name){
         return drivers.get(name);
+    }
+
+    public String[] getDriverNames(){
+        return Arrays.copyOf(drivers.keySet().toArray(), drivers.size(), String[].class);
     }
 
 }
