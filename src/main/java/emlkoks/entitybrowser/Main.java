@@ -107,7 +107,11 @@ public class Main extends Application {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return clazz.cast(jaxbUnmarshaller.unmarshal(file));
         } catch (JAXBException e) {
-            e.printStackTrace();
+            try {
+                return clazz.newInstance();
+            } catch (ReflectiveOperationException e1) {
+                e1.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

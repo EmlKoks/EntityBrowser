@@ -48,6 +48,7 @@ public class NewConnectionController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.resources = resources;
         setSavedConnection();
         driverList.getItems().addAll(Main.drivers.getDriverNames());
     }
@@ -127,7 +128,7 @@ public class NewConnectionController implements Initializable{
             e.printStackTrace();
         }
         Scene dialogScene = new Scene(root);
-        dialog.setTitle(resources.getString("newConnection.title"));
+        dialog.setTitle(resources.getString("newDriver.title"));
         dialog.setScene(dialogScene);
         dialog.show();
     }
