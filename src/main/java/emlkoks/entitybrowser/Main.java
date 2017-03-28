@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser;
 
 import emlkoks.entitybrowser.connection.DriverList;
+import emlkoks.entitybrowser.connection.SavedConnection;
 import emlkoks.entitybrowser.connection.SavedConnectionList;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +21,7 @@ public class Main extends Application {
     static String slang = "lang/pl_Polski.properties";
     public static Properties lang = new Properties();
     public static SavedConnectionList savedConnections = new SavedConnectionList();
-    public static DriverList driverList = new DriverList();
+    public static DriverList drivers = new DriverList();
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
@@ -80,7 +81,8 @@ public class Main extends Application {
     }
 
     private static void initialize(){
-        unmarshal();
+        drivers = unmarshal(DriverList.class, Util.drivers);
+        savedConnections = unmarshal(SavedConnectionList.class, Util.savedConnection);
 //        loadPropierties();
     }
 
@@ -98,17 +100,18 @@ public class Main extends Application {
         }
     }
 
-    private static void unmarshal(){
+    private static <T> T unmarshal(Class<T> clazz, String fileName){
         try {
-            File file = new File(Util.savedConnection);
-            JAXBContext jaxbContext = JAXBContext.newInstance(SavedConnectionList.class);
+            File file = new File(fileName);
+            JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            savedConnections = (SavedConnectionList) jaxbUnmarshaller.unmarshal(file);
+            return clazz.cast(jaxbUnmarshaller.unmarshal(file));
         } catch (JAXBException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 

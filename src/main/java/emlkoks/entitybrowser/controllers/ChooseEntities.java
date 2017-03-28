@@ -58,6 +58,5 @@ public class ChooseEntities implements Initializable{
         dialog.setTitle(resources.getString("newConnection.title"));
         dialog.setScene(dialogScene);
         dialog.show();
-        System.out.println("newConnection");
     }
 }

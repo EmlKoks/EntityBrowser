@@ -14,6 +14,7 @@ import java.util.zip.ZipInputStream;
 public class Util {
     public static String driversDir = "connection/";
     public static String savedConnection = "conf/savedConnection.xml";
+    public static String drivers = "conf/drivers.xml";
 
     static List<File> driverList(){
         List<File> driverList = new ArrayList<>();

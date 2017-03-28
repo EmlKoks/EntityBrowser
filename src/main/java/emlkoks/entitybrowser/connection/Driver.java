@@ -14,9 +14,12 @@ import java.net.URLClassLoader;
  * Created by koks on 10.03.17.
  */
 public class Driver {
+    String name;
     String lib;
     String className;
     String url;
+
+    public Driver(){}
 
     public Driver(String lib, String className, String url) {
         this.lib = lib;
@@ -55,6 +58,14 @@ public class Driver {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void loadDriver(){

@@ -46,7 +46,12 @@
                    <children>
                        <Label text="%newConnection.driver" />
                        <Label text="%newConnection.url" GridPane.rowIndex="1" />
-                       <ChoiceBox fx:id="driverList" prefWidth="150.0" GridPane.columnIndex="1" />
+                       <HBox prefWidth="150.0" GridPane.columnIndex="1">
+                        <children>
+                            <ChoiceBox fx:id="driverList" prefHeight="26.0" prefWidth="134.0" />
+                        <Button mnemonicParsing="false" onAction="#addDriver" text="+" />
+                        </children>
+                       </HBox>
                        <Label text="%newConnection.user" GridPane.rowIndex="2" />
                        <TextField fx:id="url" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                        <TextField fx:id="user" GridPane.columnIndex="1" GridPane.rowIndex="2" />

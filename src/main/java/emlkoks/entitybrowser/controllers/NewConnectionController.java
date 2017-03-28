@@ -5,11 +5,16 @@ import emlkoks.entitybrowser.Util;
 import emlkoks.entitybrowser.connection.SavedConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +24,9 @@ import java.util.ResourceBundle;
  * Created by EmlKoks on 18.03.17.
  */
 public class NewConnectionController implements Initializable{
+
+    @FXML
+    private ResourceBundle resources;
 
     @FXML
     BorderPane newConnectionDialog;
@@ -41,7 +49,7 @@ public class NewConnectionController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setSavedConnection();
-        driverList.getItems().addAll(Main.driverList.getDriverNames());
+        driverList.getItems().addAll(Main.drivers.getDriverNames());
     }
 
     @FXML
@@ -85,7 +93,7 @@ public class NewConnectionController implements Initializable{
                 newConnection.setUrl(url.getText());
                 newConnection.setUser(user.getText());
                 newConnection.setPassword(password.getText());
-                newConnection.setDriver(Main.driverList.getDriver(driverList.getValue()));
+                newConnection.setDriver(Main.drivers.getDriver(driverList.getValue()));
                 addNewConnection(newConnection);
                 return;
             }
@@ -93,17 +101,34 @@ public class NewConnectionController implements Initializable{
     }
 
     @FXML
-    public void connect(ActionEvent event){
+    public void connect(){
         ((Stage)newConnectionDialog.getScene().getWindow()).close();
     }
 
     @FXML
-    public void closeDialog(ActionEvent event){
+    public void closeDialog(){
         ((Stage)newConnectionDialog.getScene().getWindow()).close();
     }
 
     private void addNewConnection(SavedConnection sc){
-        Main.savedConnections.getList().add(sc);
+        Main.savedConnections.add(sc);
         savedConnection.getItems().add(sc.getName());
+    }
+
+    @FXML
+    public void addDriver(){
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(newConnectionDialog.getScene().getWindow());
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/view/newDriver.fxml"), resources);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene dialogScene = new Scene(root);
+        dialog.setTitle(resources.getString("newConnection.title"));
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 }

@@ -24,6 +24,7 @@ public class SavedConnectionList{
 
     public void add(SavedConnection sc){
         list.add(sc);
+        Main.marshal();
     }
 
     public void remove(String name){

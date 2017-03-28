@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <savedConnectionList>
     <savedConnection>
-        <name>Test</name>
+        <driver>asx</driver>
+        <name>re</name>
+        <password>3e2</password>
+        <url>ewf</url>
+        <user>qwe</user>
     </savedConnection>
 </savedConnectionList>

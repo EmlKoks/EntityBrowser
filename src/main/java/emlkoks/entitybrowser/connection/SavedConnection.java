@@ -1,6 +1,9 @@
 package emlkoks.entitybrowser.connection;
 
-import javax.xml.bind.annotation.*;
+import emlkoks.entitybrowser.Main;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Created by EmlKoks on 18.03.17.
@@ -12,12 +15,24 @@ public class SavedConnection {
     private String user;
     private String password;
 
+
+    @XmlTransient
     public Driver getDriver() {
         return driver;
     }
 
+    @XmlElement(name = "driver")
+    public String getDriverS() {
+        return driver.getName();
+    }
+
+
     public void setDriver(Driver driver) {
         this.driver = driver;
+    }
+
+    public void setDriverS(String driverName){
+        driver = Main.drivers.getDriver(driverName);
     }
 
     public String getUrl() {
