@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.Main;
+import emlkoks.entitybrowser.Util;
 
 import javax.xml.bind.annotation.*;
 import java.util.*;
@@ -24,7 +25,7 @@ public class SavedConnectionList{
 
     public void add(SavedConnection sc){
         list.add(sc);
-        Main.marshal();
+        Main.marshal(this, Util.savedConnection);
     }
 
     public void remove(String name){
@@ -34,6 +35,6 @@ public class SavedConnectionList{
                 break;
             }
         }
-        Main.marshal();
+        Main.marshal(this, Util.savedConnection);
     }
 }

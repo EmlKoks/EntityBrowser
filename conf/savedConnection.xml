@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <savedConnectionList>
     <savedConnection>
-        <driver>asx</driver>
-        <name>re</name>
-        <password>3e2</password>
-        <url>ewf</url>
-        <user>qwe</user>
+        <driver>MySQL</driver>
+        <name>we</name>
+        <password>dwe</password>
+        <url>qwr</url>
+        <user>rewf</user>
+    </savedConnection>
+    <savedConnection>
+        <driver>MySQL</driver>
+        <name>ewr</name>
+        <password>qwe</password>
+        <url>sdf</url>
+        <user>wef</user>
     </savedConnection>
 </savedConnectionList>

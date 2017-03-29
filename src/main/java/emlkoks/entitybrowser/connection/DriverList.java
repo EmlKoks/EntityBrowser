@@ -1,13 +1,23 @@
 package emlkoks.entitybrowser.connection;
 
-import java.util.*;
+import emlkoks.entitybrowser.Main;
+import emlkoks.entitybrowser.Util;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DriverList {
-    private Map<String, Driver> drivers = new HashMap<>();
+    private List<Driver> drivers = new ArrayList<>();
 
     public  void initalize(){
-        drivers.put("MySQL", new Driver("mysql-connector-java-5.1.41-bin.jar", "com.mysql.jdbc.Driver", "url"));
+        Driver d = new Driver("mysql-connector-java-5.1.41-bin.jar", "com.mysql.jdbc.Driver", "url");
+        d.setName("MySQL");
+        drivers.add(d);
     }
 
     public DriverList(){
@@ -15,11 +25,31 @@ public class DriverList {
     }
 
     public Driver getDriver(String name){
-        return drivers.get(name);
+        if(Util.isNullOrEmpty(name)) return null;
+        for(Driver d : drivers)
+            if(name.equals(d.getName()))
+                return d;
+        return null;
     }
 
-    public String[] getDriverNames(){
-        return Arrays.copyOf(drivers.keySet().toArray(), drivers.size(), String[].class);
+    public List<String> getDriverNames(){
+        List<String> names = new ArrayList<>();
+        drivers.forEach(x -> names.add(x.getName()));
+        return names;
+    }
+
+    public void add(Driver sc){
+        drivers.add(sc);
+        Main.marshal(this, Util.drivers);
+    }
+
+
+    public List<Driver> getDrivers() {
+        return drivers;
+    }
+
+    public void setDrivers(List<Driver> drivers) {
+        this.drivers = drivers;
     }
 
 }

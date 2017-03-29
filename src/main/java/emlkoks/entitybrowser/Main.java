@@ -86,13 +86,13 @@ public class Main extends Application {
 //        loadPropierties();
     }
 
-    public static void marshal(){
+    public static void marshal(Object obj, String fileName){
         try {
-            File file = new File(Util.savedConnection);
-            JAXBContext jaxbContext = JAXBContext.newInstance(SavedConnectionList.class);
+            File file = new File(fileName);
+            JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(savedConnections, file);
+            jaxbMarshaller.marshal(obj, file);
         } catch (JAXBException e) {
             e.printStackTrace();
         } catch (Exception e) {

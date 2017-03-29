@@ -3,7 +3,6 @@ package emlkoks.entitybrowser.controllers;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Util;
 import emlkoks.entitybrowser.connection.SavedConnection;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,7 +28,7 @@ public class NewConnectionController implements Initializable{
     private ResourceBundle resources;
 
     @FXML
-    BorderPane newConnectionDialog;
+    private BorderPane newConnectionDialog;
 
     @FXML
     private ListView<String> savedConnection;
@@ -74,11 +73,11 @@ public class NewConnectionController implements Initializable{
     }
 
     @FXML
-    public void saveConnection(ActionEvent event){
-
+    public void saveConnection(){
         while(true){
             TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("2");
+            dialog.setTitle(resources.getString("newConnection.save.title"));
+            dialog.setContentText(resources.getString("newConnection.save.content"));
             Optional<String> result = dialog.showAndWait();
             if(!result.isPresent()) return;
             if(Util.isNullOrEmpty(result.get())) continue;
@@ -121,11 +120,12 @@ public class NewConnectionController implements Initializable{
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(newConnectionDialog.getScene().getWindow());
-        Parent root = null;
+        Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("/view/newDriver.fxml"), resources);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         Scene dialogScene = new Scene(root);
         dialog.setTitle(resources.getString("newDriver.title"));

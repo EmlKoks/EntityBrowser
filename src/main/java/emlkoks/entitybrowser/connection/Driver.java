@@ -41,7 +41,7 @@ public class Driver {
     }
 
     public void setLib(String lib) {
-
+        this.lib = lib;
     }
 
     public String getClassName() {

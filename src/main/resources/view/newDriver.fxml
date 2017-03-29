@@ -22,25 +22,25 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="%newDriver.name" GridPane.rowIndex="1" />
-      <Label text="%newDriver.class" GridPane.rowIndex="2" />
-      <Label text="%newDriver.url_template" GridPane.rowIndex="3" />
-      <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label text="%newDriver.lib" />
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
-         <children>
-            <TextField fx:id="tDriver" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="195.0" />
-            <Button mnemonicParsing="false" onAction="#chooseLib" text="%choose_file" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-         <children>
-            <Button mnemonicParsing="false" onAction="#save" text="%save" />
-            <Button mnemonicParsing="false" text="%cancel" />
-         </children>
-      </HBox>
+    <Label text="%newDriver.lib" />
+    <Label text="%newDriver.name" GridPane.rowIndex="1" />
+    <Label text="%newDriver.class" GridPane.rowIndex="2" />
+    <Label text="%newDriver.url_template" GridPane.rowIndex="3" />
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+       <children>
+           <TextField fx:id="driver" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="195.0" />
+           <Button mnemonicParsing="false" onAction="#chooseLib" text="%choose_file" />
+       </children>
+    </HBox>
+    <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <TextField fx:id="clazz" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <TextField fx:id="urlTemplate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+     <children>
+        <Button mnemonicParsing="false" onAction="#save" text="%save" />
+        <Button mnemonicParsing="false" onAction="#closeDialog" text="%cancel" />
+     </children>
+    </HBox>
    </children>
    <padding>
       <Insets left="20.0" right="20.0" top="20.0" />
