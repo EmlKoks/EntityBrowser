@@ -1,69 +1,48 @@
 package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.Main;
+import emlkoks.entitybrowser.Util;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
+import java.util.*;
 
 /**
- * Created by EmlKoks on 18.03.17.
+ * Created by EmlKoks on 19.03.17.
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SavedConnection {
-    private String name;
-    private Driver driver;
-    private String url;
-    private String user;
-    private String password;
+    @XmlElement(name = "connection")
+    private List<Connection> list = new ArrayList<>();
 
-
-    @XmlTransient
-    public Driver getDriver() {
-        return driver;
+    public List<Connection> getList() {
+        return list;
     }
 
-    @XmlElement(name = "driver")
-    public String getDriverS() {
-        return driver.getName();
+    public void setList(List<Connection> list) {
+        this.list = list;
     }
 
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public void add(Connection sc){
+        list.add(sc);
+        Main.marshal(this, Util.savedConnection);
     }
 
-    public void setDriverS(String driverName){
-        driver = Main.drivers.getDriver(driverName);
+    public void remove(String name){
+        for(Connection sc : list){
+            if(name.equals(sc.getName())){
+                list.remove(sc);
+                break;
+            }
+        }
+        Main.marshal(this, Util.savedConnection);
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Connection getConnection(String name){
+        if(Util.isNullOrEmpty(name)) return null;
+        for(Connection d : list)
+            if(name.equals(d.getName()))
+                return d;
+        return null;
     }
 }

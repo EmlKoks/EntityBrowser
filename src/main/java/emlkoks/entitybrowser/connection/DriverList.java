@@ -15,9 +15,9 @@ public class DriverList {
     private List<Driver> drivers = new ArrayList<>();
 
     public  void initalize(){
-        Driver d = new Driver("mysql-connector-java-5.1.41-bin.jar", "com.mysql.jdbc.Driver", "url");
-        d.setName("MySQL");
-        drivers.add(d);
+//        Driver d = new Driver("mysql-connector-java-5.1.41-bin.jar", "com.mysql.jdbc.Driver", "url");
+//        d.setName("MySQL");
+//        drivers.add(d);
     }
 
     public DriverList(){

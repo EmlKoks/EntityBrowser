@@ -2,7 +2,9 @@ package emlkoks.entitybrowser.controllers;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Util;
-import emlkoks.entitybrowser.connection.SavedConnection;
+import emlkoks.entitybrowser.connection.Connector;
+import emlkoks.entitybrowser.connection.Driver;
+import emlkoks.entitybrowser.connection.Connection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,9 +12,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -50,6 +55,19 @@ public class NewConnectionController implements Initializable{
         this.resources = resources;
         setSavedConnection();
         driverList.getItems().addAll(Main.drivers.getDriverNames());
+        driverList.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Driver driver = Main.drivers.getDriver(newValue);
+            url.setText(driver.getUrl());
+        });
+
+        savedConnection.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Connection connection = Main.savedConnections.getConnection(newValue);
+            if(connection == null) return;
+            driverList.setValue(connection.getDriver().getName());
+            url.setText(connection.getUrl());
+            user.setText(connection.getUser());
+            password.setText(connection.getPassword());
+        });
     }
 
     @FXML
@@ -68,7 +86,7 @@ public class NewConnectionController implements Initializable{
     }
 
     private void setSavedConnection(){
-        for(SavedConnection sc : Main.savedConnections.getList())
+        for(Connection sc : Main.savedConnections.getList())
             savedConnection.getItems().add(sc.getName());
     }
 
@@ -82,13 +100,13 @@ public class NewConnectionController implements Initializable{
             if(!result.isPresent()) return;
             if(Util.isNullOrEmpty(result.get())) continue;
             boolean exist = false;
-            for(SavedConnection sc : Main.savedConnections.getList())
+            for(Connection sc : Main.savedConnections.getList())
                 if(sc.getName().equals(result.get())){
                     exist=true;
                     break;
                 }
             if (!exist){
-                SavedConnection newConnection = new SavedConnection();
+                Connection newConnection = new Connection();
                 newConnection.setName(result.get());
                 newConnection.setUrl(url.getText());
                 newConnection.setUser(user.getText());
@@ -102,6 +120,35 @@ public class NewConnectionController implements Initializable{
 
     @FXML
     public void connect(){
+        if(Util.isNullOrEmpty(driverList.getValue()) ||
+                Util.isNullOrEmpty(url.getText()) ||
+                Util.isNullOrEmpty(user.getText()) ||
+                Util.isNullOrEmpty(password.getText())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(resources.getString("newDriver.error.title"));
+            alert.setContentText(resources.getString("newDriver.error.content"));
+            alert.show();
+            return;
+        }
+        Connection connection = new Connection();
+        connection.setDriver(Main.drivers.getDriver(driverList.getValue()));
+        connection.setUrl(url.getText());
+        connection.setUser(user.getText());
+        connection.setPassword(password.getText());
+        EntityManagerFactory emf = null;
+        try {
+            emf = Connector.createConnection(connection);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        if(emf == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Błąd podczas połączenia");
+            alert.setContentText("Wystąpił błąd podczas połączenia");
+            alert.show();
+            return;
+        }
+        Main.getMainController().addTab(emf);
         ((Stage)newConnectionDialog.getScene().getWindow()).close();
     }
 
@@ -110,7 +157,7 @@ public class NewConnectionController implements Initializable{
         ((Stage)newConnectionDialog.getScene().getWindow()).close();
     }
 
-    private void addNewConnection(SavedConnection sc){
+    private void addNewConnection(Connection sc){
         Main.savedConnections.add(sc);
         savedConnection.getItems().add(sc.getName());
     }

@@ -88,18 +88,5 @@ public class Driver {
             e.printStackTrace();
         }
 
-
-//        try {
-//            loader.loadClass(getClassName());
-//
-//            Class.forName(getClassName(), true, loader).newInstance();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//        Class<?> clazz = Class.forName()
     }
 }

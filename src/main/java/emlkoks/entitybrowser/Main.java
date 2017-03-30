@@ -2,7 +2,7 @@ package emlkoks.entitybrowser;
 
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnection;
-import emlkoks.entitybrowser.connection.SavedConnectionList;
+import emlkoks.entitybrowser.controllers.MainWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,18 +17,19 @@ import java.io.*;
 import java.util.*;
 
 public class Main extends Application {
-    static String driverClass = "com.mysql.jdbc.Driver.class";
     static String slang = "lang/pl_Polski.properties";
     public static Properties lang = new Properties();
-    public static SavedConnectionList savedConnections = new SavedConnectionList();
+    public static SavedConnection savedConnections = new SavedConnection();
     public static DriverList drivers = new DriverList();
+    private static MainWindowController mainController;
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
         ResourceBundle bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
-        Parent root = FXMLLoader.load(getClass().getResource("/view/chooseEntities.fxml"), bundle);
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent root = fxmlLoader.load(getClass().getResource("/view/mainWindow.fxml"), bundle);
         Scene scene = new Scene(root, 500, 500);
-
+        Object x = fxmlLoader.getController();
 
 //        sp.getChildren().add(tJarChosed);
         primaryStage.setTitle("Entity Browser");
@@ -41,20 +42,12 @@ public class Main extends Application {
         try {
             initialize();
             launch(args);
-//        printDrivers();
-//        Driver driver = DriverList.getDriver("MySQL");
-//        String url = "jdbc:mysql://localhost/adress_book";
-//        try {
-//            ClassLoader.getSystemClassLoader().loadClass(driver.getClassName());
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
-//        EntityManagerFactory factory = Connector.createConnection(driver, "root", "admin", url);
+//        EntityManagerFactory factory = Connector.createConnection(connection);
 //        EntityManager em = factory.createEntityManager();
 //        List<Object[]> res = em.createNativeQuery("Select * from users").getResultList();
 //        System.out.println("res = " + res);
         } catch (Exception e){
+            e.printStackTrace();
             System.out.println("dupa");
         }
     }
@@ -82,7 +75,7 @@ public class Main extends Application {
 
     private static void initialize(){
         drivers = unmarshal(DriverList.class, Util.drivers);
-        savedConnections = unmarshal(SavedConnectionList.class, Util.savedConnection);
+        savedConnections = unmarshal(SavedConnection.class, Util.savedConnection);
 //        loadPropierties();
     }
 
@@ -108,6 +101,7 @@ public class Main extends Application {
             return clazz.cast(jaxbUnmarshaller.unmarshal(file));
         } catch (JAXBException e) {
             try {
+                e.printStackTrace();
                 return clazz.newInstance();
             } catch (ReflectiveOperationException e1) {
                 e1.printStackTrace();
@@ -118,6 +112,11 @@ public class Main extends Application {
         return null;
     }
 
+    public static MainWindowController getMainController() {
+        return mainController;
+    }
 
-
+    public static void setMainController(MainWindowController mainController) {
+        Main.mainController = mainController;
+    }
 }

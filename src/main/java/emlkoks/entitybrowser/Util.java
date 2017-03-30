@@ -12,7 +12,7 @@ import java.util.zip.ZipInputStream;
  * Created by koks on 10.03.17.
  */
 public class Util {
-    public static String driversDir = "connection/";
+    public static String driversDir = "drivers/";
     public static String savedConnection = "conf/savedConnection.xml";
     public static String drivers = "conf/drivers.xml";
 
