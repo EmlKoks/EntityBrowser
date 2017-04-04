@@ -1,6 +1,5 @@
 package emlkoks.entitybrowser.connection;
 
-import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Util;
 
 import java.io.File;
@@ -69,24 +68,13 @@ public class Driver {
     }
 
     public void loadDriver(){
-
-        URL[] zz = new URL[]{getLibURL()};
-        ClassLoader loader = new URLClassLoader(zz, Main.class.getClassLoader());
-
-        Method method = null;
+        Method method;
         try {
-            method =URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        method.setAccessible(true);
-        try {
+            method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+            method.setAccessible(true);
             method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{getLibURL()});
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
-
     }
 }

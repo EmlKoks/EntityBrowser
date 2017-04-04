@@ -3,6 +3,7 @@ package emlkoks.entitybrowser;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnection;
 import emlkoks.entitybrowser.controllers.MainWindowController;
+import emlkoks.entitybrowser.entities.EntityList;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,7 @@ public class Main extends Application {
     public static SavedConnection savedConnections = new SavedConnection();
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;
+    public static EntityList entityList = new EntityList();
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
@@ -115,6 +117,8 @@ public class Main extends Application {
     public static MainWindowController getMainController() {
         return mainController;
     }
+
+
 
     public static void setMainController(MainWindowController mainController) {
         Main.mainController = mainController;

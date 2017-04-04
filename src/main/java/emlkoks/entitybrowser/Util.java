@@ -26,7 +26,7 @@ public class Util {
         return driverList;
     }
 
-    static void printClasses(File driver) throws IOException {
+    public static void printClasses(File driver) throws IOException {
         List<String> classNames = new ArrayList<String>();
         ZipInputStream zip = new ZipInputStream(new FileInputStream(driver));
         for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {

@@ -48,6 +48,7 @@ public class NewDriverController implements Initializable{
     @FXML
     public void chooseLib() {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar");
         fileChooser.setSelectedExtensionFilter(exFilter);
         lib = fileChooser.showOpenDialog(newDriverDialog.getScene().getWindow());
