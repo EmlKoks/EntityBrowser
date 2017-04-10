@@ -64,6 +64,7 @@
                </GridPane>
                <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                <children>
+                  <Button mnemonicParsing="false" onAction="#testConnection" text="%test" />
                   <Button mnemonicParsing="false" onAction="#saveConnection" text="%save" />
                   <Button mnemonicParsing="false" onAction="#connect" text="%newConnection.connect" />
                   <Button mnemonicParsing="false" onAction="#closeDialog" text="%cancel" />

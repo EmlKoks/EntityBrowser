@@ -3,7 +3,6 @@ package emlkoks.entitybrowser;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnection;
 import emlkoks.entitybrowser.controllers.MainWindowController;
-import emlkoks.entitybrowser.entities.EntityList;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,7 +22,6 @@ public class Main extends Application {
     public static SavedConnection savedConnections = new SavedConnection();
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;
-    public static EntityList entityList = new EntityList();
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
@@ -31,9 +29,6 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/view/mainWindow.fxml"), bundle);
         Scene scene = new Scene(root, 500, 500);
-        Object x = fxmlLoader.getController();
-
-//        sp.getChildren().add(tJarChosed);
         primaryStage.setTitle("Entity Browser");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -44,10 +39,6 @@ public class Main extends Application {
         try {
             initialize();
             launch(args);
-//        EntityManagerFactory factory = Connector.createConnection(connection);
-//        EntityManager em = factory.createEntityManager();
-//        List<Object[]> res = em.createNativeQuery("Select * from users").getResultList();
-//        System.out.println("res = " + res);
         } catch (Exception e){
             e.printStackTrace();
             System.out.println("dupa");
@@ -62,16 +53,6 @@ public class Main extends Application {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static void printDrivers(){
-        for(File driver : Util.driverList()){
-            try {
-                Util.printClasses(driver);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -117,8 +98,6 @@ public class Main extends Application {
     public static MainWindowController getMainController() {
         return mainController;
     }
-
-
 
     public static void setMainController(MainWindowController mainController) {
         Main.mainController = mainController;

@@ -2,6 +2,7 @@ package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.Util;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,10 +14,12 @@ import java.net.URLClassLoader;
  * Created by koks on 10.03.17.
  */
 public class Driver {
-    String name;
-    String lib;
-    String className;
-    String url;
+    private String name;
+    private String lib;
+    private String className;
+    private String url;
+    @XmlTransient
+    private boolean wasLoaded=false;
 
     public Driver(){}
 
@@ -68,11 +71,13 @@ public class Driver {
     }
 
     public void loadDriver(){
+        if(wasLoaded) return;
         Method method;
         try {
             method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
             method.setAccessible(true);
             method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{getLibURL()});
+            wasLoaded=true;
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }

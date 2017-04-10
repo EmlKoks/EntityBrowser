@@ -1,21 +1,20 @@
 package emlkoks.entitybrowser.controllers;
 
 import emlkoks.entitybrowser.Main;
+import emlkoks.entitybrowser.connection.Connection;
+import emlkoks.entitybrowser.session.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -34,12 +33,27 @@ public class MainWindowController implements Initializable{
     private ChoiceBox<String> entityList;
 
     @FXML
+    private ChoiceBox<String> filters;
+
+    @FXML
+    private SplitPane centerContent;
+
+    @FXML
     private ResourceBundle resources;
+
+    @FXML
+    private VBox filterList;
+
+    private Session session;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Main.setMainController(this);
         this.resources=resources;
+        entityList.valueProperty().addListener((observable, oldValue, newValue)->{
+            filters.getItems().clear();
+            filters.getItems().addAll(session.getEntity(newValue).getFields().keySet());
+        });
     }
 
     @FXML
@@ -58,17 +72,13 @@ public class MainWindowController implements Initializable{
         dialog.show();
     }
 
-    public void addTab(EntityManagerFactory emf){
+    public void createNewSessionTab(Connection connection){
         File lib = chooseEntityLib();
-        Main.entityList.loadEntities(lib);
-        entityList.getItems().addAll(Main.entityList.getClassNames());
-        EntityManager em = emf.createEntityManager();
-        Class user = Main.entityList.getClass("User");
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery cq = cb.createQuery(user);
-        cq.from(user);
-        List list = em.createQuery(cq).getResultList();
-        System.out.println("wait");
+        session = new Session(connection, lib);
+        if(session.connect()) {
+            entityList.getItems().addAll(session.getClassNames());
+            centerContent.setDisable(false);
+        }
     }
 
     private File chooseEntityLib(){
@@ -78,5 +88,11 @@ public class MainWindowController implements Initializable{
         fileChooser.setSelectedExtensionFilter(exFilter);
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         return file;
+    }
+    
+    @FXML
+    public void doFilter(){
+        List list = session.find(entityList.getValue());
+        System.out.println("list.toString() = " + list.toString());
     }
 }

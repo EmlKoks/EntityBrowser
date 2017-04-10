@@ -15,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -118,36 +117,11 @@ public class NewConnectionController implements Initializable{
 
     @FXML
     public void connect(){
-        if(Util.isNullOrEmpty(driverList.getValue()) ||
-                Util.isNullOrEmpty(url.getText()) ||
-                Util.isNullOrEmpty(user.getText()) ||
-                Util.isNullOrEmpty(password.getText())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(resources.getString("newDriver.error.title"));
-            alert.setContentText(resources.getString("newDriver.error.content"));
-            alert.show();
+        Connection connection = checkConnection();
+        if(checkConnection() == null)
             return;
-        }
-        Connection connection = new Connection();
-        connection.setDriver(Main.drivers.getDriver(driverList.getValue()));
-        connection.setUrl(url.getText());
-        connection.setUser(user.getText());
-        connection.setPassword(password.getText());
-        EntityManagerFactory emf = null;
-        try {
-            emf = Connector.createConnection(connection);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        if(emf == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd podczas połączenia");
-            alert.setContentText("Wystąpił błąd podczas połączenia");
-            alert.show();
-            return;
-        }
-        Main.getMainController().addTab(emf);
         ((Stage)newConnectionDialog.getScene().getWindow()).close();
+        Main.getMainController().createNewSessionTab(connection);
     }
 
     @FXML
@@ -176,5 +150,46 @@ public class NewConnectionController implements Initializable{
         dialog.setTitle(resources.getString("newDriver.title"));
         dialog.setScene(dialogScene);
         dialog.show();
+    }
+
+    @FXML
+    public void testConnection(){
+        if(!checkFields());
+        else if(checkConnection() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(resources.getString("newConnection.test.title"));
+            alert.setContentText(resources.getString("newConnection.test.wrong.content"));
+            alert.show();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(resources.getString("newConnection.test.title"));
+            alert.setContentText(resources.getString("newConnection.test.correct.content"));
+            alert.show();
+        }
+    }
+
+    private Connection checkConnection(){
+        Connection connection = new Connection();
+        connection.setDriver(Main.drivers.getDriver(driverList.getValue()));
+        connection.setUrl(url.getText());
+        connection.setUser(user.getText());
+        connection.setPassword(password.getText());
+        if(Connector.testConnection(connection))
+            return connection;
+        else return null;
+    }
+
+    private boolean checkFields(){
+        if(Util.isNullOrEmpty(driverList.getValue()) ||
+                Util.isNullOrEmpty(url.getText()) ||
+                Util.isNullOrEmpty(user.getText()) ||
+                Util.isNullOrEmpty(password.getText())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(resources.getString("newDriver.error.title"));
+            alert.setContentText(resources.getString("newDriver.error.content"));
+            alert.show();
+            return false;
+        }
+        return true;
     }
 }
