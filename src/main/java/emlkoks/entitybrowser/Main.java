@@ -28,7 +28,7 @@ public class Main extends Application {
         ResourceBundle bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/view/mainWindow.fxml"), bundle);
-        Scene scene = new Scene(root, 500, 500);
+        Scene scene = new Scene(root);
         primaryStage.setTitle("Entity Browser");
         primaryStage.setScene(scene);
         primaryStage.show();

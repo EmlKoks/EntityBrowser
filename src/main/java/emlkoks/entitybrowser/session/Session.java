@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.File;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public class Session {
     private EntityList entityList;
     private Connection connection;
-    private EntityManagerFactory emf;
+    private EntityManager em;
 
     public Session(Connection connection, File entityJar) {
         this.connection = connection;
@@ -34,9 +35,11 @@ public class Session {
     }
 
     public boolean connect(){
-        emf = Connector.createConnection(connection, entityList.getClasses());
-        if(emf != null)
+        EntityManagerFactory emf = Connector.createConnection(connection, entityList.getClasses());
+        if(emf != null) {
+            em = emf.createEntityManager();
             return true;
+        }
         else
             return false;
     }
@@ -45,13 +48,20 @@ public class Session {
         return entityList.getEntity(entityName);
     }
 
-    public List<Object> find(String entityName){
+    public List<Object> find(String entityName, List<Predicate> predicates){
         Entity entity = entityList.getEntity(entityName);
-        EntityManager em = emf.createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(entity.getClass());
         Root root = cq.from(entity.getClazz());
         cq.select(root);
-        return em.createQuery(cq).getResultList();
+        if(predicates!= null){
+            for(Predicate p : predicates)
+                cq.where(p);
+        }
+        return em.createQuery(cq).setMaxResults(100).getResultList();
+    }
+
+    public CriteriaBuilder getCriteriaBuilder(){
+        return em.getCriteriaBuilder();
     }
 }

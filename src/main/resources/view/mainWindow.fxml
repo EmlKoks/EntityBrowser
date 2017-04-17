@@ -10,6 +10,8 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -30,14 +32,11 @@
       </MenuBar>
    </top>
    <center>
-      <SplitPane fx:id="centerContent" disable="true" dividerPositions="0.5" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="centerContent" disable="true" dividerPositions="0.4" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane>
+          <AnchorPane fx:id="leftContent">
                <children>
-                  <BorderPane>
-                     <bottom>
-                        <Button mnemonicParsing="false" onAction="#doFilter" text="%doFilter" BorderPane.alignment="CENTER" />
-                     </bottom>
+                  <BorderPane fx:id="filtersPane">
                      <top>
                         <VBox spacing="10.0" BorderPane.alignment="CENTER">
                            <children>
@@ -47,11 +46,11 @@
                                     <ChoiceBox fx:id="entityList" prefWidth="150.0" />
                                  </children>
                               </HBox>
-                              <HBox spacing="5.0">
+                              <HBox alignment="TOP_CENTER" spacing="5.0">
                                  <children>
                                     <Label text="%filters" />
                                     <ChoiceBox fx:id="filters" prefWidth="150.0" />
-                                    <Button mnemonicParsing="false" text="%addFilter" />
+                                    <Button mnemonicParsing="false" onAction="#addFilter" text="%addFilter" />
                                  </children></HBox>
                            </children>
                            <BorderPane.margin>
@@ -60,12 +59,28 @@
                         </VBox>
                      </top>
                      <center>
-                        <VBox fx:id="filterList" BorderPane.alignment="CENTER" />
+                        <GridPane fx:id="filterList" alignment="TOP_CENTER" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
+                           <columnConstraints>
+                               <ColumnConstraints halignment="LEFT" />
+                               <ColumnConstraints halignment="LEFT" />
+                           </columnConstraints>
+                        </GridPane>
                      </center>
+                      <bottom>
+                          <Button mnemonicParsing="false" onAction="#doFilter" text="%doFilter" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" />
+                           </BorderPane.margin></Button>
+                      </bottom>
                   </BorderPane>
                </children></AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="255.0" />
+          <AnchorPane fx:id="rightContent" minHeight="0.0" minWidth="0.0" prefWidth="255.0">
+               <children>
+               </children></AnchorPane>
         </items>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
       </SplitPane>
    </center>
 </BorderPane>
