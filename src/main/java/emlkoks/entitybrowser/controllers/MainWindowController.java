@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.controllers;
 
 import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.PredicateCreator;
+import emlkoks.entitybrowser.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
@@ -27,13 +27,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.persistence.criteria.Predicate;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -128,15 +128,13 @@ public class MainWindowController implements Initializable{
     public void doFilter() throws NoSuchMethodException {
         Entity entity = session.getEntity(entityList.getValue());
         ObservableList children = filterList.getChildren();
-        List<Predicate> predicates = new ArrayList<>();
+        QueryCreator pc = new QueryCreator(entity.getClazz(), session.getCriteriaBuilder());
         for(int i = 0 ; i<addedFilters.size() ; ++i){
             FieldProperty fp = entity.getFieldProperty(((Label)children.get(i*2)).getText());
-            String value = ((TextField)children.get(i*3+1)).getText();
-            Predicate predicate = PredicateCreator.createPredicate(session.getCriteriaBuilder(), fp, "", value);
-            System.out.println("predicate.toString() = " + predicate.toString());
-            predicates.add(predicate);
+            String value = ((TextField)children.get(i*3+2)).getText();
+            pc.createPredicate(fp, "", value);
         }
-        List resultList = session.find(entityList.getValue(), predicates);
+        List resultList = session.find(pc);
         showResults(resultList, entity);
     }
 
@@ -146,8 +144,10 @@ public class MainWindowController implements Initializable{
         if(addedFilters.contains(fieldName)) return;
         Field field = session.getEntity(entityList.getValue()).getField(fieldName);
         Label label = new Label(filters.getValue());
+        ChoiceBox<String> expression = new ChoiceBox<>();
+        expression.getItems().addAll(getChoiceListByFieldType(field.getType()));
         TextField value = new TextField();
-        filterList.addRow(filterList.getChildren().size(), label, value);
+        filterList.addRow(filterList.getChildren().size(), label, expression, value);
         addedFilters.add(fieldName);
     }
 
@@ -171,6 +171,28 @@ public class MainWindowController implements Initializable{
             tv.getColumns().add(columnId);
         }
         rightContent.getChildren().add(tv);
+    }
+
+    private String[] getChoiceListByFieldType(Class clazz){
+        List<String> choices = new ArrayList<>();
+        if(clazz == String.class){
+            choices.add("Równe");
+            choices.add("Zawiera");
+        } else if(clazz.isAssignableFrom(Number.class) || clazz == int.class || clazz == float.class || clazz == long.class || clazz == double.class) {
+            choices.add("==");
+            choices.add("=!");
+            choices.add(">");
+            choices.add(">=");
+            choices.add("<");
+        } else if(clazz == Date.class){
+            choices.add("==");
+            choices.add(">");
+            choices.add(">=");
+            choices.add("<");
+        } else {
+            System.out.println("Nieobsługiwany typ danych" + clazz);
+        }
+        return choices.toArray(new String[choices.size()]);
     }
     
     

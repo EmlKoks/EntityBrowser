@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser.session;
 
+import emlkoks.entitybrowser.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
 
@@ -48,17 +49,8 @@ public class Session {
         return entityList.getEntity(entityName);
     }
 
-    public List<Object> find(String entityName, List<Predicate> predicates){
-        Entity entity = entityList.getEntity(entityName);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery cq = cb.createQuery(entity.getClass());
-        Root root = cq.from(entity.getClazz());
-        cq.select(root);
-        if(predicates!= null){
-            for(Predicate p : predicates)
-                cq.where(p);
-        }
-        return em.createQuery(cq).setMaxResults(100).getResultList();
+    public List<Object> find(QueryCreator pc){
+        return em.createQuery(pc.getCriteriaQuery()).setMaxResults(100).getResultList();
     }
 
     public CriteriaBuilder getCriteriaBuilder(){
