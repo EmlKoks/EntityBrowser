@@ -9,8 +9,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,7 +20,7 @@ import java.util.zip.ZipInputStream;
  * Created by EmlKoks on 03.04.17.
  */
 public class EntityList {
-    Map<String, Entity> classList = new HashMap<>();
+    Map<String, Entity> classList = new TreeMap<>();
 
     public void loadEntities(File file) {
         loadLib(file);
@@ -26,12 +28,17 @@ public class EntityList {
             ZipInputStream zip = new ZipInputStream(new FileInputStream(file));
             for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".class") && !entry.getName().endsWith("_.class")) {
-                    String className = entry.getName().replace('/', '.').replace(".class", "");
+                    String className = entry.getName().replace("WEB-INF/", "").replace("classes/", "");
+                    className = className.replace('/', '.').replace(".class", "");
+//                    System.out.println("className = " + className);
                     try {
-                        classList.put(className.substring(className.lastIndexOf(".")+1),
-                                new Entity(Class.forName(className)));
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        Class clazz = Class.forName(className);
+                        if(clazz.getAnnotation(javax.persistence.Entity.class) != null) {
+                            classList.put(className.substring(className.lastIndexOf(".") + 1),
+                                    new Entity(clazz));
+                        }
+                    } catch (ClassNotFoundException|NoClassDefFoundError e) {
+//                        e.printStackTrace();
                     }
                 }
             }

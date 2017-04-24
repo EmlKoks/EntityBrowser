@@ -27,17 +27,22 @@ public class Entity {
             fp.setField(field);
             fp.setParentClass(clazz);
             String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
+            boolean isBoolean = field.getType() == boolean.class;
             try {
-                Method getMethod = clazz.getMethod("get" + methodName);
+                Method getMethod = clazz.getMethod((isBoolean ? "is" : "get") + methodName);
                 fp.setGetMethod(getMethod);
             } catch(NoSuchMethodException e){
-                e.printStackTrace();
+                System.out.println("Brak metody " + (isBoolean ? "is" : "get") + methodName + " w klasie " + name);
+//                e.printStackTrace();
+                continue;
             }
             try {
-                Method setMethod = clazz.getMethod("set" + methodName);
+                Method setMethod = clazz.getMethod("set" + methodName, field.getType());
                 fp.setSetMethod(setMethod);
             } catch(NoSuchMethodException e){
-                e.printStackTrace();
+                System.out.println("Brak metody set" + methodName + " w klasie " + name);
+//                e.printStackTrace();
+                continue;
             }
             fields.put(field.getName(), fp);
 
