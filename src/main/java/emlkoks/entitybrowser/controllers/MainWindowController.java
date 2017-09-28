@@ -3,6 +3,7 @@ package emlkoks.entitybrowser.controllers;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
+import emlkoks.entitybrowser.connection.ProviderEnum;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.session.Session;
@@ -14,14 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -29,6 +23,8 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import org.hibernate.Hibernate;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -41,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -112,22 +109,54 @@ public class MainWindowController implements Initializable{
     }
 
     public void createNewSessionTab(Connection connection){
-        File lib = chooseEntityLib();
-        session = new Session(connection, lib);
-        if(session.connect()) {
-            entityList.getItems().addAll(session.getClassNames());
-            centerContent.setDisable(false);
-        }
+        chooseEntity(connection);
     }
 
-    private File chooseEntityLib(){
+    private void chooseEntity(Connection connection){
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        TextField libPath = new TextField();
+        ChoiceBox<String> provider = new ChoiceBox<>();
+        provider.getItems().addAll(ProviderEnum.getStringValues());
+        provider.setValue(ProviderEnum.Hibernate.name());
+        Button chooseLib = new Button("Choose file");
+        chooseLib.setOnAction(value -> {
+            libPath.setText(chooseEntityLib());
+        });
+        grid.add(new Label("Library file:"), 0, 0);
+        grid.add(libPath, 1, 0);
+        grid.add(chooseLib, 2, 0);
+        grid.add(new Label("JPA Provider:"), 0, 1);
+        grid.add(provider, 1, 1);
+        dialog.getDialogPane().setContent(grid);
+        ButtonType loginButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                File file = new File(libPath.getText());
+                session = new Session(connection, file, ProviderEnum.valueOf(provider.getValue()));
+                if(session.connect()) {
+                    entityList.getItems().addAll(session.getClassNames());
+                    centerContent.setDisable(false);
+                }
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+    }
+
+    private String chooseEntityLib(){
+
         FileChooser fileChooser = new FileChooser();
 //        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
         fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/MoP/target"));
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar", "*.war", "*.earr");
         fileChooser.setSelectedExtensionFilter(exFilter);
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
-        return file;
+        return file.getPath();
     }
     
     @FXML

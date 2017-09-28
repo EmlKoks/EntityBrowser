@@ -3,6 +3,7 @@ package emlkoks.entitybrowser.session;
 import emlkoks.entitybrowser.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
+import emlkoks.entitybrowser.connection.ProviderEnum;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,11 +20,13 @@ import java.util.List;
 public class Session {
     private EntityList entityList;
     private Connection connection;
+    private ProviderEnum provider;
     private EntityManager em;
 
-    public Session(Connection connection, File entityJar) {
+    public Session(Connection connection, File entityJar, ProviderEnum provider) {
         this.connection = connection;
         entityList = new EntityList();
+        this.provider = provider;
         entityList.loadEntities(entityJar);
     }
 
@@ -36,7 +39,7 @@ public class Session {
     }
 
     public boolean connect(){
-        EntityManagerFactory emf = Connector.createConnection(connection, entityList.getClasses());
+        EntityManagerFactory emf = Connector.createConnection(connection, entityList.getClasses(), provider);
         if(emf != null) {
             em = emf.createEntityManager();
             return true;

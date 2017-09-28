@@ -32,7 +32,7 @@ public class Entity {
                 Method getMethod = clazz.getMethod((isBoolean ? "is" : "get") + methodName);
                 fp.setGetMethod(getMethod);
             } catch(NoSuchMethodException e){
-                System.out.println("Brak metody " + (isBoolean ? "is" : "get") + methodName + " w klasie " + name);
+//                System.out.println("Brak metody " + (isBoolean ? "is" : "get") + methodName + " w klasie " + name);
 //                e.printStackTrace();
                 continue;
             }
@@ -40,7 +40,7 @@ public class Entity {
                 Method setMethod = clazz.getMethod("set" + methodName, field.getType());
                 fp.setSetMethod(setMethod);
             } catch(NoSuchMethodException e){
-                System.out.println("Brak metody set" + methodName + " w klasie " + name);
+//                System.out.println("Brak metody set" + methodName + " w klasie " + name);
 //                e.printStackTrace();
                 continue;
             }

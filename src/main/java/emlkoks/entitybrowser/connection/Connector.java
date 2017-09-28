@@ -27,7 +27,7 @@ public class Connector {
         return Persistence.createEntityManagerFactory("persistance", properties);
     }
 
-    public static EntityManagerFactory createConnection(Connection connection, List<Class> classList){
+    public static EntityManagerFactory createConnection(Connection connection, List<Class> classList, ProviderEnum provider){
         Map<String, Object> properties = new HashMap<String, Object>();
 
         connection.getDriver().loadDriver();
@@ -38,7 +38,7 @@ public class Connector {
         properties.put("javax.persistence.jdbc.password", connection.getPassword());
         properties.put(AvailableSettings.LOADED_CLASSES, classList);
 
-        return Persistence.createEntityManagerFactory("persistance", properties);
+        return Persistence.createEntityManagerFactory(provider.name(), properties);
     }
 
     public static boolean testConnection(Connection c){

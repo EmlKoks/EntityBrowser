@@ -30,7 +30,7 @@ public class EntityList {
     Map<String, Entity> classList = new TreeMap<>();
 
     private void loadOnlyEntities(File file) {
-        System.out.println("file.getName() = " + file.getName());
+//        System.out.println("file.getName() = " + file.getName());
         try {
             ZipFile zip = new ZipFile(file);
             Enumeration<ZipEntry> zipEnum = (Enumeration<ZipEntry>) zip.entries();
@@ -68,8 +68,10 @@ public class EntityList {
     }
 
     public void loadEntities(File file) {
+        System.out.println(new Date().toString());
         loadLib(file);
         loadOnlyEntities(file);
+        System.out.println(new Date().toString());
     }
 
     public List<Class> getClasses(){
@@ -89,7 +91,7 @@ public class EntityList {
     }
 
     private void loadLib(File lib){
-        System.out.println("lib.getName() = " + lib.getName());
+//        System.out.println("lib.getName() = " + lib.getName());
         if(lib.getName().toLowerCase().endsWith(".ear")){
             unzipLib(lib);
         }
@@ -97,7 +99,7 @@ public class EntityList {
         try {
             method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
             method.setAccessible(true);
-            System.out.println("lib.toURL().toString() = " + lib.toURL().toString());
+//            System.out.println("lib.toURL().toString() = " + lib.toURL().toString());
             method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{lib.toURL()});
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
