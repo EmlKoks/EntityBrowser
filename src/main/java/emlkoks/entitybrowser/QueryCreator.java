@@ -43,7 +43,11 @@ public class QueryCreator {
     }
 
     private Predicate createStringPredicate(FieldProperty fp, String expression, String value){
-        return cb.equal(root.get(root.getModel().getDeclaredSingularAttribute(fp.getName())), value);
+        if("Zawiera".equals(expression))
+            return cb.like(root.get(root.getModel().getDeclaredSingularAttribute(fp.getName())), "%"+value+"%");
+        else if ("Równe".equals(expression))
+            return cb.equal(root.get(root.getModel().getDeclaredSingularAttribute(fp.getName())), value);
+        else return null;
     }
 
     public CriteriaQuery getCriteriaQuery(){

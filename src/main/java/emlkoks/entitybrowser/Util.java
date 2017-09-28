@@ -15,6 +15,24 @@ public class Util {
     public static String driversDir = "drivers/";
     public static String savedConnection = "conf/savedConnection.xml";
     public static String drivers = "conf/drivers.xml";
+    public static String homeDir;
+    public static String cacheDir;
+    public static String dirName = ".entityManager";
+
+    static {
+        createHomeDir();
+    }
+
+    private static void createHomeDir(){
+        String home = System.getProperty("user.home");
+        homeDir = home + "/" + dirName; //TODO poprawic na winde
+        cacheDir = homeDir + "/" + "cache";
+        File cache = new File(cacheDir);
+        if(!cache.exists()){
+            cache.mkdirs();
+        }
+    }
+
 
     static List<File> driverList(){
         List<File> driverList = new ArrayList<>();

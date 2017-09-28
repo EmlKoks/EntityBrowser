@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.xml.bind.JAXBContext;
@@ -22,6 +23,7 @@ public class Main extends Application {
     public static SavedConnection savedConnections = new SavedConnection();
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;
+    private static Queue<Object> entityDetailsQueue = new LinkedList<>();
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
@@ -101,5 +103,13 @@ public class Main extends Application {
 
     public static void setMainController(MainWindowController mainController) {
         Main.mainController = mainController;
+    }
+
+    public static void addEntity(Object o){
+        entityDetailsQueue.add(o);
+    }
+
+    public static Object getEntity(){
+        return entityDetailsQueue.poll();
     }
 }

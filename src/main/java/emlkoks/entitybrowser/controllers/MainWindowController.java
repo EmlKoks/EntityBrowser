@@ -9,16 +9,15 @@ import emlkoks.entitybrowser.session.Session;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -31,6 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.io.File;
 import java.io.IOException;
@@ -123,8 +123,8 @@ public class MainWindowController implements Initializable{
     private File chooseEntityLib(){
         FileChooser fileChooser = new FileChooser();
 //        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
-        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/XXX/target"));
-        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar", "*.war");
+        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/MoP/target"));
+        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar", "*.war", "*.earr");
         fileChooser.setSelectedExtensionFilter(exFilter);
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         return file;
@@ -138,20 +138,30 @@ public class MainWindowController implements Initializable{
         for(int i = 0 ; i<addedFilters.size() ; ++i){
             FieldProperty fp = entity.getFieldProperty(((Label)children.get(i*2)).getText());
             String value = ((TextField)children.get(i*3+2)).getText();
-            pc.createPredicate(fp, "", value);
+            String expression = ((ChoiceBox)children.get(i*3+1)).getValue().toString();
+            pc.createPredicate(fp, expression, value);
         }
-        List resultList = session.find(pc);
-        showResults(resultList, entity);
+        try {
+            List resultList = session.find(pc);
+            showResults(resultList, entity);
+        } catch (Exception e){
+            Throwable t = e;
+            while(t.getCause() != null)
+                t = t.getCause();
+            Alert alert = new Alert(Alert.AlertType.ERROR, t.getMessage());
+            alert.show();
+        }
     }
 
     @FXML
     public void addFilter(){
+        if(entityList.getValue() == null) return;
         String fieldName = filters.getValue();
         if(addedFilters.contains(fieldName)) return;
         Field field = session.getEntity(entityList.getValue()).getField(fieldName);
         Label label = new Label(filters.getValue());
         ChoiceBox<String> expression = new ChoiceBox<>();
-        expression.getItems().addAll(getChoiceListByFieldType(field.getType()));
+        expression.getItems().addAll(getChoiceListByFieldType(field));
         expression.setValue(expression.getItems().get(0));
         TextField value = new TextField();
         filterList.addRow(filterList.getChildren().size(), label, expression, value);
@@ -187,7 +197,8 @@ public class MainWindowController implements Initializable{
 
 
 
-    private String[] getChoiceListByFieldType(Class clazz) {
+    private String[] getChoiceListByFieldType(Field field) {
+        Class clazz = field.getType();
         List<String> choices = new ArrayList<>();
         if (clazz == String.class) {
             choices.add("Równe");
@@ -205,8 +216,10 @@ public class MainWindowController implements Initializable{
             choices.add(">");
             choices.add(">=");
             choices.add("<");
-        } else if (clazz.getAnnotation(OneToMany.class) != null){
-            choices.add("Zawiera");
+        } else if (field.getAnnotation(OneToMany.class) != null){
+            choices.add("OneToMany");
+        } else if (field.getAnnotation(ManyToOne.class) != null){
+            choices.add("ManyToOne");
         } else {
             System.out.println("Nieobsługiwany typ danych " + clazz);
         }
@@ -215,6 +228,21 @@ public class MainWindowController implements Initializable{
     
     private void cellClicked(MouseEvent event){
         Object selectedItem = ((TableRow)event.getSource()).getItem();
+        Main.addEntity(selectedItem);
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(mainPane.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/view/entityDetails.fxml"), resources);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        Scene dialogScene = new Scene(root);
+        dialog.setTitle(selectedItem.getClass().getSimpleName());
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
     
     

@@ -2,13 +2,14 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd" version="2.1">
 
     <persistence-unit name="persistance" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!--<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <properties>
             <!-- Hibernate properties -->
             <!--<property name="hibernate.show_sql" value="true" />-->
-            <property name="hibernate.format_sql" value="true" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+            <!--<property name="hibernate.format_sql" value="true" />-->
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />-->
             <!--<property name="hibernate.hbm2ddl.auto" value="validate" />-->
 
             <!--<property name="hibernate.c3p0.min_size" value="5" />-->

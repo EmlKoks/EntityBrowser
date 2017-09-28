@@ -49,7 +49,7 @@ public class Session {
         return entityList.getEntity(entityName);
     }
 
-    public List<Object> find(QueryCreator pc){
+    public List<Object> find(QueryCreator pc) {
         return em.createQuery(pc.getCriteriaQuery()).setMaxResults(100).getResultList();
     }
 
