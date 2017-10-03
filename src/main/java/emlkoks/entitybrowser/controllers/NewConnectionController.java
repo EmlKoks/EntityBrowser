@@ -56,7 +56,6 @@ public class NewConnectionController implements Initializable{
             Driver driver = Main.drivers.getDriver(newValue);
             url.setText(driver.getUrl());
         });
-
         savedConnection.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Connection connection = Main.savedConnections.getConnection(newValue);
             if(connection == null) return;
@@ -149,7 +148,9 @@ public class NewConnectionController implements Initializable{
         Scene dialogScene = new Scene(root);
         dialog.setTitle(resources.getString("newDriver.title"));
         dialog.setScene(dialogScene);
-        dialog.show();
+        dialog.showAndWait();
+        driverList.getItems().clear();
+        driverList.getItems().addAll(Main.drivers.getDriverNames());
     }
 
     @FXML

@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.session;
 
-import com.intellij.openapi.util.io.FileUtil;
 import emlkoks.entitybrowser.Util;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -112,7 +112,11 @@ public class EntityList {
         byte[] buffer = new byte[1024];
         File dir = new File(Util.cacheDir, lib.getName().substring(0, lib.getName().lastIndexOf(".")));
         if(dir.exists()){
-            FileUtil.delete(dir);
+            try {
+                FileUtils.deleteDirectory(dir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         dir.mkdirs();
         try(ZipInputStream zis = new ZipInputStream(new FileInputStream(lib))) {

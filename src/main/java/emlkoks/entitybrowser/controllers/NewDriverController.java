@@ -10,8 +10,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -48,7 +50,7 @@ public class NewDriverController implements Initializable{
     @FXML
     public void chooseLib() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
+//        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar");
         fileChooser.setSelectedExtensionFilter(exFilter);
         lib = fileChooser.showOpenDialog(newDriverDialog.getScene().getWindow());
@@ -74,16 +76,32 @@ public class NewDriverController implements Initializable{
             alert.setContentText(resources.getString("newDriver.error.content"));
             alert.show();
         } else {
-            Driver driver = new Driver();
-            driver.setName(name.getText());
-            driver.setClassName(clazz.getText());
-            driver.setUrl(urlTemplate.getText());
-            System.out.println("lib.getPath() = " + lib.getPath());
-            System.out.println("lib.getAbsolutePath() = " + lib.getAbsolutePath());
-            driver.setLib(lib.getPath()); //todo copy do local dir
-            Main.drivers.add(driver); //todo test driver
-            closeDialog();
+            if(createDriver()){
+                closeDialog();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(resources.getString("ERROR"));//todo
+                alert.setContentText(resources.getString("nError while copying lib to local dir"));//todo
+                alert.show();
+            }
         }
 
+    }
+
+    private boolean createDriver(){
+        Driver driver = new Driver();
+        driver.setName(name.getText());
+        driver.setClassName(clazz.getText());
+        driver.setUrl(urlTemplate.getText());
+        File destLibFile = new File(Util.driversDir, lib.getName());
+        try {
+            FileUtils.copyFile(lib, destLibFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        driver.setLib(lib.getPath());
+        Main.drivers.add(driver);
+        return true;
     }
 }

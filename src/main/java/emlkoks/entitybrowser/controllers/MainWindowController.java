@@ -152,7 +152,7 @@ public class MainWindowController implements Initializable{
 
         FileChooser fileChooser = new FileChooser();
 //        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
-        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/MoP/target"));
+//        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/MoP/target"));
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar", "*.war", "*.earr");
         fileChooser.setSelectedExtensionFilter(exFilter);
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
