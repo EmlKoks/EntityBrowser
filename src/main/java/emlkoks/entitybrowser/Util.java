@@ -25,7 +25,7 @@ public class Util {
 
     private static void createHomeDir(){
         String home = System.getProperty("user.home");
-        homeDir = home + "/" + dirName; //TODO poprawic na winde
+        homeDir = home + "/" + dirName;
         cacheDir = homeDir + "/" + "cache";
         File cache = new File(cacheDir);
         if(!cache.exists()){

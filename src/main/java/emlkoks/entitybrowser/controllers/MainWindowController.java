@@ -90,6 +90,21 @@ public class MainWindowController implements Initializable{
             filterList.getChildren().clear();
             addedFilters.clear();
         });
+        debug();
+    }
+
+    private void debug(){
+        Connection connection = new Connection();
+        connection.setDriver(Main.drivers.getDriver("Oracle"));
+        connection.setUrl("");
+        connection.setUser("");
+        connection.setPassword("");
+        File lib = new File("");
+        session = new Session(connection, lib, ProviderEnum.EclipseLink);
+        if(session.connect()) {
+            entityList.getItems().addAll(session.getClassNames());
+            centerContent.setDisable(false);
+        }
     }
 
     @FXML

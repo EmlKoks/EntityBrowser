@@ -6,4 +6,10 @@
         <name>MySQL</name>
         <url>jdbc:mysql://&lt;host&gt;:&lt;port&gt;/&lt;database_name&lt;?property1=value1&amp;property2=value2</url>
     </drivers>
+    <drivers>
+        <className>oracle.jdbc.driver.OracleDriver</className>
+        <lib>ojdbc7.jar</lib>
+        <name>Oracle</name>
+        <url>jdbc:oracle:&lt;drivertype&gt;:&lt;user&gt;/&lt;password&gt;@&lt;database&gt;</url>
+    </drivers>
 </driverList>

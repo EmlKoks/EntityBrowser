@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -48,6 +49,8 @@ public class EntityList {
                         }
                     } catch (ClassNotFoundException|NoClassDefFoundError|UnsatisfiedLinkError e) {
 //                        e.printStackTrace();
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
                     }
                 } else if(entry.getName().endsWith(".jar") || entry.getName().endsWith(".war")){
                     ZipFile zf = new ZipFile(file);
@@ -120,13 +123,20 @@ public class EntityList {
         }
         dir.mkdirs();
         try(ZipInputStream zis = new ZipInputStream(new FileInputStream(lib))) {
-            ZipEntry ze = zis.getNextEntry();
-            while (ze != null) {
+            ZipEntry ze;
+            while ((ze = zis.getNextEntry()) != null) {
+                System.out.format("File: %s Size: %d Last Modified %s %n", ze.getName(), ze.getSize(), LocalDate.ofEpochDay(ze.getTime() / 86400000L));
                 String fileName = ze.getName();
                 File file = new File(dir, fileName);
                 if(ze.isDirectory()) {
                     file.mkdirs();
                 } else {
+                    if(fileName.lastIndexOf("/") > 0) {
+                        String parentDirName = fileName.substring(0, fileName.lastIndexOf("/"));
+                        File parentDir = new File(dir, parentDirName);
+                        if (!parentDir.exists()) parentDir.mkdirs();
+                    }
+                    file.createNewFile();
                     FileOutputStream fos = new FileOutputStream(file);
                     int len;
                     while ((len = zis.read(buffer)) > 0) {
@@ -138,7 +148,6 @@ public class EntityList {
                         loadOnlyEntities(file);
                     }
                 }
-                ze = zis.getNextEntry();
             }
         } catch (IOException e) {
             e.printStackTrace();

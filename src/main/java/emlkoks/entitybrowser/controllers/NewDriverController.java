@@ -100,7 +100,7 @@ public class NewDriverController implements Initializable{
             e.printStackTrace();
             return false;
         }
-        driver.setLib(lib.getPath());
+        driver.setLib(lib.getName());
         Main.drivers.add(driver);
         return true;
     }
