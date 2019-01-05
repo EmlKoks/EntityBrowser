@@ -28,7 +28,7 @@ import java.util.zip.ZipInputStream;
  * Created by EmlKoks on 03.04.17.
  */
 public class EntityList {
-    Map<String, Entity> classList = new TreeMap<>();
+    Map<String, Entity> classMap = new TreeMap<>();
 
     private void loadOnlyEntities(File file) {
 //        System.out.println("file.getName() = " + file.getName());
@@ -44,7 +44,7 @@ public class EntityList {
 //                        System.out.println("className = " + className);
                         Class clazz = Class.forName(className);
                         if(clazz.getAnnotation(javax.persistence.Entity.class) != null) {
-                            classList.put(className.substring(className.lastIndexOf(".") + 1),
+                            classMap.put(className.substring(className.lastIndexOf(".") + 1),
                                     new Entity(clazz));
                         }
                     } catch (ClassNotFoundException|NoClassDefFoundError|UnsatisfiedLinkError e) {
@@ -79,18 +79,18 @@ public class EntityList {
 
     public List<Class> getClasses(){
         List<Class> list = new ArrayList<>();
-        classList.values().forEach(x -> list.add(x.getClazz()));
+        classMap.values().forEach(x -> list.add(x.getClazz()));
         return list;
     }
 
     public List<String> getClassNames(){
         ArrayList<String> names = new ArrayList<>();
-        classList.keySet().forEach(x -> names.add(x));
+        classMap.keySet().forEach(x -> names.add(x));
         return names;
     }
 
     public Entity getEntity(String entityName){
-        return classList.get(entityName);
+        return classMap.get(entityName);
     }
 
     private void loadLib(File lib){
