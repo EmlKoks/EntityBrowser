@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser;
 
+import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.session.Entity;
 import org.apache.commons.io.FileUtils;
 
@@ -29,13 +30,22 @@ import java.util.zip.ZipInputStream;
  */
 public class LibraryManager {
 
+    public static Map<String, Entity> getEntitesFromLib(File lib) {
+        Map<String, Entity> classMap = new TreeMap<>();
+        List<File> libWithClassToLoad = LibraryManager.loadLib(lib);
+        libWithClassToLoad.forEach(f -> {
+            classMap.putAll(loadEntityClass(f));
+        });
+        return classMap;
+    }
+
     /**
      * Unzip file to temp directory
      * @param lib
      */
-    public static List<File> unzipLib(File lib){
+    private static List<File> unzipLib(File lib){
         byte[] buffer = new byte[1024];
-        File dir = new File(Util.cacheDir, lib.getName().substring(0, lib.getName().lastIndexOf(".")));
+        File dir = new File(Resources.CACHE_DIR, lib.getName().substring(0, lib.getName().lastIndexOf(".")));
         if(dir.exists()){
             try {
                 FileUtils.deleteDirectory(dir);
@@ -79,7 +89,7 @@ public class LibraryManager {
      * @param lib
      * @return - library list with persistance
      */
-    public static List<File> loadLib(File lib){
+    private static List<File> loadLib(File lib){
         List<File> fileList;
         try {
             JarFile jar = new JarFile(lib);
@@ -107,7 +117,7 @@ public class LibraryManager {
         return fileList;
     }
 
-    public static Map<String, Entity> loadEntityClass(File file) {
+    private static Map<String, Entity> loadEntityClass(File file) {
         Map<String, Entity> classMap = new TreeMap<>();
         try {
             ZipFile zip = new ZipFile(file);
@@ -144,16 +154,6 @@ public class LibraryManager {
             e.printStackTrace();
         }
         return classMap;
-    }
-
-    public static Map<String, Entity> loadEntitesFromLib(File lib) {
-        Map<String, Entity> classMap = new TreeMap<>();
-        List<File> libWithClassToLoad = LibraryManager.loadLib(lib);
-        libWithClassToLoad.forEach(f -> {
-            classMap.putAll(loadEntityClass(f));
-        });
-        return classMap;
-
     }
 
 }

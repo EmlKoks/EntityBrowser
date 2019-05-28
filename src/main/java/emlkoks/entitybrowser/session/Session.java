@@ -25,9 +25,8 @@ public class Session {
 
     public Session(Connection connection, File entityJar, ProviderEnum provider) {
         this.connection = connection;
-        entityList = new EntityList();
+        entityList = new EntityList(entityJar);
         this.provider = provider;
-        entityList.loadEntities(entityJar);
     }
 
     public List<Class> getEntityClasses(){

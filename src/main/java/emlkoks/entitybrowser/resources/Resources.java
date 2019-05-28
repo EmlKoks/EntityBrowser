@@ -12,9 +12,9 @@ import java.util.zip.ZipInputStream;
  * Created by koks on 10.03.17.
  */
 public class Resources {
-    public static final String DRIVERS_DIR = "DRIVERS/";
-    public static final String SAVED_CONNECTION = "conf/SAVED_CONNECTION.xml";
-    public static final String DRIVERS = "conf/DRIVERS.xml";
+    public static final String DRIVERS_DIR = "drivers/";
+    public static final String SAVED_CONNECTION = "conf/savedConnection.xml";
+    public static final String DRIVERS = "conf/drivers.xml";
     public static final String HOME_DIR_NAME = ".entityManager";
     public static final String CACHE_DIR;
 

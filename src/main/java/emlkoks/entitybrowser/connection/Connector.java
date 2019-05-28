@@ -21,8 +21,7 @@ public class Connector {
         EntityManagerFactoryCreator entityManagerFactoryCreator;
         if(provider == ProviderEnum.Hibernate) {
             entityManagerFactoryCreator = new HibernateEntityManagerFactory(connection, classList);
-        }
-         else if(provider == ProviderEnum.EclipseLink) {
+        } else if(provider == ProviderEnum.EclipseLink) {
             entityManagerFactoryCreator = new EclipseLinkEntityManagerFactoryCreator(connection);
         } else {
             throw new RuntimeException("Provider not defined");
