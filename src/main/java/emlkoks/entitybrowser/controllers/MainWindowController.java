@@ -24,10 +24,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.hibernate.Hibernate;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -94,12 +94,8 @@ public class MainWindowController implements Initializable{
     }
 
     private void debug(){
-        Connection connection = new Connection();
-        connection.setDriver(Main.drivers.getDriver("Oracle"));
-        connection.setUrl("");
-        connection.setUser("");
-        connection.setPassword("");
-        File lib = new File("");
+        Connection connection = Main.savedConnections.getByName("XX");
+        File lib = new File("XX");
         session = new Session(connection, lib, ProviderEnum.EclipseLink);
         if(session.connect()) {
             entityList.getItems().addAll(session.getClassNames());
@@ -146,15 +142,22 @@ public class MainWindowController implements Initializable{
         grid.add(new Label("JPA Provider:"), 0, 1);
         grid.add(provider, 1, 1);
         dialog.getDialogPane().setContent(grid);
-        ButtonType loginButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        ButtonType connectButton = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(connectButton, ButtonType.CANCEL);
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
+            if (dialogButton == connectButton) {
                 File file = new File(libPath.getText());
                 session = new Session(connection, file, ProviderEnum.valueOf(provider.getValue()));
-                if(session.connect()) {
+                try{
+                    session.connect();
                     entityList.getItems().addAll(session.getClassNames());
                     centerContent.setDisable(false);
+                } catch (PersistenceException ex) {
+                    ex.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Nie udało się połączyć");
+                    alert.setContentText(ex.getMessage());
+                    alert.show();
                 }
             }
             return null;
@@ -166,8 +169,6 @@ public class MainWindowController implements Initializable{
     private String chooseEntityLib(){
 
         FileChooser fileChooser = new FileChooser();
-//        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
-//        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/MoP/target"));
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar", "*.war", "*.earr");
         fileChooser.setSelectedExtensionFilter(exFilter);
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
@@ -175,7 +176,7 @@ public class MainWindowController implements Initializable{
     }
     
     @FXML
-    public void doFilter() throws NoSuchMethodException {
+    public void doSearch() throws NoSuchMethodException {
         Entity entity = session.getEntity(entityList.getValue());
         ObservableList children = filterList.getChildren();
         QueryCreator pc = new QueryCreator(entity.getClazz(), session.getCriteriaBuilder());

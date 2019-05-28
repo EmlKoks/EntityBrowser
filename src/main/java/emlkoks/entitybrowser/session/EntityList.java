@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.session;
 
-import emlkoks.entitybrowser.Util;
+import emlkoks.entitybrowser.resources.Resources;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -113,7 +113,7 @@ public class EntityList {
 
     private void unzipLib(File lib){
         byte[] buffer = new byte[1024];
-        File dir = new File(Util.cacheDir, lib.getName().substring(0, lib.getName().lastIndexOf(".")));
+        File dir = new File(Resources.CACHE_DIR, lib.getName().substring(0, lib.getName().lastIndexOf(".")));
         if(dir.exists()){
             try {
                 FileUtils.deleteDirectory(dir);

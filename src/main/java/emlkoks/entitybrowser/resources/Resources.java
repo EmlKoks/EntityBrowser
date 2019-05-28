@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser;
+package emlkoks.entitybrowser.resources;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,23 +11,21 @@ import java.util.zip.ZipInputStream;
 /**
  * Created by koks on 10.03.17.
  */
-public class Util {
-    public static String driversDir = "drivers/";
-    public static String savedConnection = "conf/savedConnection.xml";
-    public static String drivers = "conf/drivers.xml";
-    public static String homeDir;
-    public static String cacheDir;
-    public static String dirName = ".entityManager";
+public class Resources {
+    public static final String DRIVERS_DIR = "DRIVERS/";
+    public static final String SAVED_CONNECTION = "conf/SAVED_CONNECTION.xml";
+    public static final String DRIVERS = "conf/DRIVERS.xml";
+    public static final String HOME_DIR_NAME = ".entityManager";
+    public static final String CACHE_DIR;
 
     static {
+        String home = System.getProperty("user.home");
+        CACHE_DIR = home + "/" + HOME_DIR_NAME + "/" + "cache";
         createHomeDir();
     }
 
     private static void createHomeDir(){
-        String home = System.getProperty("user.home");
-        homeDir = home + "/" + dirName;
-        cacheDir = homeDir + "/" + "cache";
-        File cache = new File(cacheDir);
+        File cache = new File(CACHE_DIR);
         if(!cache.exists()){
             cache.mkdirs();
         }

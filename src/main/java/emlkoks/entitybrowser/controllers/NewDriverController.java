@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.controllers;
 
 import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.Util;
+import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.connection.Driver;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -68,9 +68,9 @@ public class NewDriverController implements Initializable{
     @FXML
     public void save(){
         if(lib == null ||
-                Util.isNullOrEmpty(name.getText()) ||
-                Util.isNullOrEmpty(clazz.getText()) ||
-                Util.isNullOrEmpty(urlTemplate.getText())){
+                Resources.isNullOrEmpty(name.getText()) ||
+                Resources.isNullOrEmpty(clazz.getText()) ||
+                Resources.isNullOrEmpty(urlTemplate.getText())){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(resources.getString("newDriver.error.title"));
             alert.setContentText(resources.getString("newDriver.error.content"));
@@ -93,7 +93,7 @@ public class NewDriverController implements Initializable{
         driver.setName(name.getText());
         driver.setClassName(clazz.getText());
         driver.setUrl(urlTemplate.getText());
-        File destLibFile = new File(Util.driversDir, lib.getName());
+        File destLibFile = new File(Resources.DRIVERS_DIR, lib.getName());
         try {
             FileUtils.copyFile(lib, destLibFile);
         } catch (IOException e) {

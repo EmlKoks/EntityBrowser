@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.controllers;
 
 import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.Util;
+import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Connection;
@@ -94,7 +94,7 @@ public class NewConnectionController implements Initializable{
             dialog.setContentText(resources.getString("newConnection.save.content"));
             Optional<String> result = dialog.showAndWait();
             if(!result.isPresent()) return;
-            if(Util.isNullOrEmpty(result.get())) continue;
+            if(Resources.isNullOrEmpty(result.get())) continue;
             boolean exist = false;
             for(Connection sc : Main.savedConnections.getList())
                 if(sc.getName().equals(result.get())){
@@ -181,10 +181,10 @@ public class NewConnectionController implements Initializable{
     }
 
     private boolean checkFields(){
-        if(Util.isNullOrEmpty(driverList.getValue()) ||
-                Util.isNullOrEmpty(url.getText()) ||
-                Util.isNullOrEmpty(user.getText()) ||
-                Util.isNullOrEmpty(password.getText())) {
+        if(Resources.isNullOrEmpty(driverList.getValue()) ||
+                Resources.isNullOrEmpty(url.getText()) ||
+                Resources.isNullOrEmpty(user.getText()) ||
+                Resources.isNullOrEmpty(password.getText())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(resources.getString("newDriver.error.title"));
             alert.setContentText(resources.getString("newDriver.error.content"));

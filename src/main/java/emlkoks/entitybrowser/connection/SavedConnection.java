@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.connection;
 
-import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.Util;
+import emlkoks.entitybrowser.common.Marshaller;
+import emlkoks.entitybrowser.resources.Resources;
 
 import javax.xml.bind.annotation.*;
 import java.util.*;
@@ -25,7 +25,13 @@ public class SavedConnection {
 
     public void add(Connection sc){
         list.add(sc);
-        Main.marshal(this, Util.savedConnection);
+        Marshaller.marshal(this, Resources.SAVED_CONNECTION);
+    }
+
+    public Connection getByName(String name) {
+        return list.stream()
+                .filter(c -> c.getName().equals(name))
+                .findFirst().get();
     }
 
     public void remove(String name){
@@ -35,11 +41,11 @@ public class SavedConnection {
                 break;
             }
         }
-        Main.marshal(this, Util.savedConnection);
+        Marshaller.marshal(this, Resources.SAVED_CONNECTION);
     }
 
     public Connection getConnection(String name){
-        if(Util.isNullOrEmpty(name)) return null;
+        if(Resources.isNullOrEmpty(name)) return null;
         for(Connection d : list)
             if(name.equals(d.getName()))
                 return d;

@@ -67,7 +67,7 @@
                         </GridPane>
                      </center>
                       <bottom>
-                          <Button mnemonicParsing="false" onAction="#doFilter" text="%doFilter" BorderPane.alignment="CENTER">
+                          <Button mnemonicParsing="false" onAction="#doSearch" text="%doSearch" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
                               <Insets bottom="10.0" />
                            </BorderPane.margin></Button>

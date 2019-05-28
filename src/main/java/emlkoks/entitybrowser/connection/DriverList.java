@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.connection;
 
-import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.Util;
+import emlkoks.entitybrowser.common.Marshaller;
+import emlkoks.entitybrowser.resources.Resources;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,8 @@ public class DriverList {
     }
 
     public Driver getDriver(String name){
-        if(Util.isNullOrEmpty(name)) return null;
+        if(Resources.isNullOrEmpty(name))
+            return null;
         for(Driver d : drivers)
             if(name.equals(d.getName()))
                 return d;
@@ -40,16 +41,6 @@ public class DriverList {
 
     public void add(Driver sc){
         drivers.add(sc);
-        Main.marshal(this, Util.drivers);
+        Marshaller.marshal(this, Resources.DRIVERS);
     }
-
-
-    public List<Driver> getDrivers() {
-        return drivers;
-    }
-
-    public void setDrivers(List<Driver> drivers) {
-        this.drivers = drivers;
-    }
-
 }
