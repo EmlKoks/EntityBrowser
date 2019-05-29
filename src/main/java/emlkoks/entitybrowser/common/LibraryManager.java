@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser;
+package emlkoks.entitybrowser.common;
 
 import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.session.Entity;
@@ -33,9 +33,9 @@ public class LibraryManager {
     public static Map<String, Entity> getEntitesFromLib(File lib) {
         Map<String, Entity> classMap = new TreeMap<>();
         List<File> libWithClassToLoad = LibraryManager.loadLib(lib);
-        libWithClassToLoad.forEach(f -> {
-            classMap.putAll(loadEntityClass(f));
-        });
+        libWithClassToLoad.forEach(f ->
+            classMap.putAll(loadEntityClass(f))
+        );
         return classMap;
     }
 

@@ -1,10 +1,8 @@
-package emlkoks.entitybrowser.controllers;
+package emlkoks.entitybrowser.view.controllers;
 
 import emlkoks.entitybrowser.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 

@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.controllers;
+package emlkoks.entitybrowser.view.controllers;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.resources.Resources;

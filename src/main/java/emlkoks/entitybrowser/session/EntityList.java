@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.session;
 
-import emlkoks.entitybrowser.LibraryManager;
+import emlkoks.entitybrowser.common.LibraryManager;
 
 import java.io.File;
 import java.util.ArrayList;
