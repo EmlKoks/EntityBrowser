@@ -7,6 +7,7 @@ import emlkoks.entitybrowser.connection.ProviderEnum;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.session.Session;
+import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -133,9 +134,7 @@ public class MainWindowController implements Initializable{
         provider.getItems().addAll(ProviderEnum.getStringValues());
         provider.setValue(ProviderEnum.Hibernate.name());
         Button chooseLib = new Button("Choose file");
-        chooseLib.setOnAction(value -> {
-            libPath.setText(chooseEntityLib());
-        });
+        chooseLib.setOnAction(value -> libPath.setText(chooseEntityLib()));
         grid.add(new Label("Library file:"), 0, 0);
         grid.add(libPath, 1, 0);
         grid.add(chooseLib, 2, 0);
@@ -154,10 +153,11 @@ public class MainWindowController implements Initializable{
                     centerContent.setDisable(false);
                 } catch (PersistenceException ex) {
                     ex.printStackTrace();
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Nie udało się połączyć");
-                    alert.setContentText(ex.getMessage());
-                    alert.show();
+
+                    new ErrorDialogCreator(
+                            "Nie udało się połączyć",
+                            ex.getMessage())
+                            .show();
                 }
             }
             return null;
@@ -193,8 +193,8 @@ public class MainWindowController implements Initializable{
             Throwable t = e;
             while(t.getCause() != null)
                 t = t.getCause();
-            Alert alert = new Alert(Alert.AlertType.ERROR, t.getMessage());
-            alert.show();
+            new ErrorDialogCreator(t.getMessage())
+                    .show();
         }
     }
 

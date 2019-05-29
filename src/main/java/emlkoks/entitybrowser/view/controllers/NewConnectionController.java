@@ -5,6 +5,7 @@ import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Connection;
+import emlkoks.entitybrowser.view.dialog.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 /**
  * Created by EmlKoks on 18.03.17.
  */
-public class NewConnectionController implements Initializable{
+public class NewConnectionController implements Initializable {
 
     @FXML
     private ResourceBundle resources;
@@ -58,7 +59,7 @@ public class NewConnectionController implements Initializable{
         });
         savedConnection.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Connection connection = Main.savedConnections.getConnection(newValue);
-            if(connection == null) return;
+            if (connection == null) return;
             driverList.setValue(connection.getDriver().getName());
             url.setText(connection.getUrl());
             user.setText(connection.getUser());
@@ -67,41 +68,43 @@ public class NewConnectionController implements Initializable{
     }
 
     @FXML
-    private void deleteConnection(){
+    private void deleteConnection() {
         List<String> selectedItems = savedConnection.getSelectionModel().getSelectedItems();
-        for(String item : selectedItems) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Uwaga!");
-            alert.setContentText("Czy na pewno chcesz usunąć połączenie " + item + "?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if(result.get() == ButtonType.OK){
+        for (String item : selectedItems) {
+            Optional<ButtonType> result =
+                    new ConfirmationDialogCreator(
+                            "Uwaga!",
+                            "Czy na pewno chcesz usunąć połączenie " + item + "?")
+                            .showAndWait();
+            if (result.get() == ButtonType.OK) {
                 Main.savedConnections.remove(item);
                 savedConnection.getItems().remove(item);
             }
         }
     }
 
-    private void setSavedConnection(){
-        for(Connection sc : Main.savedConnections.getList())
+    private void setSavedConnection() {
+        for (Connection sc : Main.savedConnections.getList())
             savedConnection.getItems().add(sc.getName());
     }
 
     @FXML
-    public void saveConnection(){
-        while(true){
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle(resources.getString("newConnection.save.title"));
-            dialog.setContentText(resources.getString("newConnection.save.content"));
-            Optional<String> result = dialog.showAndWait();
-            if(!result.isPresent()) return;
-            if(Resources.isNullOrEmpty(result.get())) continue;
+    public void saveConnection() {
+        while (true) {
+            Optional<String> result =
+                    new TextInputDialogCreator(
+                            resources.getString("newConnection.save.title"),
+                            resources.getString("newConnection.save.content"))
+                            .showAndWait();
+            if (!result.isPresent()) return;
+            if (Resources.isNullOrEmpty(result.get())) continue;
             boolean exist = false;
-            for(Connection sc : Main.savedConnections.getList())
-                if(sc.getName().equals(result.get())){
-                    exist=true;
+            for (Connection sc : Main.savedConnections.getList())
+                if (sc.getName().equals(result.get())) {
+                    exist = true;
                     break;
                 }
-            if (!exist){
+            if (!exist) {
                 Connection newConnection = new Connection();
                 newConnection.setName(result.get());
                 newConnection.setUrl(url.getText());
@@ -115,26 +118,26 @@ public class NewConnectionController implements Initializable{
     }
 
     @FXML
-    public void connect(){
+    public void connect() {
         Connection connection = checkConnection();
-        if(checkConnection() == null)
+        if (checkConnection() == null)
             return;
-        ((Stage)newConnectionDialog.getScene().getWindow()).close();
+        ((Stage) newConnectionDialog.getScene().getWindow()).close();
         Main.getMainController().createNewSessionTab(connection);
     }
 
     @FXML
-    public void closeDialog(){
-        ((Stage)newConnectionDialog.getScene().getWindow()).close();
+    public void closeDialog() {
+        ((Stage) newConnectionDialog.getScene().getWindow()).close();
     }
 
-    private void addNewConnection(Connection sc){
+    private void addNewConnection(Connection sc) {
         Main.savedConnections.add(sc);
         savedConnection.getItems().add(sc.getName());
     }
 
     @FXML
-    public void addDriver(){
+    public void addDriver() {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(newConnectionDialog.getScene().getWindow());
@@ -154,41 +157,41 @@ public class NewConnectionController implements Initializable{
     }
 
     @FXML
-    public void testConnection(){
-        if(!checkFields());
-        else if(checkConnection() == null){
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(resources.getString("newConnection.test.title"));
-            alert.setContentText(resources.getString("newConnection.test.wrong.content"));
-            alert.show();
+    public void testConnection() {
+        if (!checkFields()) ;
+        else if (checkConnection() == null) {
+            new WarningDialogCreator(
+                    resources.getString("newConnection.test.title"),
+                    resources.getString("newConnection.test.wrong.content"))
+                    .show();
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(resources.getString("newConnection.test.title"));
-            alert.setContentText(resources.getString("newConnection.test.correct.content"));
-            alert.show();
+            new InformationDialogCreator(
+                    resources.getString("newConnection.test.title"),
+                    resources.getString("newConnection.test.correct.content"))
+                    .show();
         }
     }
 
-    private Connection checkConnection(){
+    private Connection checkConnection() {
         Connection connection = new Connection();
         connection.setDriver(Main.drivers.getDriver(driverList.getValue()));
         connection.setUrl(url.getText());
         connection.setUser(user.getText());
         connection.setPassword(password.getText());
-        if(Connector.testConnection(connection))
+        if (Connector.testConnection(connection))
             return connection;
         else return null;
     }
 
-    private boolean checkFields(){
-        if(Resources.isNullOrEmpty(driverList.getValue()) ||
+    private boolean checkFields() {
+        if (Resources.isNullOrEmpty(driverList.getValue()) ||
                 Resources.isNullOrEmpty(url.getText()) ||
                 Resources.isNullOrEmpty(user.getText()) ||
                 Resources.isNullOrEmpty(password.getText())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(resources.getString("newDriver.error.title"));
-            alert.setContentText(resources.getString("newDriver.error.content"));
-            alert.show();
+            new ErrorDialogCreator(
+                    resources.getString("newDriver.error.title"),
+                    resources.getString("newDriver.error.content"))
+                    .show();
             return false;
         }
         return true;

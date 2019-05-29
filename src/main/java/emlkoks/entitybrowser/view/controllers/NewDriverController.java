@@ -3,9 +3,9 @@ package emlkoks.entitybrowser.controllers;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.connection.Driver;
+import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -71,18 +71,18 @@ public class NewDriverController implements Initializable{
                 Resources.isNullOrEmpty(name.getText()) ||
                 Resources.isNullOrEmpty(clazz.getText()) ||
                 Resources.isNullOrEmpty(urlTemplate.getText())){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(resources.getString("newDriver.error.title"));
-            alert.setContentText(resources.getString("newDriver.error.content"));
-            alert.show();
+            new ErrorDialogCreator(
+                    resources.getString("newDriver.error.title"),
+                    resources.getString("newDriver.error.content"))
+                    .show();
         } else {
             if(createDriver()){
                 closeDialog();
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(resources.getString("ERROR"));//todo
-                alert.setContentText(resources.getString("nError while copying lib to local dir"));//todo
-                alert.show();
+                new ErrorDialogCreator(
+                        "ERROR",//TODO
+                        "nError while copying lib to local dir")//TODO
+                        .show();
             }
         }
 
