@@ -25,11 +25,11 @@
     <Label text="%newDriver.lib" />
     <Label text="%newDriver.name" GridPane.rowIndex="1" />
     <Label text="%newDriver.class" GridPane.rowIndex="2" />
-    <Label text="%newDriver.url_template" GridPane.rowIndex="3" />
+    <Label text="%newDriver.urlTemplate" GridPane.rowIndex="3" />
     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
        <children>
            <TextField fx:id="driver" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="195.0" />
-           <Button mnemonicParsing="false" onAction="#chooseLib" text="%choose_file" />
+           <Button mnemonicParsing="false" onAction="#chooseLib" text="%newDriver.chooseFile" />
        </children>
     </HBox>
     <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" />

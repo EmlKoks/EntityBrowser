@@ -73,8 +73,8 @@ public class NewConnectionController implements Initializable {
         for (String item : selectedItems) {
             Optional<ButtonType> result =
                     new ConfirmationDialogCreator(
-                            "Uwaga!",
-                            "Czy na pewno chcesz usunąć połączenie " + item + "?")
+                            resources.getString("error.title"),
+                            resources.getString("newDriver.removeConnection") + item + "?")
                             .showAndWait();
             if (result.get() == ButtonType.OK) {
                 Main.savedConnections.remove(item);
@@ -189,7 +189,7 @@ public class NewConnectionController implements Initializable {
                 Resources.isNullOrEmpty(user.getText()) ||
                 Resources.isNullOrEmpty(password.getText())) {
             new ErrorDialogCreator(
-                    resources.getString("newDriver.error.title"),
+                    resources.getString("error.title"),
                     resources.getString("newDriver.error.content"))
                     .show();
             return false;

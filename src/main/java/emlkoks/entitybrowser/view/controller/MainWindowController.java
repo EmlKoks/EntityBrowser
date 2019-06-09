@@ -127,7 +127,7 @@ public class MainWindowController implements Initializable{
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/entityLibraryChoice.fxml"), resources);
             Scene dialogScene = new Scene(root);
-            stage.setTitle("Wybór biblioteki");
+            stage.setTitle(resources.getString("entityLibraryChoice.title"));
             stage.setScene(dialogScene);
             stage.show();
         } catch (IOException e) {

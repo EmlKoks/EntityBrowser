@@ -17,15 +17,15 @@
         <HBox alignment="CENTER" GridPane.columnIndex="1">
             <children>
                 <TextField fx:id="libraryPath" alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="195.0" />
-                <Button onAction="#chooseLib" text="%choose_file" />
+                <Button onAction="#chooseLib" text="%entityLibraryChoice.chooseFile" />
             </children>
         </HBox>
         <Label text="JPA Provider" GridPane.columnIndex="0" GridPane.rowIndex="1" /> <!--TODO-->
         <ChoiceBox fx:id="providerList" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <HBox alignment="TOP_RIGHT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <children>
-                <Button mnemonicParsing="false" onAction="#connect" text="Connect" />
-                <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+                <Button mnemonicParsing="false" onAction="#connect" text="%entityLibraryChoice.connect" />
+                <Button mnemonicParsing="false" onAction="#cancel" text="%entityLibraryChoice.cancel" />
             </children>
         </HBox>
        <columnConstraints>

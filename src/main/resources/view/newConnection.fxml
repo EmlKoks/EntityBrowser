@@ -17,7 +17,7 @@
     <left>
         <VBox prefWidth="151.0" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
-                <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteConnection" text="Usuń to" textOverrun="CLIP" />
+                <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteConnection" text="%newConnection.deleteConnection" textOverrun="CLIP" />
                 <ListView fx:id="savedConnection" GridPane.rowIndex="1">
                     <opaqueInsets>
                         <Insets />

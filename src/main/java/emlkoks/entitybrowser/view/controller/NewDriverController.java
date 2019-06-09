@@ -50,8 +50,7 @@ public class NewDriverController implements Initializable{
     @FXML
     public void chooseLib() {
         FileChooser fileChooser = new FileChooser();
-//        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
-        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar");
+        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("newDriver.libFilter"), "*.jar");
         fileChooser.setSelectedExtensionFilter(exFilter);
         lib = fileChooser.showOpenDialog(newDriverPane.getScene().getWindow());
         if(lib != null)
@@ -72,16 +71,16 @@ public class NewDriverController implements Initializable{
                 Resources.isNullOrEmpty(clazz.getText()) ||
                 Resources.isNullOrEmpty(urlTemplate.getText())){
             new ErrorDialogCreator(
-                    resources.getString("newDriver.error.title"),
-                    resources.getString("newDriver.error.content"))
+                    resources.getString("error.title"),
+                    resources.getString("newDriver.error.emptyFields"))
                     .show();
         } else {
             if(createDriver()){
                 closeDialog();
             } else {
                 new ErrorDialogCreator(
-                        "ERROR",//TODO
-                        "nError while copying lib to local dir")//TODO
+                        resources.getString("error.title"),
+                        resources.getString("newDriver.error.copylibToLocalDir"))
                         .show();
             }
         }
