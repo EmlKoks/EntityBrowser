@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.view.controllers;
+package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.resources.Resources;
@@ -31,7 +31,7 @@ public class NewConnectionController implements Initializable {
     private ResourceBundle resources;
 
     @FXML
-    private BorderPane newConnectionDialog;
+    private BorderPane newConnectionPane;
 
     @FXML
     private ListView<String> savedConnection;
@@ -122,13 +122,13 @@ public class NewConnectionController implements Initializable {
         Connection connection = checkConnection();
         if (checkConnection() == null)
             return;
-        ((Stage) newConnectionDialog.getScene().getWindow()).close();
+        ((Stage) newConnectionPane.getScene().getWindow()).close();
         Main.getMainController().createNewSessionTab(connection);
     }
 
     @FXML
     public void closeDialog() {
-        ((Stage) newConnectionDialog.getScene().getWindow()).close();
+        ((Stage) newConnectionPane.getScene().getWindow()).close();
     }
 
     private void addNewConnection(Connection sc) {
@@ -140,7 +140,7 @@ public class NewConnectionController implements Initializable {
     public void addDriver() {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(newConnectionDialog.getScene().getWindow());
+        dialog.initOwner(newConnectionPane.getScene().getWindow());
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("/view/newDriver.fxml"), resources);

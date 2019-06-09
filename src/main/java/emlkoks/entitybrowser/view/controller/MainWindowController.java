@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.view.controllers;
+package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.QueryCreator;
@@ -24,7 +24,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -78,6 +76,8 @@ public class MainWindowController implements Initializable{
 
     private Set<String> addedFilters = new HashSet<>();
 
+    private Connection connection;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Main.setMainController(this);
@@ -91,12 +91,12 @@ public class MainWindowController implements Initializable{
             filterList.getChildren().clear();
             addedFilters.clear();
         });
-        debug();
+//        debug();
     }
 
     private void debug(){
-        Connection connection = Main.savedConnections.getByName("XX");
-        File lib = new File("XX");
+        Connection connection = Main.savedConnections.getByName("ers");
+        File lib = new File("/home/koks/Projekty/EntityBrowser/ERS-db-entities-1.1.jar");
         session = new Session(connection, lib, ProviderEnum.EclipseLink);
         if(session.connect()) {
             entityList.getItems().addAll(session.getClassNames());
@@ -106,8 +106,8 @@ public class MainWindowController implements Initializable{
 
     @FXML
     private void newConnection(){
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         Parent root = null;
         try {
             root = FXMLLoader.load(getClass().getResource("/view/newConnection.fxml"), resources);
@@ -115,55 +115,40 @@ public class MainWindowController implements Initializable{
             e.printStackTrace();
         }
         Scene dialogScene = new Scene(root);
-        dialog.setTitle(resources.getString("newConnection.title"));
-        dialog.setScene(dialogScene);
-        dialog.show();
+        stage.setTitle(resources.getString("newConnection.title"));
+        stage.setScene(dialogScene);
+        stage.show();
     }
 
     public void createNewSessionTab(Connection connection){
-        chooseEntity(connection);
+        this.connection = connection;
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/entityLibraryChoice.fxml"), resources);
+            Scene dialogScene = new Scene(root);
+            stage.setTitle("Wybór biblioteki");
+            stage.setScene(dialogScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void chooseEntity(Connection connection){
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        TextField libPath = new TextField();
-        ChoiceBox<String> provider = new ChoiceBox<>();
-        provider.getItems().addAll(ProviderEnum.getStringValues());
-        provider.setValue(ProviderEnum.Hibernate.name());
-        Button chooseLib = new Button("Choose file");
-        chooseLib.setOnAction(value -> libPath.setText(chooseEntityLib()));
-        grid.add(new Label("Library file:"), 0, 0);
-        grid.add(libPath, 1, 0);
-        grid.add(chooseLib, 2, 0);
-        grid.add(new Label("JPA Provider:"), 0, 1);
-        grid.add(provider, 1, 1);
-        dialog.getDialogPane().setContent(grid);
-        ButtonType connectButton = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(connectButton, ButtonType.CANCEL);
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == connectButton) {
-                File file = new File(libPath.getText());
-                session = new Session(connection, file, ProviderEnum.valueOf(provider.getValue()));
-                try{
-                    session.connect();
-                    entityList.getItems().addAll(session.getClassNames());
-                    centerContent.setDisable(false);
-                } catch (PersistenceException ex) {
-                    ex.printStackTrace();
+    public void setEntityList(File file, ProviderEnum provider) {
+        session = new Session(connection, file, provider);
+        try{
+            session.connect();
+            entityList.getItems().addAll(session.getClassNames());
+            centerContent.setDisable(false);
+        } catch (PersistenceException ex) {
+            ex.printStackTrace();
 
-                    new ErrorDialogCreator(
-                            "Nie udało się połączyć",
-                            ex.getMessage())
-                            .show();
-                }
-            }
-            return null;
-        });
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
+            new ErrorDialogCreator(
+                    "Nie udało się połączyć",
+                    ex.getMessage())
+                    .show();
+        }
     }
 
     private String chooseEntityLib(){
@@ -174,7 +159,7 @@ public class MainWindowController implements Initializable{
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         return file.getPath();
     }
-    
+
     @FXML
     public void doSearch() throws NoSuchMethodException {
         Entity entity = session.getEntity(entityList.getValue());
@@ -270,12 +255,12 @@ public class MainWindowController implements Initializable{
         }
         return choices.toArray(new String[choices.size()]);
     }
-    
+
     private void cellClicked(MouseEvent event){
         Object selectedItem = ((TableRow)event.getSource()).getItem();
         Main.addEntity(selectedItem);
         Stage dialog = new Stage();
-        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initModality(Modality.WINDOW_MODAL);//TODO none
         dialog.initOwner(mainPane.getScene().getWindow());
         Parent root;
         try {
@@ -289,6 +274,4 @@ public class MainWindowController implements Initializable{
         dialog.setScene(dialogScene);
         dialog.show();
     }
-    
-    
 }

@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by EmlKoks on 10.03.17.
  */
 public abstract class EntityManagerFactoryCreator {
-    Map<String, Object> properties = new HashMap<String, Object>();
+    protected Map<String, Object> properties = new HashMap<String, Object>();
 
     EntityManagerFactoryCreator(Connection connection) {
         properties.put("javax.persistence.jdbc.driver", connection.getDriver().getClassName());

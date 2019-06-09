@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.view.controllers;
+package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.resources.Resources;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 public class NewDriverController implements Initializable{
 
     @FXML
-    private GridPane newDriverDialog;
+    private GridPane newDriverPane;
 
     @FXML
     private TextField driver;
@@ -53,7 +53,7 @@ public class NewDriverController implements Initializable{
 //        fileChooser.setInitialDirectory(new File("/mnt/dysk/Programowanie/koks312-adressbook-a508f653c32e/model/target"));
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar");
         fileChooser.setSelectedExtensionFilter(exFilter);
-        lib = fileChooser.showOpenDialog(newDriverDialog.getScene().getWindow());
+        lib = fileChooser.showOpenDialog(newDriverPane.getScene().getWindow());
         if(lib != null)
             driver.setText(lib.getName());
         else
@@ -62,7 +62,7 @@ public class NewDriverController implements Initializable{
 
     @FXML
     public void closeDialog(){
-        ((Stage)newDriverDialog.getScene().getWindow()).close();
+        ((Stage) newDriverPane.getScene().getWindow()).close();
     }
 
     @FXML

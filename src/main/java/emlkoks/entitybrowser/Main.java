@@ -5,7 +5,7 @@ import emlkoks.entitybrowser.common.Properties;
 import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnection;
-import emlkoks.entitybrowser.view.controllers.MainWindowController;
+import emlkoks.entitybrowser.view.controller.MainWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.view.controllers;
+package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
 import javafx.fxml.FXML;
