@@ -15,5 +15,9 @@ public class FieldProperty {
     Method getMethod;
     Field field;
     Class parentClass;
+
+    public FieldProperty(String name){
+        this.name = name;
+    }
 }
 
