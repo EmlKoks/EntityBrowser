@@ -1,11 +1,9 @@
 package emlkoks.entitybrowser.session;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 /**
  * Created by EmlKoks on 09.04.17.
@@ -13,40 +11,11 @@ import java.util.TreeMap;
 public class Entity {
     private String name;
     private Class clazz;
-    private SortedMap<String, FieldProperty> fields = new TreeMap<>();
+    private SortedMap<String, FieldProperty> fields;
 
     public Entity(Class entity){
         name = entity.getName();
         clazz = entity;
-        loadFields();
-    }
-    
-    private void loadFields(){
-        for(Field field : clazz.getDeclaredFields()){
-            FieldProperty fp = new FieldProperty(field.getName());
-            fp.setField(field);
-            fp.setParentClass(clazz);
-            String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
-            boolean isBoolean = field.getType() == boolean.class;
-            try {
-                Method getMethod = clazz.getMethod((isBoolean ? "is" : "get") + methodName);
-                fp.setGetMethod(getMethod);
-            } catch(NoSuchMethodException e){
-//                System.out.println("Brak metody " + (isBoolean ? "is" : "get") + methodName + " w klasie " + name);
-//                e.printStackTrace();
-                continue;
-            }
-            try {
-                Method setMethod = clazz.getMethod("set" + methodName, field.getType());
-                fp.setSetMethod(setMethod);
-            } catch(NoSuchMethodException e){
-//                System.out.println("Brak metody set" + methodName + " w klasie " + name);
-//                e.printStackTrace();
-                continue;
-            }
-            fields.put(field.getName(), fp);
-
-        }
     }
 
     public String getName() {
@@ -63,6 +32,10 @@ public class Entity {
 
     public Set<String> getFieldsNames() {
         return fields.keySet();
+    }
+
+    public void setFields(SortedMap<String, FieldProperty> fields) {
+        this.fields = fields;
     }
 
     public Field getField(String name){

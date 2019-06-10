@@ -2,6 +2,8 @@ package emlkoks.entitybrowser.common;
 
 import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.session.Entity;
+import emlkoks.entitybrowser.session.FieldProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -9,18 +11,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.jar.JarFile;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -28,15 +25,27 @@ import java.util.zip.ZipInputStream;
 /**
  * Created by EmlKoks on 08.10.17.
  */
+@Slf4j
 public class LibraryManager {
 
     public static Map<String, Entity> getEntitesFromLib(File lib) {
         Map<String, Entity> classMap = new TreeMap<>();
-        List<File> libWithClassToLoad = LibraryManager.loadLib(lib);
+        List<File> libWithClassToLoad = getLibraryListFromFile(lib);
         libWithClassToLoad.forEach(f ->
             classMap.putAll(loadEntityClass(f))
         );
         return classMap;
+    }
+
+    private static void removeDirectoryIfExists(File dir){
+        if(dir.exists()){
+            try {
+                FileUtils.deleteDirectory(dir);
+            } catch (IOException e) {
+                log.error("Cannot remove directory", e);
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -46,13 +55,7 @@ public class LibraryManager {
     private static List<File> unzipLib(File lib){
         byte[] buffer = new byte[1024];
         File dir = new File(Resources.CACHE_DIR, lib.getName().substring(0, lib.getName().lastIndexOf(".")));
-        if(dir.exists()){
-            try {
-                FileUtils.deleteDirectory(dir);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        removeDirectoryIfExists(dir);
         dir.mkdirs();
         List<File> unzippedFiles = new ArrayList<>();
         try(ZipInputStream zis = new ZipInputStream(new FileInputStream(lib))) {
@@ -72,7 +75,7 @@ public class LibraryManager {
                     }
                     fos.close();
                     if(fileName.toLowerCase().endsWith(".jar") || fileName.toLowerCase().endsWith(".war")){
-                        loadLib(file);
+                        getLibraryListFromFile(file);
                         unzippedFiles.add(file);
                     }
                 }
@@ -85,36 +88,32 @@ public class LibraryManager {
     }
 
     /**
-     *  Load classes from lib to ClassLoader
-     * @param lib
+     *  Get list of library from lib
+     * @param library
      * @return - library list with persistance
      */
-    private static List<File> loadLib(File lib){
+    private static List<File> getLibraryListFromFile(File library){
         List<File> fileList;
-        try {
-            JarFile jar = new JarFile(lib);
-//            jar.getEntry("").
-            System.out.println("jar = " + jar);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(lib.getName().toLowerCase().endsWith(".ear")){
-            fileList = unzipLib(lib);
+        if(library.getName().toLowerCase().endsWith(".ear")){
+            fileList = unzipLib(library);
         } else {
             fileList = new ArrayList<>();
-            fileList.add(lib);
+            fileList.add(library);
         }
-        Method method;
-        try {
-            method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
-            method.setAccessible(true);
-            method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{lib.toURL()});
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if(!fileList.isEmpty()) {
+            loadLibraryToClassLoader(library);
         }
         return fileList;
+    }
+
+    private static void loadLibraryToClassLoader(File library) {
+        try {
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            method.setAccessible(true);
+            method.invoke(ClassLoader.getSystemClassLoader(), library.toURL());
+        } catch (ReflectiveOperationException|MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Map<String, Entity> loadEntityClass(File file) {
@@ -124,36 +123,72 @@ public class LibraryManager {
             Enumeration<ZipEntry> zipEnum = (Enumeration<ZipEntry>) zip.entries();
             for (ZipEntry entry = zipEnum.nextElement(); zipEnum.hasMoreElements(); entry = zipEnum.nextElement()) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".class") && !entry.getName().endsWith("_.class")) {
-                    String className = entry.getName().replace("WEB-INF/", "").replace("classes/", "");
-                    className = className.replace('/', '.').replace(".class", "");
-//                    System.out.println("className = " + className);
-                    try {
-//                        System.out.println("className = " + className);
-                        Class clazz = Class.forName(className);
-                        if(clazz.getAnnotation(javax.persistence.Entity.class) != null) {
-                            classMap.put(className.substring(className.lastIndexOf(".") + 1),
-                                    new Entity(clazz));
-                        }
-                    } catch (ClassNotFoundException|NoClassDefFoundError|UnsatisfiedLinkError e) {
-//                        e.printStackTrace();
-                    }
+                    loadClass(entry, classMap);
                 } else if(entry.getName().endsWith(".jar") || entry.getName().endsWith(".war")){
-                    ZipFile zf = new ZipFile(file);
-                    InputStream entryIs = zf.getInputStream(entry);
-                    String fileName = "temp/" + new Date().getTime();
-                    if(!new File("temp").exists()){
-                        new File("temp").mkdir();
-                    }
-                    File newFile = new File(fileName);
-                    Files.copy(entryIs, newFile.toPath());
-                    classMap.putAll(loadEntityClass(newFile));
-                    newFile.delete();
+                    loadJarOrWar(file, entry, classMap);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return classMap;
+    }
+
+    private static void loadClass(ZipEntry entry, Map<String, Entity> classMap) {
+        String classPath = entry.getName().replace("WEB-INF/", "").replace("classes/", "");
+        String className = classPath.replace('/', '.').replace(".class", "");
+        try {
+            log.debug("className = " + className);
+            Class clazz = Class.forName(className);
+            if(clazz.getAnnotation(javax.persistence.Entity.class) != null) {
+                Entity entity = new Entity(clazz);
+                entity.setFields(getEntityFields(entity));
+                classMap.put(className.substring(className.lastIndexOf(".") + 1), entity);
+            }
+        } catch (ClassNotFoundException|NoClassDefFoundError|UnsatisfiedLinkError e) {
+            //Skip
+        }
+    }
+
+    private static void loadJarOrWar(File file, ZipEntry entry, Map<String, Entity> classMap) throws IOException{
+        ZipFile zf = new ZipFile(file);
+        InputStream entryIs = zf.getInputStream(entry);
+        String fileName = "temp/" + new Date().getTime();
+        if(!new File("temp").exists()){
+            new File("temp").mkdir();
+        }
+        File newFile = new File(fileName);
+        Files.copy(entryIs, newFile.toPath());
+        classMap.putAll(loadEntityClass(newFile));
+        newFile.delete();
+    }
+
+    private static SortedMap<String, FieldProperty> getEntityFields(Entity entity) {
+        SortedMap<String, FieldProperty> fields = new TreeMap<>();
+        Class clazz = entity.getClazz();
+        for(Field field : clazz.getDeclaredFields()){
+            FieldProperty fp = new FieldProperty(field.getName());
+            fp.setField(field);
+            fp.setParentClass(entity.getClazz());
+            String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
+            boolean isBoolean = field.getType() == boolean.class;
+            try {
+                Method getMethod = clazz.getMethod((isBoolean ? "is" : "get") + methodName);
+                fp.setGetMethod(getMethod);
+            } catch(NoSuchMethodException e){
+                log.debug("Cannot find method " + (isBoolean ? "is" : "get") + methodName + " in class " + clazz.getName());
+                continue;
+            }
+            try {
+                Method setMethod = clazz.getMethod("set" + methodName, field.getType());
+                fp.setSetMethod(setMethod);
+            } catch(NoSuchMethodException e){
+                log.debug("Cannot find method get" + methodName + " in class " + clazz.getName());
+                continue;
+            }
+            fields.put(field.getName(), fp);
+        }
+        return fields;
     }
 
 }

@@ -24,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -43,6 +44,7 @@ import java.util.Set;
 /**
  * Created by EmlKoks on 18.03.17.
  */
+@Slf4j
 public class MainWindowController implements Initializable{
 
     @FXML
@@ -251,7 +253,7 @@ public class MainWindowController implements Initializable{
         } else if (field.getAnnotation(ManyToOne.class) != null){
             choices.add("ManyToOne");
         } else {
-            System.out.println("Nieobsługiwany typ danych " + clazz);
+            log.debug("Nieobsługiwany typ danych " + clazz);
         }
         return choices.toArray(new String[choices.size()]);
     }

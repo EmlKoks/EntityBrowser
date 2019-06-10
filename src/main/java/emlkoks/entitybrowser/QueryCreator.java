@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser;
 
 import emlkoks.entitybrowser.session.FieldProperty;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Created by EmlKoks on 17.04.17.
  */
+@Slf4j
 public class QueryCreator {
     private Root root;
     private CriteriaBuilder cb;
@@ -32,9 +34,9 @@ public class QueryCreator {
 
     public void createPredicate(FieldProperty fp, String expression, String value){
         Predicate p = null;
-        if(fp.getField().getAnnotation(OneToMany.class) != null) System.out.println("OneToMany");
-        if(fp.getField().getAnnotation(ManyToOne.class) != null) System.out.println("ManyToOne");
-        if(fp.getField().getAnnotation(ManyToMany.class) != null) System.out.println("ManyToMany");
+        if(fp.getField().getAnnotation(OneToMany.class) != null) log.debug("OneToMany");
+        if(fp.getField().getAnnotation(ManyToOne.class) != null) log.debug("ManyToOne");
+        if(fp.getField().getAnnotation(ManyToMany.class) != null) log.debug("ManyToMany");
         if(fp.getField().getType() == String.class){
             p = createStringPredicate(fp, expression, value);
         }

@@ -1,5 +1,7 @@
 package emlkoks.entitybrowser.resources;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.zip.ZipInputStream;
 /**
  * Created by koks on 10.03.17.
  */
+@Slf4j
 public class Resources {
     public static final String DRIVERS_DIR = "drivers/";
     public static final String SAVED_CONNECTION = "conf/savedConnection.xml";
@@ -50,7 +53,7 @@ public class Resources {
                 // This ZipEntry represents a class. Now, what class does it represent?
                 String className = entry.getName().replace('/', '.'); // including ".class"
                 classNames.add(className.substring(0, className.length() - ".class".length()));
-                System.out.println("className = " + className);
+                log.debug("className = " + className);
             }
         }
     }
