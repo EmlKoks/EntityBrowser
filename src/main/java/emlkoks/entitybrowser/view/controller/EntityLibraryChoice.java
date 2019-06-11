@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.connection.ProviderEnum;
+import emlkoks.entitybrowser.connection.Provider;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -37,8 +37,8 @@ public class EntityLibraryChoice implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
-        providerList.getItems().addAll(ProviderEnum.getStringValues());
-        providerList.setValue(ProviderEnum.Hibernate.name());
+        providerList.getItems().addAll(Provider.getStringValues());
+        providerList.setValue(Provider.Hibernate.name());
     }
 
     @FXML
@@ -57,7 +57,7 @@ public class EntityLibraryChoice implements Initializable {
     public void connect() {
         File file = new File(libraryPath.getText());
         ((Stage) entityLibraryChoicePane.getScene().getWindow()).close();
-        Main.getMainController().setEntityList(file, ProviderEnum.valueOf(providerList.getValue()));
+        Main.getMainController().setEntityList(file, Provider.valueOf(providerList.getValue()));
     }
 
     @FXML

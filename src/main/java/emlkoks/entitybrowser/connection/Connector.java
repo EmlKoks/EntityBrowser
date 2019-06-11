@@ -14,14 +14,14 @@ import java.util.List;
  */
 public class Connector {
 
-    public static EntityManagerFactory createConnection(Connection connection, List<Class> classList, ProviderEnum provider){
+    public static EntityManagerFactory createConnection(Connection connection, List<Class> classList, Provider provider){
         connection.getDriver().loadDriver();
 
 
         EntityManagerFactoryCreator entityManagerFactoryCreator;
-        if(provider == ProviderEnum.Hibernate) {
+        if(provider == Provider.Hibernate) {
             entityManagerFactoryCreator = new HibernateEntityManagerFactory(connection, classList);
-        } else if(provider == ProviderEnum.EclipseLink) {
+        } else if(provider == Provider.EclipseLink) {
             entityManagerFactoryCreator = new EclipseLinkEntityManagerFactoryCreator(connection);
         } else {
             throw new RuntimeException("Provider not defined");

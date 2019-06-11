@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.view.controller;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.connection.ProviderEnum;
+import emlkoks.entitybrowser.connection.Provider;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.session.Session;
@@ -99,7 +99,7 @@ public class MainWindowController implements Initializable{
     private void debug(){
         Connection connection = Main.savedConnections.getByName("ers");
         File lib = new File("/home/koks/Projekty/EntityBrowser/ERS-db-entities-1.1.jar");
-        session = new Session(connection, lib, ProviderEnum.EclipseLink);
+        session = new Session(connection, lib, Provider.EclipseLink);
         if(session.connect()) {
             entityList.getItems().addAll(session.getClassNames());
             centerContent.setDisable(false);
@@ -137,7 +137,7 @@ public class MainWindowController implements Initializable{
         }
     }
 
-    public void setEntityList(File file, ProviderEnum provider) {
+    public void setEntityList(File file, Provider provider) {
         session = new Session(connection, file, provider);
         try{
             session.connect();

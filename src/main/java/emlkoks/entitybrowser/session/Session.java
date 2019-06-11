@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.session;
 import emlkoks.entitybrowser.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
-import emlkoks.entitybrowser.connection.ProviderEnum;
+import emlkoks.entitybrowser.connection.Provider;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,10 +20,10 @@ import java.util.List;
 public class Session {
     private EntityList entityList;
     private Connection connection;
-    private ProviderEnum provider;
+    private Provider provider;
     private EntityManager em;
 
-    public Session(Connection connection, File entityJar, ProviderEnum provider) {
+    public Session(Connection connection, File entityJar, Provider provider) {
         this.connection = connection;
         entityList = new EntityList(entityJar);
         this.provider = provider;
