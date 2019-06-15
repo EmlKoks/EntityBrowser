@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser.query.comparator;
 
-import emlkoks.entitybrowser.query.comparator.expression.*;
+import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
+import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
 
 /**
  * Created by EmlKoks on 15.06.19.

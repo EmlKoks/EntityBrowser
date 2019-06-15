@@ -1,15 +1,14 @@
 package emlkoks.entitybrowser.session;
 
-import emlkoks.entitybrowser.query.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Provider;
-
+import emlkoks.entitybrowser.query.QueryCreator;
+import java.io.File;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
-import java.io.File;
-import java.util.List;
 
 /**
  * Created by EmlKoks on 09.04.17.
@@ -26,25 +25,25 @@ public class Session {
         this.provider = provider;
     }
 
-    public List<Class> getEntityClasses(){
+    public List<Class> getEntityClasses() {
         return entityList.getClasses();
     }
 
-    public List<String> getClassNames(){
+    public List<String> getClassNames() {
         return entityList.getClassNames();
     }
 
-    public boolean connect(){
+    public boolean connect() {
         EntityManagerFactory emf = Connector.createConnection(connection, entityList.getClasses(), provider);
-        if(emf != null) {
+        if (emf != null) {
             em = emf.createEntityManager();
             return true;
-        }
-        else
+        } else {
             return false;
+        }
     }
 
-    public Entity getEntity(String entityName){
+    public Entity getEntity(String entityName) {
         return entityList.getEntity(entityName);
     }
 
@@ -52,7 +51,7 @@ public class Session {
         return em.createQuery(pc.getCriteriaQuery()).setMaxResults(100).getResultList();
     }
 
-    public CriteriaBuilder getCriteriaBuilder(){
+    public CriteriaBuilder getCriteriaBuilder() {
         return em.getCriteriaBuilder();
     }
 }

@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.connection.factoryCreator;
+package emlkoks.entitybrowser.connection.factory.creator;
 
 import emlkoks.entitybrowser.connection.Connection;
 
@@ -10,7 +10,7 @@ import javax.persistence.Persistence;
  */
 public class EclipseLinkEntityManagerFactoryCreator extends EntityManagerFactoryCreator {
 
-    public EclipseLinkEntityManagerFactoryCreator(Connection connection){
+    public EclipseLinkEntityManagerFactoryCreator(Connection connection) {
         super(connection);
     }
 

@@ -19,7 +19,7 @@ public class TextInputDialogCreator extends DialogCreator<String> {
     @Override
     protected Dialog<String> createDialog() {
         TextInputDialog dialog = new TextInputDialog();
-        if(title != null && !title.isEmpty()) {
+        if (title != null && !title.isEmpty()) {
             dialog.setTitle(title);
         }
         dialog.setContentText(message);

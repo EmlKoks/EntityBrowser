@@ -1,9 +1,8 @@
 package emlkoks.entitybrowser.session;
 
-import lombok.Data;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import lombok.Data;
 
 /**
  * Created by EmlKoks on 17.04.17.
@@ -16,7 +15,7 @@ public class FieldProperty {
     Field field;
     Class parentClass;
 
-    public FieldProperty(String name){
+    public FieldProperty(String name) {
         this.name = name;
     }
 }

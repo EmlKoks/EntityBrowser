@@ -2,9 +2,12 @@ package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.resources.Resources;
-
-import javax.xml.bind.annotation.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by EmlKoks on 19.03.17.
@@ -23,7 +26,7 @@ public class SavedConnection {
         this.list = list;
     }
 
-    public void add(Connection sc){
+    public void add(Connection sc) {
         list.add(sc);
         Marshaller.marshal(this, Resources.SAVED_CONNECTION);
     }
@@ -34,9 +37,9 @@ public class SavedConnection {
                 .findFirst().get();
     }
 
-    public void remove(String name){
-        for(Connection sc : list){
-            if(name.equals(sc.getName())){
+    public void remove(String name) {
+        for (Connection sc : list) {
+            if (name.equals(sc.getName())) {
                 list.remove(sc);
                 break;
             }
@@ -44,11 +47,15 @@ public class SavedConnection {
         Marshaller.marshal(this, Resources.SAVED_CONNECTION);
     }
 
-    public Connection getConnection(String name){
-        if(Resources.isNullOrEmpty(name)) return null;
-        for(Connection d : list)
-            if(name.equals(d.getName()))
+    public Connection getConnection(String name) {
+        if (Resources.isNullOrEmpty(name)) {
+            return null;
+        }
+        for (Connection d : list) {
+            if (name.equals(d.getName())) {
                 return d;
+            }
+        }
         return null;
     }
 }

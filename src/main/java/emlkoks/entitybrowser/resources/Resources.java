@@ -1,7 +1,5 @@
 package emlkoks.entitybrowser.resources;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by koks on 10.03.17.
@@ -27,20 +26,21 @@ public class Resources {
         createHomeDir();
     }
 
-    private static void createHomeDir(){
+    private static void createHomeDir() {
         File cache = new File(CACHE_DIR);
-        if(!cache.exists()){
+        if (!cache.exists()) {
             cache.mkdirs();
         }
     }
 
 
-    static List<File> driverList(){
+    static List<File> driverList() {
         List<File> driverList = new ArrayList<>();
-        for(File file : new File("./../connection").listFiles()){
+        for (File file : new File("./../connection").listFiles()) {
             String fileName = file.getName();
-            if ("JAR".equals(fileName.substring(fileName.lastIndexOf(".")+1).toUpperCase()))
+            if ("JAR".equals(fileName.substring(fileName.lastIndexOf(".") + 1).toUpperCase())) {
                 driverList.add(file);
+            }
         }
         return driverList;
     }
@@ -57,7 +57,8 @@ public class Resources {
             }
         }
     }
-    public static boolean isNullOrEmpty(String s){
-        return s==null || s.isEmpty();
+
+    public static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 }

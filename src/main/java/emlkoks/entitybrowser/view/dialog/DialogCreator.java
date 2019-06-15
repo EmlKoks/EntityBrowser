@@ -1,9 +1,7 @@
 package emlkoks.entitybrowser.view.dialog;
 
-import javafx.scene.control.Dialog;
-
 import java.util.Optional;
-
+import javafx.scene.control.Dialog;
 
 /**
  * Created by EmlKoks on 29.05.19.

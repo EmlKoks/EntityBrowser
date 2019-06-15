@@ -1,10 +1,9 @@
-package emlkoks.entitybrowser.connection.factoryCreator;
+package emlkoks.entitybrowser.connection.factory.creator;
 
 import emlkoks.entitybrowser.connection.Connection;
-
-import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.EntityManagerFactory;
 
 /**
  * Created by EmlKoks on 10.03.17.

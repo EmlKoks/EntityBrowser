@@ -1,10 +1,11 @@
 package emlkoks.entitybrowser.view.dialog;
 
+import static javafx.scene.control.Alert.AlertType;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 
-import static javafx.scene.control.Alert.AlertType;
 
 /**
  * Created by EmlKoks on 29.05.19.
@@ -26,7 +27,7 @@ public abstract class AlertCreator extends DialogCreator<ButtonType> {
     @Override
     protected Dialog<ButtonType> createDialog() {
         Alert alert = new Alert(alertType);
-        if(title != null && !title.isEmpty()) {
+        if (title != null && !title.isEmpty()) {
             alert.setTitle(title);
         }
         alert.setContentText(message);

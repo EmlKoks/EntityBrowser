@@ -2,6 +2,9 @@ package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.connection.Provider;
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -9,10 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Created by EmlKoks on 30.05.19.
@@ -44,13 +43,15 @@ public class EntityLibraryChoice implements Initializable {
     @FXML
     public void chooseLib() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("entityLibraryChoice.libFilter"), "*.jar", "*.war", "*.ear");
+        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(
+                resources.getString("entityLibraryChoice.libFilter"), "*.jar", "*.war", "*.ear");
         fileChooser.setSelectedExtensionFilter(exFilter);
         entityLibrary = fileChooser.showOpenDialog(entityLibraryChoicePane.getScene().getWindow());
-        if(entityLibrary != null)
+        if (entityLibrary != null) {
             libraryPath.setText(entityLibrary.getName());
-        else
+        } else {
             libraryPath.setText("");
+        }
     }
 
     @FXML

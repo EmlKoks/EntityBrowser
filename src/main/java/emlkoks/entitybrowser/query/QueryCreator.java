@@ -1,8 +1,8 @@
 package emlkoks.entitybrowser.query;
 
 import emlkoks.entitybrowser.session.FieldProperty;
-import lombok.extern.slf4j.Slf4j;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -10,8 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by EmlKoks on 17.04.17.
@@ -24,7 +23,7 @@ public class QueryCreator {
     private Class clazz;
     private List<Predicate> predicates;
 
-    public QueryCreator(Class clazz, CriteriaBuilder cb){
+    public QueryCreator(Class clazz, CriteriaBuilder cb) {
         predicates = new ArrayList<>();
         this.clazz = clazz;
         this.cb = cb;
@@ -32,34 +31,44 @@ public class QueryCreator {
         root = cq.from(clazz);
     }
 
-    public void createPredicate(FieldProperty fp, String expression, String value){
+    public void createPredicate(FieldProperty fp, String expression, String value) {
         Predicate p = null;
-        if(fp.getField().getAnnotation(OneToMany.class) != null) log.debug("OneToMany");
-        if(fp.getField().getAnnotation(ManyToOne.class) != null) log.debug("ManyToOne");
-        if(fp.getField().getAnnotation(ManyToMany.class) != null) log.debug("ManyToMany");
-        if(fp.getField().getType() == String.class){
+        if (fp.getField().getAnnotation(OneToMany.class) != null) {
+            log.debug("OneToMany");
+        }
+        if (fp.getField().getAnnotation(ManyToOne.class) != null) {
+            log.debug("ManyToOne");
+        }
+        if (fp.getField().getAnnotation(ManyToMany.class) != null) {
+            log.debug("ManyToMany");
+        }
+        if (fp.getField().getType() == String.class) {
             p = createStringPredicate(fp, expression, value);
         }
-        if(p!=null)
+        if (p != null) {
             predicates.add(p);
+        }
     }
 
-    private Predicate createStringPredicate(FieldProperty fp, String expression, String value){
-        if("Zawiera".equals(expression))
-            return cb.like(root.get(root.getModel().getDeclaredSingularAttribute(fp.getName())), "%"+value+"%");
-        else if ("Równe".equals(expression))
+    private Predicate createStringPredicate(FieldProperty fp, String expression, String value) {
+        if ("Zawiera".equals(expression)) {
+            return cb.like(root.get(root.getModel().getDeclaredSingularAttribute(fp.getName())), "%" + value + "%");
+        } else if ("Równe".equals(expression)) {
             return cb.equal(root.get(root.getModel().getDeclaredSingularAttribute(fp.getName())), value);
-        else return null;
+        } else {
+            return null;
+        }
     }
 
-    public CriteriaQuery getCriteriaQuery(){
+    public CriteriaQuery getCriteriaQuery() {
         addPredicatesToCq();
         return cq;
     }
 
-    private void addPredicatesToCq(){
-        for(Predicate p : predicates)
+    private void addPredicatesToCq() {
+        for (Predicate p : predicates) {
             cq.where(p);
+        }
     }
 
 

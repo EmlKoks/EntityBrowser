@@ -7,9 +7,9 @@ public enum Provider {
     Hibernate,
     EclipseLink;
 
-    public static List<String> getStringValues(){
+    public static List<String> getStringValues() {
         List<String> values = new ArrayList<>();
-        for(Provider val : Provider.values()){
+        for (Provider val : Provider.values()) {
             values.add(val.toString());
         }
         return values;

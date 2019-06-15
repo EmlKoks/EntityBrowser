@@ -1,18 +1,17 @@
-package emlkoks.entitybrowser.connection.factoryCreator;
+package emlkoks.entitybrowser.connection.factory.creator;
 
 import emlkoks.entitybrowser.connection.Connection;
-import org.hibernate.jpa.AvailableSettings;
-
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.List;
+import org.hibernate.jpa.AvailableSettings;
 
 /**
  * Created by EmlKoks on 10.03.17.
  */
 public class HibernateEntityManagerFactory extends EntityManagerFactoryCreator {
 
-    public HibernateEntityManagerFactory(Connection connection, List<Class> classList){
+    public HibernateEntityManagerFactory(Connection connection, List<Class> classList) {
         super(connection);
         properties.put(AvailableSettings.LOADED_CLASSES, classList);
     }

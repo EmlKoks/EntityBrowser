@@ -13,7 +13,7 @@ public class Entity {
     private Class clazz;
     private SortedMap<String, FieldProperty> fields;
 
-    public Entity(Class entity){
+    public Entity(Class entity) {
         name = entity.getName();
         clazz = entity;
     }
@@ -38,15 +38,15 @@ public class Entity {
         this.fields = fields;
     }
 
-    public Field getField(String name){
+    public Field getField(String name) {
         return fields.get(name).getField();
     }
 
-    public Collection<FieldProperty> getFields(){
+    public Collection<FieldProperty> getFields() {
         return fields.values();
     }
 
-    public FieldProperty getFieldProperty(String name){
+    public FieldProperty getFieldProperty(String name) {
         return fields.get(name);
     }
 

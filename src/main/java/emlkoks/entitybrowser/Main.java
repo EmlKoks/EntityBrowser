@@ -2,17 +2,20 @@ package emlkoks.entitybrowser;
 
 import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.common.Properties;
-import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnection;
+import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.view.controller.MainWindowController;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Queue;
+import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.*;
 
 public class Main extends Application {
     static Properties properties;
@@ -23,7 +26,7 @@ public class Main extends Application {
     public static ResourceBundle bundle;
 
     @Override
-    public void start(final Stage primaryStage) throws Exception{
+    public void start(final Stage primaryStage) throws Exception {
         bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/view/mainWindow.fxml"), bundle);
@@ -38,12 +41,12 @@ public class Main extends Application {
         try {
             initialize();
             launch(args);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void initialize(){
+    private static void initialize() {
         drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
         savedConnections = Marshaller.unmarshal(SavedConnection.class, Resources.SAVED_CONNECTION);
 //        properties = new Properties();
@@ -58,11 +61,11 @@ public class Main extends Application {
         Main.mainController = mainController;
     }
 
-    public static void addEntity(Object o){
+    public static void addEntity(Object o) {
         entityDetailsQueue.add(o);
     }
 
-    public static Object getEntity(){
+    public static Object getEntity() {
         return entityDetailsQueue.poll();
     }
 }

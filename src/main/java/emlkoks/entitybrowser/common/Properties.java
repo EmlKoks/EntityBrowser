@@ -9,7 +9,7 @@ public class Properties {
     java.util.Properties lang = new java.util.Properties();
     String slang = "lang/pl_Polski.properties";
 
-    public Properties(){
+    public Properties() {
         try {
             InputStream is = new FileInputStream(slang);
             lang.load(is);

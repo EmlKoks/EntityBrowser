@@ -1,13 +1,13 @@
 package emlkoks.entitybrowser.common;
 
+import java.io.File;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
 
 public class Marshaller {
 
-    public static void marshal(Object obj, String fileName){
+    public static void marshal(Object obj, String fileName) {
         try {
             File file = new File(fileName);
             JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
@@ -21,7 +21,7 @@ public class Marshaller {
         }
     }
 
-    public static <T> T unmarshal(Class<T> clazz, String fileName){
+    public static <T> T unmarshal(Class<T> clazz, String fileName) {
         try {
             File file = new File(fileName);
             JAXBContext jaxbContext = JAXBContext.newInstance(clazz);

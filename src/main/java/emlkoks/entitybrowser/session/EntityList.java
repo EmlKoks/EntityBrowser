@@ -10,26 +10,26 @@ import java.util.Map;
 /**
  * Created by EmlKoks on 03.04.17.
  */
-public class EntityList {
+class EntityList {
     Map<String, Entity> classMap;
 
-    public EntityList(File libFile) {
+    EntityList(File libFile) {
         classMap = LibraryManager.getEntitesFromLib(libFile);
     }
 
-    public List<Class> getClasses(){
+    List<Class> getClasses() {
         List<Class> list = new ArrayList<>();
         classMap.values().forEach(x -> list.add(x.getClazz()));
         return list;
     }
 
-    public List<String> getClassNames(){
+    List<String> getClassNames() {
         ArrayList<String> names = new ArrayList<>();
         classMap.keySet().forEach(x -> names.add(x));
         return names;
     }
 
-    public Entity getEntity(String entityName){
+    Entity getEntity(String entityName) {
         return classMap.get(entityName);
     }
 

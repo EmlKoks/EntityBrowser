@@ -1,9 +1,13 @@
 package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.connection.Driver;
+import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -12,15 +16,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Created by EmlKoks on 28.03.17.
  */
-public class NewDriverController implements Initializable{
+public class NewDriverController implements Initializable {
 
     @FXML
     private GridPane newDriverPane;
@@ -50,32 +50,34 @@ public class NewDriverController implements Initializable{
     @FXML
     public void chooseLib() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("newDriver.libFilter"), "*.jar");
+        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(
+                resources.getString("newDriver.libFilter"), "*.jar");
         fileChooser.setSelectedExtensionFilter(exFilter);
         lib = fileChooser.showOpenDialog(newDriverPane.getScene().getWindow());
-        if(lib != null)
+        if (lib != null) {
             driver.setText(lib.getName());
-        else
+        } else {
             driver.setText("");
+        }
     }
 
     @FXML
-    public void closeDialog(){
+    public void closeDialog() {
         ((Stage) newDriverPane.getScene().getWindow()).close();
     }
 
     @FXML
-    public void save(){
-        if(lib == null ||
-                Resources.isNullOrEmpty(name.getText()) ||
-                Resources.isNullOrEmpty(clazz.getText()) ||
-                Resources.isNullOrEmpty(urlTemplate.getText())){
+    public void save() {
+        if (lib == null
+                || Resources.isNullOrEmpty(name.getText())
+                || Resources.isNullOrEmpty(clazz.getText())
+                || Resources.isNullOrEmpty(urlTemplate.getText())) {
             new ErrorDialogCreator(
                     resources.getString("error.title"),
                     resources.getString("newDriver.error.emptyFields"))
                     .show();
         } else {
-            if(createDriver()){
+            if (createDriver()) {
                 closeDialog();
             } else {
                 new ErrorDialogCreator(
@@ -87,7 +89,7 @@ public class NewDriverController implements Initializable{
 
     }
 
-    private boolean createDriver(){
+    private boolean createDriver() {
         Driver driver = new Driver();
         driver.setName(name.getText());
         driver.setClassName(clazz.getText());
