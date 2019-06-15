@@ -1,9 +1,12 @@
 package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.QueryCreator;
+import emlkoks.entitybrowser.query.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Provider;
+import emlkoks.entitybrowser.query.comparator.ComparatorManager;
+import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
+import emlkoks.entitybrowser.query.comparator.expression.Expression;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.session.Session;
@@ -21,25 +24,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PersistenceException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by EmlKoks on 18.03.17.
@@ -153,15 +148,6 @@ public class MainWindowController implements Initializable{
         }
     }
 
-    private String chooseEntityLib(){
-
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("choose.lib_filter"), "*.jar", "*.war", "*.earr");
-        fileChooser.setSelectedExtensionFilter(exFilter);
-        File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
-        return file.getPath();
-    }
-
     @FXML
     public void doSearch() throws NoSuchMethodException {
         Entity entity = session.getEntity(entityList.getValue());
@@ -192,8 +178,14 @@ public class MainWindowController implements Initializable{
         if(addedFilters.contains(fieldName)) return;
         Field field = session.getEntity(entityList.getValue()).getField(fieldName);
         Label label = new Label(filters.getValue());
-        ChoiceBox<String> expression = new ChoiceBox<>();
-        expression.getItems().addAll(getChoiceListByFieldType(field));
+        ChoiceBox<Expression> expression = new ChoiceBox<>();
+        try {
+            expression.getItems().addAll(ComparatorManager.getExpressionByField(field));
+        } catch (ComparatorNotFoundException ex) {
+            log.info(ex.getMessage());
+            //TODO show dialog
+            return;
+        }
         expression.setValue(expression.getItems().get(0));
         TextField value = new TextField();
         filterList.addRow(filterList.getChildren().size(), label, expression, value);
@@ -225,37 +217,6 @@ public class MainWindowController implements Initializable{
             tv.getColumns().add(column);
         }
         rightContent.getChildren().add(tv);
-    }
-
-
-
-    private String[] getChoiceListByFieldType(Field field) {
-        Class clazz = field.getType();
-        List<String> choices = new ArrayList<>();
-        if (clazz == String.class) {
-            choices.add("Równe");
-            choices.add("Zawiera");
-        } else if(clazz == boolean.class || clazz == Boolean.class) {
-            choices.add("Równe");
-        } else if (clazz.isAssignableFrom(Number.class) || clazz == int.class || clazz == float.class || clazz == long.class || clazz == double.class) {
-            choices.add("==");
-            choices.add("=!");
-            choices.add(">");
-            choices.add(">=");
-            choices.add("<");
-        } else if (clazz == Date.class) {
-            choices.add("==");
-            choices.add(">");
-            choices.add(">=");
-            choices.add("<");
-        } else if (field.getAnnotation(OneToMany.class) != null){
-            choices.add("OneToMany");
-        } else if (field.getAnnotation(ManyToOne.class) != null){
-            choices.add("ManyToOne");
-        } else {
-            log.debug("Nieobsługiwany typ danych " + clazz);
-        }
-        return choices.toArray(new String[choices.size()]);
     }
 
     private void cellClicked(MouseEvent event){

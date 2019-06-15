@@ -44,7 +44,7 @@ public class EntityLibraryChoice implements Initializable {
     @FXML
     public void chooseLib() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("entityLibraryChoice.libFilter"), "*.jar");
+        FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(resources.getString("entityLibraryChoice.libFilter"), "*.jar", "*.war", "*.ear");
         fileChooser.setSelectedExtensionFilter(exFilter);
         entityLibrary = fileChooser.showOpenDialog(entityLibraryChoicePane.getScene().getWindow());
         if(entityLibrary != null)

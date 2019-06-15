@@ -20,10 +20,11 @@ public class Main extends Application {
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;
     private static Queue<Object> entityDetailsQueue = new LinkedList<>();
+    public static ResourceBundle bundle;
 
     @Override
     public void start(final Stage primaryStage) throws Exception{
-        ResourceBundle bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
+        bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/view/mainWindow.fxml"), bundle);
         Scene scene = new Scene(root);

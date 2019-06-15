@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser;
+package emlkoks.entitybrowser.query;
 
 import emlkoks.entitybrowser.session.FieldProperty;
 import lombok.extern.slf4j.Slf4j;

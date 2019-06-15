@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.session;
 
-import emlkoks.entitybrowser.QueryCreator;
+import emlkoks.entitybrowser.query.QueryCreator;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Provider;
@@ -8,9 +8,6 @@ import emlkoks.entitybrowser.connection.Provider;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.io.File;
 import java.util.List;
 
