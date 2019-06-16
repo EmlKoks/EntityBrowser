@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser.connection;
 
+import emlkoks.entitybrowser.Main;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import lombok.Data;
@@ -23,5 +24,9 @@ public class Connection {
     @XmlElement(name = "driver")
     public String getDriverS() {
         return driver.getName();
+    }
+
+    public void setDriverS(String driverName) {
+        driver = Main.drivers.getDriver(driverName);
     }
 }
