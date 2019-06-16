@@ -12,6 +12,10 @@ public class ComparatorFactory {
             return new StringComparator();
         }
 
+        if (clazz == Character.class || clazz == char.class) {
+            return new CharacterComparator();
+        }
+
         if (clazz == Date.class) {
             return new DateComparator();
         }
@@ -20,9 +24,13 @@ public class ComparatorFactory {
             return new BooleanComparator();
         }
 
-        if (clazz.isAssignableFrom(Number.class) || clazz == int.class || clazz == float.class
-                || clazz == long.class || clazz == double.class) {
+        if (Number.class.isAssignableFrom(clazz) || clazz == int.class || clazz == float.class
+                || clazz == long.class || clazz == double.class || clazz == short.class) {
             return new NumberComparator();
+        }
+
+        if (clazz.isEnum()) {
+            return new EnumComparator();
         }
 
         return null;

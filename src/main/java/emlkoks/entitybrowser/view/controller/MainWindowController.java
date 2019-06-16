@@ -116,7 +116,13 @@ public class MainWindowController implements Initializable {
         session.getClassNames().stream()
                 .map(clazz -> session.getEntity(clazz))
                 .forEach(entity -> entity.getFields().stream()
-                    .forEach(field -> ComparatorManager.getExpressionByField(field.getField())));
+                    .forEach(field -> {
+                        try {
+                            ComparatorManager.getExpressionByField(field.getField());
+                        } catch (ComparatorNotFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }));
     }
 
     @FXML

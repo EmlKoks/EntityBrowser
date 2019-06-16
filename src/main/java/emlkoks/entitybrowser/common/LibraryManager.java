@@ -25,8 +25,10 @@ import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+import javax.persistence.Transient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+
 
 /**
  * Created by EmlKoks on 08.10.17.
@@ -174,6 +176,9 @@ public class LibraryManager {
         SortedMap<String, FieldProperty> fields = new TreeMap<>();
         Class clazz = entity.getClazz();
         for (Field field : clazz.getDeclaredFields()) {
+            if (field.getAnnotation(Transient.class) != null) {
+                continue;
+            }
             FieldProperty fp = new FieldProperty(field.getName());
             fp.setField(field);
             fp.setParentClass(entity.getClazz());
@@ -183,6 +188,9 @@ public class LibraryManager {
                 Method getMethod = clazz.getMethod((isBoolean ? "is" : "get") + methodName);
                 fp.setGetMethod(getMethod);
             } catch (NoSuchMethodException e) {
+                if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
+                    continue;
+                }
                 log.debug("Cannot find method " + (isBoolean ? "is" : "get") + methodName
                         + " in class " + clazz.getName());
                 continue;
@@ -191,6 +199,9 @@ public class LibraryManager {
                 Method setMethod = clazz.getMethod("set" + methodName, field.getType());
                 fp.setSetMethod(setMethod);
             } catch (NoSuchMethodException e) {
+                if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
+                    continue;
+                }
                 log.debug("Cannot find method get" + methodName + " in class " + clazz.getName());
                 continue;
             }
