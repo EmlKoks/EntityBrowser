@@ -1,5 +1,7 @@
 package emlkoks.entitybrowser.query.comparator;
 
+import emlkoks.entitybrowser.session.FieldProperty;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,11 @@ import java.util.Date;
  */
 public class ComparatorFactory {
 
-    public AbstractComparator getExpression(Class clazz) {
+    public AbstractComparator getComparator(FieldProperty fieldProperty) {
+        return getComparator(fieldProperty.getField().getType());
+    }
+
+    AbstractComparator getComparator(Class clazz) {
         if (clazz == String.class) {
             return new StringComparator();
         }

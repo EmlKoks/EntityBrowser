@@ -3,7 +3,8 @@ package emlkoks.entitybrowser.view.controller;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Provider;
-import emlkoks.entitybrowser.query.QueryCreator;
+import emlkoks.entitybrowser.query.FieldFilter;
+import emlkoks.entitybrowser.query.QueryBuilder;
 import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -97,7 +99,7 @@ public class MainWindowController implements Initializable {
             filterList.getChildren().clear();
             addedFilters.clear();
         });
-        debug();
+//        debug();
     }
 
     private void debug() {
@@ -107,7 +109,7 @@ public class MainWindowController implements Initializable {
         if (session.connect()) {
             entityList.getItems().addAll(session.getClassNames());
             centerContent.setDisable(false);
-            validateEntities(session);
+//            validateEntities(session);
         }
     }
 
@@ -175,14 +177,7 @@ public class MainWindowController implements Initializable {
     @FXML
     public void doSearch() {
         Entity entity = session.getEntity(entityList.getValue());
-        ObservableList children = filterList.getChildren();
-        QueryCreator pc = new QueryCreator(entity.getClazz(), session.getCriteriaBuilder());
-        for (int i = 0;i < addedFilters.size();++i) {
-            FieldProperty fp = entity.getFieldProperty(((Label)children.get(i * 2)).getText());
-            String value = ((TextField)children.get(i * 3 + 2)).getText();
-            String expression = ((ChoiceBox)children.get(i * 3 + 1)).getValue().toString();
-            pc.createPredicate(fp, expression, value);
-        }
+        QueryBuilder pc = new QueryBuilder(session.getCriteriaBuilder(), entity, prepareFieldFilters());
         try {
             List resultList = session.find(pc);
             showResults(resultList, entity);
@@ -194,6 +189,19 @@ public class MainWindowController implements Initializable {
             new ErrorDialogCreator(t.getMessage())
                     .show();
         }
+    }
+
+    private List<FieldFilter> prepareFieldFilters()  {
+        Entity entity = session.getEntity(entityList.getValue());
+        List<FieldFilter> fieldFilterList = new ArrayList<>();
+        ObservableList children = filterList.getChildren();
+        for (int i = 0;i < addedFilters.size();++i) {
+            FieldProperty fieldProperty = entity.getFieldProperty(((Label)children.get(i * 2)).getText());
+            Expression expression = (Expression) ((ChoiceBox)children.get(i * 3 + 1)).getValue();
+            String value = ((TextField)children.get(i * 3 + 2)).getText();
+            fieldFilterList.add(new FieldFilter(expression, fieldProperty, value));
+        }
+        return fieldFilterList;
     }
 
     @FXML

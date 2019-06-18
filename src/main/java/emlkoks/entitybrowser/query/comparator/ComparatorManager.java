@@ -30,7 +30,7 @@ public class ComparatorManager {
         }
 
         ComparatorFactory comparatorFactory = new ComparatorFactory();
-        AbstractComparator abstractComparator = comparatorFactory.getExpression(field.getType());
+        AbstractComparator abstractComparator = comparatorFactory.getComparator(field.getType());
         if (abstractComparator == null) {
             log.info("Cannot find comparator by class " + field.getType());
             return null;//todo throw exception to show warning

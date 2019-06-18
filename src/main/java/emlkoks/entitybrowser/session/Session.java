@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.session;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Provider;
-import emlkoks.entitybrowser.query.QueryCreator;
+import emlkoks.entitybrowser.query.QueryBuilder;
 import java.io.File;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -47,7 +47,7 @@ public class Session {
         return entityList.getEntity(entityName);
     }
 
-    public List<Object> find(QueryCreator pc) {
+    public List<Object> find(QueryBuilder pc) {
         return em.createQuery(pc.getCriteriaQuery()).setMaxResults(100).getResultList();
     }
 

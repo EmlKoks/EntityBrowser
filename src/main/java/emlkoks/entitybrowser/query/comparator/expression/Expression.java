@@ -18,7 +18,7 @@ public abstract class Expression {
         return expressionLabel;
     }
 
-    public ExpressionType getExpressionType() {
+    public ExpressionType getType() {
         return expressionType;
     }
 }
