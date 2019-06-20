@@ -8,11 +8,10 @@ import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
-
+import java.util.Date;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import java.util.Date;
 
 /**
  * Created by EmlKoks on 15.06.19.

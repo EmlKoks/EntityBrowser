@@ -9,11 +9,11 @@ import java.util.Date;
  */
 public class ComparatorFactory {
 
-    public AbstractComparator getComparator(FieldProperty fieldProperty) {
+    public static AbstractComparator getComparator(FieldProperty fieldProperty) {
         return getComparator(fieldProperty.getField().getType());
     }
 
-    AbstractComparator getComparator(Class clazz) {
+    static AbstractComparator getComparator(Class clazz) {
         if (clazz == String.class) {
             return new StringComparator();
         }

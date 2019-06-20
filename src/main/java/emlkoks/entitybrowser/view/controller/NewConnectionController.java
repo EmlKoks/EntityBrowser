@@ -54,6 +54,8 @@ public class NewConnectionController implements Initializable {
     @FXML
     private TextField password;
 
+    private Connection connection;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
@@ -133,12 +135,11 @@ public class NewConnectionController implements Initializable {
 
     @FXML
     public void connect() {
-        Connection connection = checkConnection();
-        if (checkConnection() == null) {
+        connection = createConnection();
+        if (connection == null) {
             return;
         }
         ((Stage) newConnectionPane.getScene().getWindow()).close();
-        Main.getMainController().createNewSessionTab(connection);
     }
 
     @FXML
@@ -175,7 +176,7 @@ public class NewConnectionController implements Initializable {
     public void testConnection() {
         if (!checkFields()) {
             //TODO nothing?
-        } else if (checkConnection() == null) {
+        } else if (createConnection() == null) {
             new WarningDialogCreator(
                     resources.getString("newConnection.test.title"),
                     resources.getString("newConnection.test.wrong.content"))
@@ -188,7 +189,7 @@ public class NewConnectionController implements Initializable {
         }
     }
 
-    private Connection checkConnection() {
+    private Connection createConnection() {
         Connection connection = new Connection();
         connection.setDriver(Main.drivers.getDriver(driverList.getValue()));
         connection.setUrl(url.getText());
@@ -213,5 +214,9 @@ public class NewConnectionController implements Initializable {
             return false;
         }
         return true;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

@@ -1,6 +1,5 @@
 package emlkoks.entitybrowser.session;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
 import java.util.SortedMap;
@@ -38,8 +37,8 @@ public class Entity {
         this.fields = fields;
     }
 
-    public Field getField(String name) {
-        return fields.get(name).getField();
+    public FieldProperty getField(String name) {
+        return fields.get(name);
     }
 
     public Collection<FieldProperty> getFields() {

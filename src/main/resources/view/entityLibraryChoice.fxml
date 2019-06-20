@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="entityLibraryChoicePane" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emlkoks.entitybrowser.view.controller.EntityLibraryChoice">
+<AnchorPane fx:id="entityLibraryChoicePane" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emlkoks.entitybrowser.view.controller.EntityLibraryChoiceController">
     <GridPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="400.0" vgap="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <Label alignment="CENTER" text="Library file" GridPane.columnIndex="0" GridPane.rowIndex="0" /> <!--TODO-->
         <HBox alignment="CENTER" GridPane.columnIndex="1">

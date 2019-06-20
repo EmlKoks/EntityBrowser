@@ -20,6 +20,13 @@ public class CharacterComparator extends AbstractComparator<Character> {
 
     @Override
     public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        return null;//TODO
+        switch (fieldFilter.getExpression().getType()) {
+            case EQUAL:
+                return cb.equal(attributePath, fieldFilter.getValue());
+            case NOT_EQUAL:
+                return cb.notEqual(attributePath, fieldFilter.getValue());
+            default:
+                throw new RuntimeException("Expression " + fieldFilter.getExpression().getType() + " not allowed");
+        }
     }
 }

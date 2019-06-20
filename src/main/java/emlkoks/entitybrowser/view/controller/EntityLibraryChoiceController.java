@@ -1,6 +1,5 @@
 package emlkoks.entitybrowser.view.controller;
 
-import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.connection.Provider;
 import java.io.File;
 import java.net.URL;
@@ -16,7 +15,7 @@ import javafx.stage.Stage;
 /**
  * Created by EmlKoks on 30.05.19.
  */
-public class EntityLibraryChoice implements Initializable {
+public class EntityLibraryChoiceController implements Initializable {
 
     @FXML
     private AnchorPane entityLibraryChoicePane;
@@ -32,7 +31,6 @@ public class EntityLibraryChoice implements Initializable {
 
     private File entityLibrary;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
@@ -46,9 +44,9 @@ public class EntityLibraryChoice implements Initializable {
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(
                 resources.getString("entityLibraryChoice.libFilter"), "*.jar", "*.war", "*.ear");
         fileChooser.setSelectedExtensionFilter(exFilter);
-        entityLibrary = fileChooser.showOpenDialog(entityLibraryChoicePane.getScene().getWindow());
-        if (entityLibrary != null) {
-            libraryPath.setText(entityLibrary.getName());
+        File selectedFile = fileChooser.showOpenDialog(entityLibraryChoicePane.getScene().getWindow());
+        if (selectedFile != null) {
+            libraryPath.setText(selectedFile.getName());
         } else {
             libraryPath.setText("");
         }
@@ -56,14 +54,23 @@ public class EntityLibraryChoice implements Initializable {
 
     @FXML
     public void connect() {
-        File file = new File(libraryPath.getText());
-        ((Stage) entityLibraryChoicePane.getScene().getWindow()).close();
-        Main.getMainController().setEntityList(file, Provider.valueOf(providerList.getValue()));
+        entityLibrary = new File(libraryPath.getText());
+        if (entityLibrary.exists()) {
+            ((Stage) entityLibraryChoicePane.getScene().getWindow()).close();
+        }
     }
 
     @FXML
     public void cancel() {
         ((Stage) entityLibraryChoicePane.getScene().getWindow()).close();
+    }
+
+    Provider getProvider() {
+        return Provider.valueOf(providerList.getValue());
+    }
+
+    File getEntityLibrary() {
+        return entityLibrary;
     }
 
 }

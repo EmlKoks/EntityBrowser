@@ -5,6 +5,8 @@ import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Provider;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.QueryBuilder;
+import emlkoks.entitybrowser.query.comparator.AbstractComparator;
+import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
@@ -14,14 +16,14 @@ import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeSet;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,10 +59,10 @@ public class MainWindowController implements Initializable {
     private BorderPane mainPane;
 
     @FXML
-    private ChoiceBox<String> entityList;
+    private ChoiceBox<String> entities;
 
     @FXML
-    private ChoiceBox<String> filters;
+    private ChoiceBox<String> fields;
 
     @FXML
     private SplitPane centerContent;
@@ -78,13 +80,11 @@ public class MainWindowController implements Initializable {
     private AnchorPane rightContent;
 
     @FXML
-    private GridPane filterList;
+    private GridPane filtersGrid;
 
     private Session session;
 
-    private Set<String> addedFilters = new HashSet<>();
-
-    private Connection connection;
+    private Set<String> addedFilters = new TreeSet<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,11 +92,11 @@ public class MainWindowController implements Initializable {
         this.resources = resources;
         filtersPane.prefWidthProperty().bind(leftContent.widthProperty());
         filtersPane.prefHeightProperty().bind(leftContent.heightProperty());
-        entityList.valueProperty().addListener((observable, oldValue, newValue) -> {
-            filters.getItems().clear();
-            filters.getItems().addAll(session.getEntity(newValue).getFieldsNames());
-            filters.setValue(filters.getItems().get(0));
-            filterList.getChildren().clear();
+        entities.valueProperty().addListener((observable, oldValue, newValue) -> {
+            fields.getItems().clear();
+            fields.getItems().addAll(session.getEntity(newValue).getFieldsNames());
+            fields.setValue(fields.getItems().get(0));
+            filtersGrid.getChildren().clear();
             addedFilters.clear();
         });
 //        debug();
@@ -107,9 +107,9 @@ public class MainWindowController implements Initializable {
         File lib = new File("/home/koks/Projekty/EntityBrowser/ERS-db-entities-1.1.jar");
         session = new Session(connection, lib, Provider.EclipseLink);
         if (session.connect()) {
-            entityList.getItems().addAll(session.getClassNames());
+            entities.getItems().addAll(session.getClassNames());
             centerContent.setDisable(false);
-//            validateEntities(session);
+            validateEntities(session);
         }
     }
 
@@ -131,39 +131,44 @@ public class MainWindowController implements Initializable {
     private void newConnection() {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        Parent root = null;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/newConnection.fxml"), resources);
         try {
-            root = FXMLLoader.load(getClass().getResource("/view/newConnection.fxml"), resources);
+            loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene dialogScene = new Scene(root);
+        Scene dialogScene = new Scene(loader.getRoot());
+        NewConnectionController controller = loader.getController();
         stage.setTitle(resources.getString("newConnection.title"));
         stage.setScene(dialogScene);
-        stage.show();
-    }
-
-    void createNewSessionTab(Connection connection) {
-        this.connection = connection;
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/entityLibraryChoice.fxml"), resources);
-            Scene dialogScene = new Scene(root);
-            stage.setTitle(resources.getString("entityLibraryChoice.title"));
-            stage.setScene(dialogScene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        stage.showAndWait();
+        Connection connection = controller.getConnection();
+        if (connection != null) {
+            createNewSessionTab(controller.getConnection());
         }
     }
 
-    void setEntityList(File file, Provider provider) {
-        session = new Session(connection, file, provider);
+    private void createNewSessionTab(Connection connection) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/entityLibraryChoice.fxml"), resources);
         try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        Scene dialogScene = new Scene(loader.getRoot());
+        stage.setTitle(resources.getString("entityLibraryChoice.title"));
+        stage.setScene(dialogScene);
+        stage.showAndWait();
+        EntityLibraryChoiceController controller = loader.getController();
+        createSession(connection, controller.getEntityLibrary(), controller.getProvider());
+    }
+
+    private void createSession(Connection connection, File file, Provider provider) {
+        try {
+            session = new Session(connection, file, provider);
             session.connect();
-            entityList.getItems().addAll(session.getClassNames());
-            centerContent.setDisable(false);
         } catch (PersistenceException ex) {
             ex.printStackTrace();
 
@@ -172,11 +177,17 @@ public class MainWindowController implements Initializable {
                     ex.getMessage())
                     .show();
         }
+        setEntityList();
+    }
+
+    private void setEntityList() {
+            entities.getItems().addAll(session.getClassNames());
+            centerContent.setDisable(false);
     }
 
     @FXML
     public void doSearch() {
-        Entity entity = session.getEntity(entityList.getValue());
+        Entity entity = session.getEntity(entities.getValue());
         QueryBuilder pc = new QueryBuilder(session.getCriteriaBuilder(), entity, prepareFieldFilters());
         try {
             List resultList = session.find(pc);
@@ -192,9 +203,9 @@ public class MainWindowController implements Initializable {
     }
 
     private List<FieldFilter> prepareFieldFilters()  {
-        Entity entity = session.getEntity(entityList.getValue());
+        Entity entity = session.getEntity(entities.getValue());
         List<FieldFilter> fieldFilterList = new ArrayList<>();
-        ObservableList children = filterList.getChildren();
+        ObservableList children = filtersGrid.getChildren();
         for (int i = 0;i < addedFilters.size();++i) {
             FieldProperty fieldProperty = entity.getFieldProperty(((Label)children.get(i * 2)).getText());
             Expression expression = (Expression) ((ChoiceBox)children.get(i * 3 + 1)).getValue();
@@ -206,26 +217,16 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void addFilter() {
-        if (entityList.getValue() == null) {
+        if (entities.getValue() == null) {
             return;
         }
-        String fieldName = filters.getValue();
+        String fieldName = fields.getValue();
         if (addedFilters.contains(fieldName)) {
-            return;
+            return;//Can add twice the same field?
         }
-        Field field = session.getEntity(entityList.getValue()).getField(fieldName);
-        Label label = new Label(filters.getValue());
-        ChoiceBox<Expression> expression = new ChoiceBox<>();
-        try {
-            expression.getItems().addAll(ComparatorManager.getExpressionByField(field));
-        } catch (ComparatorNotFoundException ex) {
-            log.info(ex.getMessage());
-            //TODO show dialog
-            return;
-        }
-        expression.setValue(expression.getItems().get(0));
-        TextField value = new TextField();
-        filterList.addRow(filterList.getChildren().size(), label, expression, value);
+        FieldProperty field = session.getEntity(entities.getValue()).getField(fieldName);
+        AbstractComparator comparator = ComparatorFactory.getComparator(field);
+        filtersGrid.addRow(filtersGrid.getChildren().size(), comparator.createFilterRow(field));
         addedFilters.add(fieldName);
     }
 
