@@ -24,6 +24,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 
+import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -146,6 +148,16 @@ public class MainWindowController implements Initializable {
         if (connection != null) {
             createNewSessionTab(controller.getConnection());
         }
+    }
+
+    @FXML
+    private void exit() {
+        Platform.exit();
+    }
+
+    @FXML
+    private void showAbout() {
+        new InformationDialogCreator("About", "Test").show();
     }
 
     private void createNewSessionTab(Connection connection) {

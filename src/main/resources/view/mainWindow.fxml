@@ -19,13 +19,15 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="%menu.file">
+          <Menu fx:id="menuFile" mnemonicParsing="false" text="%menu.file">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#newConnection" text="%menu.file.newConnection" />
-               </items></Menu>
-          <Menu mnemonicParsing="false" text="%menu.help">
+                  <MenuItem mnemonicParsing="false" onAction="#exit" text="%menu.file.exit" />
+               </items>
+          </Menu>
+          <Menu fx:id="menuHelp" mnemonicParsing="false" text="%menu.help">
             <items>
-              <MenuItem mnemonicParsing="false" text="%menu.help.about" />
+              <MenuItem fx:id="menuAbout" mnemonicParsing="false" onAction="#showAbout" text="%menu.help.about" />
             </items>
           </Menu>
         </menus>

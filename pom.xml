@@ -54,7 +54,16 @@
             <artifactId>guava</artifactId>
             <version>28.0-jre</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-core</artifactId>
+            <version>4.0.15-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-junit</artifactId>
+            <version>4.0.15-alpha</version>
+        </dependency>
     </dependencies>
 
     <build>
