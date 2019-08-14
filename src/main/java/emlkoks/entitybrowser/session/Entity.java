@@ -1,15 +1,19 @@
 package emlkoks.entitybrowser.session;
 
+import emlkoks.entitybrowser.common.LibraryManager;
 import java.util.Collection;
 import java.util.Set;
 import java.util.SortedMap;
+import lombok.Data;
 
 /**
  * Created by EmlKoks on 09.04.17.
  */
+@Data
 public class Entity {
     private String name;
     private Class clazz;
+    private Class metamodel;
     private SortedMap<String, FieldProperty> fields;
 
     public Entity(Class entity) {
@@ -17,35 +21,31 @@ public class Entity {
         clazz = entity;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Class getClazz() {
-        return clazz;
-    }
-
     public Set<String> getFieldsNames() {
+        if (fields == null) {
+            fields = LibraryManager.getEntityFields(this);
+        }
         return fields.keySet();
     }
 
-    public void setFields(SortedMap<String, FieldProperty> fields) {
-        this.fields = fields;
-    }
-
     public FieldProperty getField(String name) {
+        if (fields == null) {
+            fields = LibraryManager.getEntityFields(this);
+        }
         return fields.get(name);
     }
 
     public Collection<FieldProperty> getFields() {
+        if (fields == null) {
+            fields = LibraryManager.getEntityFields(this);
+        }
         return fields.values();
     }
 
     public FieldProperty getFieldProperty(String name) {
+        if (fields == null) {
+            fields = LibraryManager.getEntityFields(this);
+        }
         return fields.get(name);
     }
 

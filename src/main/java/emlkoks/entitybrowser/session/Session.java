@@ -48,7 +48,9 @@ public class Session {
     }
 
     public List<Object> find(QueryBuilder pc) {
-        return em.createQuery(pc.getCriteriaQuery()).setMaxResults(100).getResultList();
+        return em.createQuery(pc.getCriteriaQuery())
+                .setMaxResults(100)
+                .getResultList();
     }
 
     public CriteriaBuilder getCriteriaBuilder() {

@@ -21,7 +21,7 @@
         <menus>
           <Menu fx:id="menuFile" mnemonicParsing="false" text="%menu.file">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#newConnection" text="%menu.file.newConnection" />
+                  <MenuItem mnemonicParsing="false" onAction="#createNewSession" text="%menu.file.newSession" />
                   <MenuItem mnemonicParsing="false" onAction="#exit" text="%menu.file.exit" />
                </items>
           </Menu>

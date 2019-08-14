@@ -30,6 +30,13 @@ public class NumberComparator extends AbstractComparator<Number> {
 
     @Override
     public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        return null;//TODO
+        switch (fieldFilter.getExpression().getType()) {
+            case EQUAL:
+                return cb.equal(attributePath, fieldFilter.getValue());
+            case NOT_EQUAL:
+                return cb.notEqual(attributePath, fieldFilter.getValue());
+            default://TODO implement rest expressions
+                throw new RuntimeException("Expression " + fieldFilter.getExpression().getType() + " not allowed");
+        }
     }
 }

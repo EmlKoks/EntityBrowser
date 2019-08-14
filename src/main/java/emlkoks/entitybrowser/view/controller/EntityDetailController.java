@@ -2,6 +2,7 @@ package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -13,6 +14,9 @@ import javafx.scene.control.TreeView;
  * Created by EmlKoks on 01.05.17.
  */
 public class EntityDetailController implements Initializable {
+    private static final int MAX_DEEP = 20;
+    private static final int MAX_ITEM_LENGTH = 30;
+
     @FXML
     private TreeView<Object> tree;
 
@@ -59,44 +63,75 @@ public class EntityDetailController implements Initializable {
 //        });
     }
 
-    private TreeItem createTreeItem(Object entity, String name) {
+    private TreeItem<Object> createTreeItem(Object entity, String fieldName) {
+        System.out.println(deep + " " + fieldName);
         ++deep;
-        if (deep == 20) {
+        if (deep == MAX_DEEP) {
             --deep;
-            return new TreeItem("...");
+            return new TreeItem<>("...");
         }
-        TreeItem<Object> item;
-        String value = entity.toString();
-        if (!entity.getClass().isEnum() && entity.getClass() != String.class
-                && entity.getClass().getSuperclass() != Number.class && entity.getClass() != Boolean.class) {
-            if (entity instanceof Iterable) {
-                item = new TreeItem<>("");
-                int i = 0;
-                for (Object o : (Iterable) entity) {
-                    item.getChildren().add(createTreeItem(o, "[" + (i++) + "] "));
-                }
-                item.setValue(name + " : size = " + i + " (" + entity.getClass().getCanonicalName() + ")");
-            } else {
-                item = new TreeItem<>(name + ": "
-                        + (value.length() > 30 ? value.substring(0,30) + "..." : value)
-                        + " (" + entity.getClass().getCanonicalName() + ")");
-                Field[] fields = entity.getClass().getDeclaredFields();
-                for (Field f : fields) {
-                    f.setAccessible(true);
-                    try {
-                        item.getChildren().add(createTreeItem(f.get(entity), f.getName()));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
+        if (entity == null) {
+            --deep;
+            return null;
+        }
+        if (isSimplyType(entity.getClass())) {
+            --deep;
+            return getStringValue(entity, fieldName);
+        }
+        if (entity instanceof Iterable) {
+            --deep;
+            return createIterableItem((Iterable) entity, fieldName);
+        }
+        return createItemWithChildren(entity, fieldName);
+    }
+
+    private boolean isSimplyType(Class entityClass) {
+        return entityClass.isEnum() || entityClass == String.class || entityClass.getSuperclass() == Number.class
+                || entityClass == Boolean.class;
+    }
+
+    private TreeItem<Object> createIterableItem(Iterable entity, String fieldName) {
+        TreeItem item = new TreeItem<>("");
+        int i = 0;
+        for (Object o : entity) {
+            TreeItem subitem = createTreeItem(o, "[" + (i++) + "] ");
+            if (subitem != null) {
+                item.getChildren().add(subitem);
             }
-        } else {
-            item = new TreeItem<>(name + " = "
-                    + (value.length() > 30 ? value.substring(0,30) + "..." : value)
-                    + " (" + entity.getClass().getCanonicalName() + ")");
         }
-        --deep;
+        item.setValue(fieldName + " : size = " + i + " (" + entity.getClass().getCanonicalName() + ")");
         return item;
+    }
+
+    private TreeItem<Object> createItemWithChildren(Object entity, String fieldName) {
+        String toStringValue = entity.toString();
+        TreeItem<Object> item = new TreeItem<>(fieldName + ": "
+                + (toStringValue.length() > MAX_ITEM_LENGTH ? toStringValue.substring(0,MAX_ITEM_LENGTH)
+                + "..." : toStringValue) + " (" + entity.getClass().getCanonicalName() + ")");
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field f : fields) {
+            if (Modifier.isFinal(f.getModifiers())) {
+                continue;
+            }
+            f.setAccessible(true);
+            try {
+                TreeItem subitem = createTreeItem(f.get(entity), f.getName());
+                if (subitem != null) {
+                    item.getChildren().add(subitem);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        deep--;
+        return item;
+    }
+
+    private TreeItem<Object> getStringValue(Object entity, String fieldName) {
+        String toStringValue = entity.toString();
+        return new TreeItem<>(fieldName + " = "
+                + (toStringValue.length() > MAX_ITEM_LENGTH ? toStringValue.substring(0,MAX_ITEM_LENGTH)
+                + "..." : toStringValue) + " (" + entity.getClass().getCanonicalName() + ")");
     }
 
 }

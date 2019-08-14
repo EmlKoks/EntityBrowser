@@ -14,6 +14,7 @@ import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
+import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -23,8 +24,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
-
-import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -47,7 +46,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javax.persistence.PersistenceException;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -130,27 +128,6 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void newConnection() {
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/newConnection.fxml"), resources);
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Scene dialogScene = new Scene(loader.getRoot());
-        NewConnectionController controller = loader.getController();
-        stage.setTitle(resources.getString("newConnection.title"));
-        stage.setScene(dialogScene);
-        stage.showAndWait();
-        Connection connection = controller.getConnection();
-        if (connection != null) {
-            createNewSessionTab(controller.getConnection());
-        }
-    }
-
-    @FXML
     private void exit() {
         Platform.exit();
     }
@@ -160,8 +137,9 @@ public class MainWindowController implements Initializable {
         new InformationDialogCreator("About", "Test").show();
     }
 
-    private void createNewSessionTab(Connection connection) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/entityLibraryChoice.fxml"), resources);
+    @FXML
+    private void createNewSession() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/newSession.fxml"), resources);
         try {
             loader.load();
         } catch (IOException e) {
@@ -170,25 +148,11 @@ public class MainWindowController implements Initializable {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene dialogScene = new Scene(loader.getRoot());
-        stage.setTitle(resources.getString("entityLibraryChoice.title"));
+        stage.setTitle(resources.getString("newSession.title"));
         stage.setScene(dialogScene);
         stage.showAndWait();
-        EntityLibraryChoiceController controller = loader.getController();
-        createSession(connection, controller.getEntityLibrary(), controller.getProvider());
-    }
-
-    private void createSession(Connection connection, File file, Provider provider) {
-        try {
-            session = new Session(connection, file, provider);
-            session.connect();
-        } catch (PersistenceException ex) {
-            ex.printStackTrace();
-
-            new ErrorDialogCreator(
-                    "Nie udało się połączyć",
-                    ex.getMessage())
-                    .show();
-        }
+        NewSessionController controller = loader.getController();
+        session = controller.getSession();
         setEntityList();
     }
 
@@ -205,6 +169,7 @@ public class MainWindowController implements Initializable {
             List resultList = session.find(pc);
             showResults(resultList, entity);
         } catch (Exception e) {
+            e.printStackTrace();
             Throwable t = e;
             while (t.getCause() != null) {
                 t = t.getCause();
@@ -242,31 +207,47 @@ public class MainWindowController implements Initializable {
         addedFilters.add(fieldName);
     }
 
-    private void showResults(List results, Entity entity) {
-        ObservableList list = FXCollections.observableList(results);
-        TableView tv = new TableView();
-        tv.setItems(list);
-        tv.prefWidthProperty().bind(rightContent.widthProperty());
-        tv.prefHeightProperty().bind(rightContent.heightProperty());
-        tv.setRowFactory(v -> {
-            TableRow row = new TableRow();
-            row.setOnMouseClicked(ev -> cellClicked(ev));
-            return row;
-        });
+    private void showResults(List<Object> results, Entity entity) {
+        ObservableList<Object> list = FXCollections.observableList(results);
+        TableView resultsTable = createResultsTable(list);
         for (FieldProperty fp : entity.getFields()) {
             TableColumn column = new TableColumn(fp.getName());
             column.setCellValueFactory(cellData -> {
                 try {
-                    Object x = fp.getGetMethod().invoke(((TableColumn.CellDataFeatures) cellData).getValue());
-                    return new SimpleObjectProperty<>(x);
+                    Object cellValue = fp.getGetter().invoke(((TableColumn.CellDataFeatures) cellData).getValue());
+                    return new SimpleObjectProperty<>(getStringValue(cellValue));
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
                 return null;
             });
-            tv.getColumns().add(column);
+            resultsTable.getColumns().add(column);
         }
-        rightContent.getChildren().add(tv);
+        rightContent.getChildren().add(resultsTable);
+    }
+
+    private String getStringValue(Object obj) {
+        //TODO String, Date, Number...
+        if (obj == null) {
+            return null;
+        }
+        if (obj.toString().length() > 30) {
+            return "{" + obj.getClass().getSimpleName() + "}";
+        }
+        return obj.toString();
+    }
+
+    private TableView createResultsTable(ObservableList<Object> results) {
+        TableView resultsTable = new TableView();
+        resultsTable.setItems(results);
+        resultsTable.prefWidthProperty().bind(rightContent.widthProperty());
+        resultsTable.prefHeightProperty().bind(rightContent.heightProperty());
+        resultsTable.setRowFactory(v -> {
+            TableRow<Object> row = new TableRow<>();
+            row.setOnMouseClicked(this::cellClicked);
+            return row;
+        });
+        return resultsTable;
     }
 
     private void cellClicked(MouseEvent event) {

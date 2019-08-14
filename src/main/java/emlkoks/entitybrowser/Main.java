@@ -25,6 +25,10 @@ public class Main extends Application {
     private static Queue<Object> entityDetailsQueue = new LinkedList<>();
     public static ResourceBundle bundle;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(final Stage primaryStage) throws Exception {
         bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
@@ -35,17 +39,8 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
-    public static void main(String[] args) {
-        try {
-            initialize();
-            launch(args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void initialize() {
+    @Override
+    public void init() {
         drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
         savedConnections = Marshaller.unmarshal(SavedConnection.class, Resources.SAVED_CONNECTION);
 //        properties = new Properties();

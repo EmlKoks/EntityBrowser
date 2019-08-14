@@ -134,7 +134,7 @@ public class NewConnectionController implements Initializable {
     }
 
     @FXML
-    public void connect() {
+    public void choose() {
         connection = createConnection();
         if (connection == null) {
             return;
@@ -191,6 +191,7 @@ public class NewConnectionController implements Initializable {
 
     private Connection createConnection() {
         Connection connection = new Connection();
+        connection.setName("Custom");//TODO use saved connection name
         connection.setDriver(Main.drivers.getDriver(driverList.getValue()));
         connection.setUrl(url.getText());
         connection.setUser(user.getText());

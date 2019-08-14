@@ -66,7 +66,7 @@
                     <children>
                         <Button mnemonicParsing="false" onAction="#testConnection" text="%test" />
                         <Button mnemonicParsing="false" onAction="#saveConnection" text="%save" />
-                        <Button mnemonicParsing="false" onAction="#connect" text="%newConnection.connect" />
+                        <Button mnemonicParsing="false" onAction="#choose" text="%newConnection.choose" />
                         <Button mnemonicParsing="false" onAction="#closeDialog" text="%cancel" />
                     </children>
                     <VBox.margin>

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -102,7 +103,7 @@ public class LibraryManager {
      */
     private static List<File> getLibraryListFromFile(File library) {
         List<File> fileList;
-        if (library.getName().toLowerCase().endsWith(".ear")) {
+        if (library.getName().toLowerCase().endsWith(".ear") || library.getName().toLowerCase().endsWith(".war")) {
             fileList = unzipLib(library);
         } else {
             fileList = new ArrayList<>();
@@ -147,15 +148,14 @@ public class LibraryManager {
         String classPath = entry.getName().replace("WEB-INF/", "").replace("classes/", "");
         String className = classPath.replace('/', '.').replace(".class", "");
         try {
-            log.debug("className = " + className);
+//            log.debug("className = " + className);
             Class clazz = Class.forName(className);
             if (clazz.getAnnotation(javax.persistence.Entity.class) != null) {
                 Entity entity = new Entity(clazz);
-                entity.setFields(getEntityFields(entity));
                 classMap.put(className.substring(className.lastIndexOf(".") + 1), entity);
             }
-        } catch (ClassNotFoundException | NoClassDefFoundError | UnsatisfiedLinkError e) {
-            //Skip
+        } catch (ClassNotFoundException | LinkageError | ArrayStoreException e) {
+            //skip
         }
     }
 
@@ -172,42 +172,70 @@ public class LibraryManager {
         newFile.delete();
     }
 
-    private static SortedMap<String, FieldProperty> getEntityFields(Entity entity) {
+    public static SortedMap<String, FieldProperty> getEntityFields(Entity entity) {
+        return getFieldFromClass(entity.getClazz());
+    }
+
+    public static SortedMap<String, FieldProperty> getFieldFromClass(Class clazz) {
         SortedMap<String, FieldProperty> fields = new TreeMap<>();
-        Class clazz = entity.getClazz();
         for (Field field : clazz.getDeclaredFields()) {
-            if (field.getAnnotation(Transient.class) != null) {
+            if (isTransient(field) || isFinal(field)) {
                 continue;
             }
             FieldProperty fp = new FieldProperty(field.getName());
             fp.setField(field);
-            fp.setParentClass(entity.getClazz());
-            String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
-            boolean isBoolean = field.getType() == boolean.class;
+            fp.setParentClass(clazz);
             try {
-                Method getMethod = clazz.getMethod((isBoolean ? "is" : "get") + methodName);
-                fp.setGetMethod(getMethod);
-            } catch (NoSuchMethodException e) {
-                if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
-                    continue;
-                }
-                log.debug("Cannot find method " + (isBoolean ? "is" : "get") + methodName
-                        + " in class " + clazz.getName());
-                continue;
-            }
-            try {
-                Method setMethod = clazz.getMethod("set" + methodName, field.getType());
-                fp.setSetMethod(setMethod);
-            } catch (NoSuchMethodException e) {
-                if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
-                    continue;
-                }
-                log.debug("Cannot find method get" + methodName + " in class " + clazz.getName());
+                fp.setGetter(getGetter(field));
+                fp.setSetter(getSetter(field));
+            } catch (Exception e) {
                 continue;
             }
             fields.put(field.getName(), fp);
         }
+        if (clazz.getSuperclass() != Object.class) {
+            fields.putAll(getFieldFromClass(clazz.getSuperclass()));
+        }
+
         return fields;
+    }
+
+    private static boolean isFinal(Field field) {
+        return Modifier.isFinal(field.getModifiers());
+    }
+
+    private static boolean isTransient(Field field) {
+        return field.getAnnotation(Transient.class) != null;
+    }
+
+    private static Method getGetter(Field field) throws RuntimeException {
+        String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
+        boolean isBoolean = field.getType() == boolean.class;
+        try {
+            return field.getDeclaringClass().getMethod((isBoolean ? "is" : "get") + methodName);
+        } catch (NoSuchMethodException e) {
+            if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
+                throw new RuntimeException("skip");//TODO refactore
+            }
+            log.debug("Cannot find method " + (isBoolean ? "is" : "get") + methodName
+                    + " in class " + field.getDeclaringClass().getName());
+            throw new RuntimeException("skip");//TODO refactore
+            //TODO skip?
+        }
+    }
+
+    private static Method getSetter(Field field) throws RuntimeException {
+        String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
+        try {
+            return field.getDeclaringClass().getMethod("set" + methodName, field.getType());
+        } catch (NoSuchMethodException e) {
+            if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
+                throw new RuntimeException("skip");//TODO refactore
+            }
+            log.debug("Cannot find method get" + methodName + " in class " + field.getDeclaringClass().getName());
+            throw new RuntimeException("skip");//TODO refactore
+            //TODO skip?
+        }
     }
 
 }

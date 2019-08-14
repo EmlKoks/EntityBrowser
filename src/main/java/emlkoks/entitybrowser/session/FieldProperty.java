@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 public class FieldProperty {
     String name;
-    Method setMethod;
-    Method getMethod;
+    Method setter;
+    Method getter;
     Field field;
     Class parentClass;
 
