@@ -2,8 +2,11 @@ package emlkoks.entitybrowser.connection.factory.creator;
 
 import emlkoks.entitybrowser.connection.Connection;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import emlkoks.entitybrowser.connection.Property;
 import org.hibernate.jpa.AvailableSettings;
 
 /**
@@ -18,6 +21,6 @@ public class HibernateEntityManagerFactory extends EntityManagerFactoryCreator {
 
     @Override
     public EntityManagerFactory createEntityManagerFactory() {
-        return Persistence.createEntityManagerFactory("Hibernate", properties);
+        return Persistence.createEntityManagerFactory("Hibernate", getMapProperties());
     }
 }

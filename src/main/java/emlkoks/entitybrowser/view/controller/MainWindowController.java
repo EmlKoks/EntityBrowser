@@ -99,17 +99,22 @@ public class MainWindowController implements Initializable {
             filtersGrid.getChildren().clear();
             addedFilters.clear();
         });
+        debug2();
 //        debug();
     }
 
+    private void debug2() {
+        createNewSession();
+    }
+
     private void debug() {
-        Connection connection = Main.savedConnections.getByName("ers");
-        File lib = new File("/home/koks/Projekty/EntityBrowser/ERS-db-entities-1.1.jar");
-        session = new Session(connection, lib, Provider.EclipseLink);
+        Connection connection = Main.savedConnections.getByName("OSP");
+        File lib = new File("/home/nn/projects/EntityBrowser/osp.war");
+        session = new Session(connection, lib, Provider.Hibernate);
         if (session.connect()) {
             entities.getItems().addAll(session.getClassNames());
             centerContent.setDisable(false);
-            validateEntities(session);
+//            validateEntities(session);
         }
     }
 

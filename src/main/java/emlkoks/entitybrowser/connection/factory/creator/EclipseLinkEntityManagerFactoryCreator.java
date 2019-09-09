@@ -16,6 +16,6 @@ public class EclipseLinkEntityManagerFactoryCreator extends EntityManagerFactory
 
     @Override
     public EntityManagerFactory createEntityManagerFactory() {
-        return Persistence.createEntityManagerFactory("EclipseLink", properties);
+        return Persistence.createEntityManagerFactory("EclipseLink", getMapProperties());
     }
 }
