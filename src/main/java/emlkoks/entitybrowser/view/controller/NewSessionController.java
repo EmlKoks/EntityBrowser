@@ -186,7 +186,7 @@ public class NewSessionController implements Initializable {
         return Provider.valueOf(providerList.getValue());
     }
 
-    Session getSession() {
+    public Session getSession() {
         return session;
     }
 

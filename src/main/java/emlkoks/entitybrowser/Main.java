@@ -5,7 +5,7 @@ import emlkoks.entitybrowser.common.Properties;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnection;
 import emlkoks.entitybrowser.resources.Resources;
-import emlkoks.entitybrowser.view.controller.MainWindowController;
+import emlkoks.entitybrowser.view.controller.main.MainWindowController;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Queue;
@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
+    public static Mode mode = Mode.PROD;
     static Properties properties;
     public static SavedConnection savedConnections = new SavedConnection();
     public static DriverList drivers = new DriverList();
@@ -26,7 +27,17 @@ public class Main extends Application {
     public static ResourceBundle bundle;
 
     public static void main(String[] args) {
+        if  (args.length > 0) {
+            mode = Mode.valueOf(args[0]);
+        }
         launch(args);
+    }
+
+    @Override
+    public void init() {
+        drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
+        savedConnections = Marshaller.unmarshal(SavedConnection.class, Resources.SAVED_CONNECTION);
+//        properties = new Properties();
     }
 
     @Override
@@ -37,14 +48,16 @@ public class Main extends Application {
         primaryStage.setTitle("Entity Browser");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+        if (Mode.DEBUG.equals(mode)) {
+            initDebugData();
+        }
     }
 
-    @Override
-    public void init() {
-        drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
-        savedConnections = Marshaller.unmarshal(SavedConnection.class, Resources.SAVED_CONNECTION);
-//        properties = new Properties();
+    private void initDebugData() {
+
     }
+
 
 
     public static MainWindowController getMainController() {

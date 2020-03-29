@@ -14,7 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
  * Created by EmlKoks on 09.04.17.
  */
 public class Session {
-    private EntityList entityList;
+    protected EntityList entityList;
     private Connection connection;
     private Provider provider;
     private EntityManager em;

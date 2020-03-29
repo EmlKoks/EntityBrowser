@@ -31,6 +31,8 @@ public abstract class AlertCreator extends DialogCreator<ButtonType> {
             alert.setTitle(title);
         }
         alert.setContentText(message);
+        alert.setResizable(true);
+        alert.setWidth(500);
         return alert;
     }
 }

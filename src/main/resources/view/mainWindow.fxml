@@ -10,79 +10,45 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="emlkoks.entitybrowser.view.controller.MainWindowController">
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu fx:id="menuFile" mnemonicParsing="false" text="%menu.file">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#createNewSession" text="%menu.file.newSession" />
-                  <MenuItem mnemonicParsing="false" onAction="#exit" text="%menu.file.exit" />
-               </items>
-          </Menu>
-          <Menu fx:id="menuHelp" mnemonicParsing="false" text="%menu.help">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.102-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="emlkoks.entitybrowser.view.controller.main.MainWindowController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu fx:id="menuFile" mnemonicParsing="false" text="%menu.file">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#createNewSession" text="%menu.file.newSession"/>
+                        <MenuItem mnemonicParsing="false" onAction="#exit" text="%menu.file.exit"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="menuHelp" mnemonicParsing="false" text="%menu.help">
+                    <items>
+                        <MenuItem fx:id="menuAbout" mnemonicParsing="false" onAction="#showAbout"
+                                  text="%menu.help.about"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <center>
+        <SplitPane fx:id="centerContent" disable="true" dividerPositions="0.4" BorderPane.alignment="CENTER">
             <items>
-              <MenuItem fx:id="menuAbout" mnemonicParsing="false" onAction="#showAbout" text="%menu.help.about" />
+                <AnchorPane fx:id="leftContent">
+                    <children>
+                        <fx:include fx:id="search" source="main/search.fxml"/>
+                    </children>
+                </AnchorPane>
+                <AnchorPane fx:id="rightContent" minHeight="0.0" minWidth="0.0" prefWidth="255.0">
+                    <children>
+                        <fx:include fx:id="results" source="main/results.fxml"/>
+                    </children>
+                </AnchorPane>
             </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
-   <center>
-      <SplitPane fx:id="centerContent" disable="true" dividerPositions="0.4" BorderPane.alignment="CENTER">
-        <items>
-          <AnchorPane fx:id="leftContent">
-               <children>
-                  <BorderPane fx:id="filtersPane">
-                     <top>
-                        <VBox spacing="10.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <HBox alignment="CENTER" spacing="5.0">
-                                 <children>
-                                    <Label text="%mainWindow.entity" />
-                                    <ChoiceBox fx:id="entities" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="TOP_CENTER" spacing="5.0">
-                                 <children>
-                                    <Label text="%mainWindow.filters" />
-                                    <ChoiceBox fx:id="fields" prefWidth="150.0" />
-                                    <Button mnemonicParsing="false" onAction="#addFilter" text="%mainWindow.addFilter" />
-                                 </children></HBox>
-                           </children>
-                           <BorderPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </BorderPane.margin>
-                        </VBox>
-                     </top>
-                     <center>
-                        <GridPane fx:id="filtersGrid" alignment="TOP_CENTER" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
-                           <columnConstraints>
-                               <ColumnConstraints halignment="LEFT" />
-                               <ColumnConstraints halignment="LEFT" />
-                           </columnConstraints>
-                        </GridPane>
-                     </center>
-                      <bottom>
-                          <Button mnemonicParsing="false" onAction="#doSearch" text="%mainWindow.doSearch" BorderPane.alignment="CENTER">
-                           <BorderPane.margin>
-                              <Insets bottom="10.0" />
-                           </BorderPane.margin></Button>
-                      </bottom>
-                  </BorderPane>
-               </children></AnchorPane>
-          <AnchorPane fx:id="rightContent" minHeight="0.0" minWidth="0.0" prefWidth="255.0">
-               <children>
-               </children></AnchorPane>
-        </items>
-         <padding>
-            <Insets left="5.0" right="5.0" />
-         </padding>
-      </SplitPane>
-   </center>
+            <padding>
+                <Insets left="5.0" right="5.0"/>
+            </padding>
+        </SplitPane>
+    </center>
 </BorderPane>
