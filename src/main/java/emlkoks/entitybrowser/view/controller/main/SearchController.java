@@ -1,7 +1,9 @@
 package emlkoks.entitybrowser.view.controller.main;
 
+import emlkoks.entitybrowser.Main;
+import emlkoks.entitybrowser.Mode;
+import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.QueryBuilder;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
@@ -9,6 +11,12 @@ import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -18,10 +26,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class SearchController {
 
@@ -41,6 +45,7 @@ public class SearchController {
 
     private Session session;
     private Set<String> addedFilters = new TreeSet<>();
+    private Entity selectedEntity;
 
     public void initialize(MainWindowController parentController, Pane parentPane, Session session) {
         this.parentController = parentController;
@@ -48,8 +53,9 @@ public class SearchController {
         filtersPane.prefHeightProperty().bind(parentPane.heightProperty());
         this.session = session;
         entities.valueProperty().addListener((observable, oldValue, newValue) -> {
+            selectedEntity = session.getEntity(newValue);
             fields.getItems().clear();
-            fields.getItems().addAll(session.getEntity(newValue).getFieldsNames());
+            fields.getItems().addAll(selectedEntity.getFieldsNames());
             fields.setValue(fields.getItems().get(0));
             filtersGrid.getChildren().clear();
             addedFilters.clear();
@@ -59,37 +65,49 @@ public class SearchController {
     public void updateEntities(Session session) {
         this.session = session;
         entities.getItems().addAll(session.getClassNames());
+        if (Mode.DEBUG.equals(Main.mode)) {
+            entities.setValue(entities.getItems().get(0));
+        }
     }
 
     @FXML
     public void doSearch() {
-        Entity entity = session.getEntity(entities.getValue());
-        QueryBuilder pc = new QueryBuilder(session.getCriteriaBuilder(), entity, prepareFieldFilters());
         try {
-            List resultList = session.find(pc);
-            parentController.getResultsController().showResults(resultList, entity);
+//            List resultList = SearchService.searchResults(session, selectedEntity, getFieldFilters());
+            List resultList = MockSession.getResultsList();
+            parentController.getResultsController().showResults(resultList, selectedEntity);
         } catch (Exception e) {
             e.printStackTrace();
-            Throwable t = e;
-            while (t.getCause() != null) {
-                t = t.getCause();
-            }
-            new ErrorDialogCreator(t.getMessage())
+            new ErrorDialogCreator("Cannot find results")
                     .show();
         }
     }
 
-    private List<FieldFilter> prepareFieldFilters()  {
-        Entity entity = session.getEntity(entities.getValue());
+    private List<FieldFilter> getFieldFilters()  {
         List<FieldFilter> fieldFilterList = new ArrayList<>();
         ObservableList children = filtersGrid.getChildren();
         for (int i = 0;i < addedFilters.size();++i) {
-            FieldProperty fieldProperty = entity.getFieldProperty(((Label)children.get(i * 2)).getText());
-            Expression expression = (Expression) ((ChoiceBox)children.get(i * 3 + 1)).getValue();
-            String value = ((TextField)children.get(i * 3 + 2)).getText();
+            int firstChildInRow = i * 3;
+            FieldProperty fieldProperty = getFieldProperty(children.get(firstChildInRow));
+            Expression expression = getExpression(children.get(firstChildInRow + 1));
+            String value = getFilterValue(children.get(firstChildInRow + 2));
             fieldFilterList.add(new FieldFilter(expression, fieldProperty, value));
         }
         return fieldFilterList;
+    }
+
+    private FieldProperty getFieldProperty(Object obj) {
+        Label label = (Label) obj;
+        return selectedEntity.getFieldProperty(label.getText());
+    }
+
+    private Expression getExpression(Object obj) {
+        ChoiceBox choiceBox = (ChoiceBox) obj;
+        return (Expression) choiceBox.getValue();
+    }
+
+    private String getFilterValue(Object obj) {
+        return ((TextField)obj).getText();
     }
 
     @FXML

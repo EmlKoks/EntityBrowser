@@ -3,15 +3,15 @@ package emlkoks.entitybrowser.view.controller.main;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.connection.Provider;
-import mock.mock.MockSession;
+import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.Session;
+import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.NewSessionController;
 import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
-import java.io.File;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
-
 
 /**
  * Created by EmlKoks on 18.03.17.
@@ -59,14 +58,13 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Main.setMainController(this);
         this.resources = resources;
+        session = new MockSession();
         searchController.initialize(this, leftContent, session);
         resultsController.initialize(rightContent, resources);
 //        debugNewSession();
 //        debugOSP();
 //        debugResultsList();
-        if(Mode.DEBUG.equals(Main.mode)) {
-            debugWithMock();
-        }
+        debugWithMock();
     }
 
 
@@ -96,15 +94,19 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void createNewSession() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/newSession.fxml"), resources);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewFile.NEW_SESSION.getFile()), resources);
         try {
             loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Stage stage = creatNewSessionStage(loader);
+        Stage stage = createNewSessionStage(loader);
         stage.showAndWait();
-        session = ((NewSessionController)loader.getController()).getSession();
+        openSession(((NewSessionController)loader.getController()).getSession());
+    }
+
+    public void openSession(Session session) {
+        this.session = session;
         updateView();
     }
 
@@ -113,7 +115,7 @@ public class MainWindowController implements Initializable {
         centerContent.setDisable(false);
     }
 
-    private Stage creatNewSessionStage(FXMLLoader loader) {
+    private Stage createNewSessionStage(FXMLLoader loader) {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene dialogScene = new Scene(loader.getRoot());
@@ -137,7 +139,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void debugWithMock() {
-        session = new MockSession();
-        updateView();
+        openSession(new MockSession());
+        searchController.doSearch();
     }
 }

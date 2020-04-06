@@ -5,6 +5,7 @@ import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.dialog.ConfirmationDialogCreator;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
@@ -159,7 +160,7 @@ public class NewConnectionController implements Initializable {
         dialog.initOwner(newConnectionPane.getScene().getWindow());
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("/view/newDriver.fxml"), resources);
+            root = FXMLLoader.load(getClass().getResource(ViewFile.NEW_DRIVER.getFile()), resources);
         } catch (IOException e) {
             e.printStackTrace();
             return;

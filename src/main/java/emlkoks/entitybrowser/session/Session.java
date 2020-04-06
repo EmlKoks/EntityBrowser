@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.session;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Provider;
-import emlkoks.entitybrowser.query.QueryBuilder;
+
 import java.io.File;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ public class Session {
     protected EntityList entityList;
     private Connection connection;
     private Provider provider;
-    private EntityManager em;
+    private EntityManager entityManager;
 
     public Session(Connection connection, File entityJar, Provider provider) {
         this.connection = connection;
@@ -36,7 +36,7 @@ public class Session {
     public boolean connect() {
         EntityManagerFactory emf = Connector.createConnection(connection, entityList.getClasses(), provider);
         if (emf != null) {
-            em = emf.createEntityManager();
+            entityManager = emf.createEntityManager();
             return true;
         } else {
             return false;
@@ -47,13 +47,11 @@ public class Session {
         return entityList.getEntity(entityName);
     }
 
-    public List<Object> find(QueryBuilder pc) {
-        return em.createQuery(pc.getCriteriaQuery())
-                .setMaxResults(100)
-                .getResultList();
+    public CriteriaBuilder getCriteriaBuilder() {
+        return entityManager.getCriteriaBuilder();
     }
 
-    public CriteriaBuilder getCriteriaBuilder() {
-        return em.getCriteriaBuilder();
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }

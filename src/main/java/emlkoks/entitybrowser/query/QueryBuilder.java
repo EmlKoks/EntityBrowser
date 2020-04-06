@@ -37,6 +37,9 @@ public class QueryBuilder {
         build(fieldFilters);
     }
 
+    protected QueryBuilder() {
+    }
+
     private void build(Collection<FieldFilter> fieldFilters) {
         fieldFilters.forEach(this::createPredicate);
     }

@@ -5,6 +5,7 @@ import emlkoks.entitybrowser.common.Properties;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnection;
 import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.main.MainWindowController;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    public static Mode mode = Mode.PROD;
+    public static Mode mode = Mode.DEBUG;
     static Properties properties;
     public static SavedConnection savedConnections = new SavedConnection();
     public static DriverList drivers = new DriverList();
@@ -44,7 +45,7 @@ public class Main extends Application {
     public void start(final Stage primaryStage) throws Exception {
         bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
         FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent root = fxmlLoader.load(getClass().getResource("/view/mainWindow.fxml"), bundle);
+        Parent root = fxmlLoader.load(getClass().getResource(ViewFile.MAIN_WINDOW.getFile()), bundle);
         primaryStage.setTitle("Entity Browser");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
@@ -57,8 +58,6 @@ public class Main extends Application {
     private void initDebugData() {
 
     }
-
-
 
     public static MainWindowController getMainController() {
         return mainController;

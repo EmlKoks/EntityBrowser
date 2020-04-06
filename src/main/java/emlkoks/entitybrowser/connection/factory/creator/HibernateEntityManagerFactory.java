@@ -1,12 +1,11 @@
 package emlkoks.entitybrowser.connection.factory.creator;
 
 import emlkoks.entitybrowser.connection.Connection;
+import emlkoks.entitybrowser.connection.Property;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import emlkoks.entitybrowser.connection.Property;
 import org.hibernate.jpa.AvailableSettings;
 
 /**
@@ -16,7 +15,7 @@ public class HibernateEntityManagerFactory extends EntityManagerFactoryCreator {
 
     public HibernateEntityManagerFactory(Connection connection, List<Class> classList) {
         super(connection);
-        properties.put(AvailableSettings.LOADED_CLASSES, classList);
+        properties.add(new Property(AvailableSettings.LOADED_CLASSES, classList));
     }
 
     @Override

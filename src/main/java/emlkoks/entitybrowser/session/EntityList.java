@@ -1,13 +1,11 @@
 package emlkoks.entitybrowser.session;
 
 import emlkoks.entitybrowser.common.LibraryManager;
-import lombok.Data;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import lombok.Data;
 
 /**
  * Created by EmlKoks on 03.04.17.

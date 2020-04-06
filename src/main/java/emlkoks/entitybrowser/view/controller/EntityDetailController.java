@@ -1,6 +1,5 @@
 package emlkoks.entitybrowser.view.controller;
 
-import emlkoks.entitybrowser.Main;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -24,19 +23,15 @@ public class EntityDetailController implements Initializable {
     private ResourceBundle resources;
 
     private int deep;
+    private Object entity;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
-        Object entity = Main.getEntity();
-        if (entity != null) {
-            loadEntity(entity);
-        } else {
-            //TODO throw error?
-        }
     }
 
-    private void loadEntity(Object entity) {
+    public void loadEntity(Object entity) {
+        this.entity = entity;
         deep = 0;
         TreeItem<Object> rootItem = createTreeItem(entity, "Root");
         rootItem.setExpanded(true);

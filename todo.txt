@@ -1,0 +1,3 @@
+set modality in every windows
+create app icon
+add graphical view of db and one entity with depends

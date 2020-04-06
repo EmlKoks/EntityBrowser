@@ -3,6 +3,11 @@ package emlkoks.entitybrowser.view.controller.main;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.view.ViewFile;
+import emlkoks.entitybrowser.view.controller.EntityDetailController;
+import java.io.IOException;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,13 +23,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.persistence.Id;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class ResultsTableController {
 
@@ -34,27 +32,47 @@ public class ResultsTableController {
     @FXML
     private TableView resultsTable;
 
+    private Entity selectedEntity;
+
     public void initialize(Pane parentPane, ResourceBundle resources) {
         this.parentPane = parentPane;
         this.resources = resources;
     }
 
     public void showResults(List<? extends Object> results, Entity entity) {
+        this.selectedEntity = entity;
         ObservableList<? extends Object> list = FXCollections.observableList(results);
         createResultsTable(list);
-        for (FieldProperty fp : entity.getFields()) {
-            TableColumn column = new TableColumn(fp.getName());
-            column.setCellValueFactory(cellData -> {
-                try {
-                    Object cellValue = fp.getGetter().invoke(((TableColumn.CellDataFeatures) cellData).getValue());
-                    return new SimpleObjectProperty<>(getStringValue(cellValue));
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            });
-            resultsTable.getColumns().add(column);
-        }
+        fillColumns();
+        this.resultsTable.setVisible(true);
+
+    }
+
+    private void createResultsTable(ObservableList<? extends Object> results) { //TODO set observable list
+        resultsTable.setItems(results);
+        resultsTable.prefWidthProperty().bind(parentPane.widthProperty());
+        resultsTable.prefHeightProperty().bind(parentPane.heightProperty());
+        resultsTable.setRowFactory(v -> {
+            TableRow<Object> row = new TableRow<>();
+            row.setOnMouseClicked(this::openDetails);
+            return row;
+        });
+
+    }
+
+    private void fillColumns() {
+        selectedEntity.getFields().stream()
+                .map(this::createTableColumn)
+                .forEach(resultsTable.getColumns()::add);
+    }
+
+    private TableColumn<String, Object> createTableColumn(FieldProperty fieldProperty) {
+        TableColumn<String, Object> column = new TableColumn<>(fieldProperty.getName());
+        column.setCellValueFactory(cellData -> {
+            Object cellValue = fieldProperty.getValue(cellData.getValue());
+            return new SimpleObjectProperty<>(getStringValue(cellValue));
+        });
+        return column;
     }
 
     private String getStringValue(Object obj) {
@@ -66,17 +84,6 @@ public class ResultsTableController {
             return "{" + obj.getClass().getSimpleName() + "}";
         }
         return obj.toString();
-    }
-
-    private void createResultsTable(ObservableList<? extends Object> results) {//TODO set observable list
-        resultsTable.setItems(results);
-        resultsTable.prefWidthProperty().bind(parentPane.widthProperty());
-        resultsTable.prefHeightProperty().bind(parentPane.heightProperty());
-        resultsTable.setRowFactory(v -> {
-            TableRow<Object> row = new TableRow<>();
-            row.setOnMouseClicked(this::openDetails);
-            return row;
-        });
     }
 
     private void openDetails(MouseEvent event) {
@@ -92,22 +99,26 @@ public class ResultsTableController {
         dialog.initOwner(parentPane.getScene().getWindow());
         Parent parent;
         try {
-            parent = FXMLLoader.load(getClass().getResource("/view/entityDetails.fxml"), resources);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewFile.ENTITY_DETAILS.getFile()), resources);
+            parent = loader.load();
+            EntityDetailController controller = loader.getController();
+            controller.loadEntity(entity);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Cannot open details dialog");//TODO message from lang
         }
         Scene dialogScene = new Scene(parent);
-        dialog.setTitle(buildTitle(entity));
+        dialog.setTitle(getDetailsTitle(entity));
         dialog.setScene(dialogScene);
         return dialog;
     }
 
-    private String buildTitle(Object entity) {
-        Arrays.asList(entity.getClass().getDeclaredFields()).stream()
-                .filter(field -> field.isAnnotationPresent(Id.class))
-                .collect(Collectors.toList());
-//        selectedItem.getClass().getSimpleName()
-        return entity.getClass().getSimpleName() + "(Id: " + 0 + ")";
+    private String getDetailsTitle(Object entity) {
+        try {
+            return selectedEntity.getSimpleName() + "(Id: " + selectedEntity.getIdValue(entity) + ")";
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return selectedEntity.getSimpleName();
     }
 }
