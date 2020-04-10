@@ -4,6 +4,7 @@ import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.FieldFilter;
+import emlkoks.entitybrowser.query.SearchService;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
@@ -73,8 +74,12 @@ public class SearchController {
     @FXML
     public void doSearch() {
         try {
-//            List resultList = SearchService.searchResults(session, selectedEntity, getFieldFilters());
-            List resultList = MockSession.getResultsList();
+            List resultList;
+            if (Mode.PROD.equals(Main.mode)) {
+                resultList = SearchService.searchResults(session, selectedEntity, getFieldFilters());
+            } else {
+                resultList = MockSession.getResultsList();
+            }
             parentController.getResultsController().showResults(resultList, selectedEntity);
         } catch (Exception e) {
             e.printStackTrace();

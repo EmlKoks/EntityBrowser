@@ -64,7 +64,9 @@ public class MainWindowController implements Initializable {
 //        debugNewSession();
 //        debugOSP();
 //        debugResultsList();
-        debugWithMock();
+        if (Mode.DEBUG.equals(Main.mode)) {
+            debugWithMock();
+        }
     }
 
 

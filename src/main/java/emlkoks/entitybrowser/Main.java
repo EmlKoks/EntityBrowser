@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    public static Mode mode = Mode.DEBUG;
+    public static Mode mode = Mode.PROD;
     static Properties properties;
     public static SavedConnection savedConnections = new SavedConnection();
     public static DriverList drivers = new DriverList();
@@ -56,7 +56,7 @@ public class Main extends Application {
     }
 
     private void initDebugData() {
-
+        System.out.println("debug");
     }
 
     public static MainWindowController getMainController() {
