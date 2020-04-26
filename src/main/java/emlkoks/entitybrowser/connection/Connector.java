@@ -20,12 +20,15 @@ public class Connector {
 
 
         EntityManagerFactoryCreator entityManagerFactoryCreator;
-        if (provider == Provider.Hibernate) {
-            entityManagerFactoryCreator = new HibernateEntityManagerFactory(connection, classList);
-        } else if (provider == Provider.EclipseLink) {
-            entityManagerFactoryCreator = new EclipseLinkEntityManagerFactoryCreator(connection);
-        } else {
-            throw new RuntimeException("Provider not defined");
+        switch (provider){
+            case Hibernate:
+                entityManagerFactoryCreator = new HibernateEntityManagerFactory(connection, classList);
+                break;
+            case EclipseLink:
+                entityManagerFactoryCreator = new EclipseLinkEntityManagerFactoryCreator(connection);
+                break;
+            default:
+                throw new EntityManagerNotFoundException(provider);
         }
 
         return entityManagerFactoryCreator.createEntityManagerFactory();

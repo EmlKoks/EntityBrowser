@@ -42,7 +42,7 @@ public class NumberComparator extends AbstractComparator<Number> {
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             default://TODO implement rest expressions
-                throw new RuntimeException("Expression " + fieldFilter.getExpression().getType() + " not allowed");
+                throw new ExpressionNotImplementedException(fieldFilter.getExpression());
         }
     }
 

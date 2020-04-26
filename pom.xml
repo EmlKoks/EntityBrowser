@@ -6,7 +6,7 @@
 
     <groupId>emlkoks.entitybrowser</groupId>
     <artifactId>entity-browser</artifactId>
-    <version>1.0.0</version>
+    <version>0.1-alpha</version>
     <packaging>jar</packaging>
 
     <name>EntityBrowser</name>

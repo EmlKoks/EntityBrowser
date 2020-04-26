@@ -38,7 +38,7 @@ public class StringComparator extends AbstractComparator<String> {
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             default:
-                throw new RuntimeException("Expression " + fieldFilter.getExpression().getType() + " not allowed");
+                throw new ExpressionNotImplementedException(fieldFilter.getExpression());
         }
     }
 }

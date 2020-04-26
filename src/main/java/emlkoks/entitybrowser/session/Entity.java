@@ -5,21 +5,20 @@ import emlkoks.entitybrowser.common.LibraryManager;
 import java.util.Collection;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.stream.Collectors;
+
 import lombok.Getter;
 
 /**
  * Created by EmlKoks on 09.04.17.
  */
 public class Entity {
-
-    private String name;
     @Getter
     private Class clazz;
     private Class metamodel;
-    private SortedMap<String, FieldProperty> fields;
+    private Set<FieldProperty> fields;
 
     public Entity(Class entity) {
-        name = entity.getName();
         clazz = entity;
     }
 
@@ -31,28 +30,26 @@ public class Entity {
         if (fields == null) {
             fields = LibraryManager.getEntityFields(this);
         }
-        return fields.keySet();
-    }
-
-    public FieldProperty getField(String name) {
-        if (fields == null) {
-            fields = LibraryManager.getEntityFields(this);
-        }
-        return fields.get(name);
-    }
-
-    public Collection<FieldProperty> getFields() {
-        if (fields == null) {
-            fields = LibraryManager.getEntityFields(this);
-        }
-        return fields.values();
+        return fields.stream()
+                .map(FieldProperty::getName)
+                .collect(Collectors.toSet());
     }
 
     public FieldProperty getFieldProperty(String name) {
         if (fields == null) {
             fields = LibraryManager.getEntityFields(this);
         }
-        return fields.get(name);
+        return fields.stream()
+                .filter(fieldProperty -> name.equals(fieldProperty.getName()))
+                .findAny()
+                .orElse(null);
+    }
+
+    public Collection<FieldProperty> getFields() {
+        if (fields == null) {
+            fields = LibraryManager.getEntityFields(this);
+        }
+        return fields;
     }
 
     public Object getIdValue(Object entityObject) {
@@ -60,7 +57,7 @@ public class Entity {
             throw new RuntimeException("Wrong object type. Is " + entityObject.getClass().getName()
                     + " but should be " + clazz.getName());
         }
-        return fields.values().stream()
+        return fields.stream()
                 .filter(FieldProperty::isId)
                 .findFirst()
                 .map(fieldProperty -> fieldProperty.getValue(entityObject))

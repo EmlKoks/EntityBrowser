@@ -26,6 +26,6 @@ public class BooleanComparator extends AbstractComparator<Boolean> {
 
     @Override
     public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        throw new RuntimeException("Create predicate in BooleanComparator is not implemented");//TODO
+        return null;//TODO
     }
 }

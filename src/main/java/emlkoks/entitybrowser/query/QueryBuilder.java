@@ -25,15 +25,13 @@ public class QueryBuilder {
     private Root root;
     private CriteriaBuilder cb;
     private CriteriaQuery cq;
-    private Class clazz;
     private List<Predicate> predicates;
 
     public QueryBuilder(CriteriaBuilder cb, Entity entity, Collection<FieldFilter> fieldFilters) {
         predicates = new ArrayList<>();
-        this.clazz = entity.getClazz();
         this.cb = cb;
-        cq = cb.createQuery(clazz);
-        root = cq.from(clazz);
+        cq = cb.createQuery(entity.getClazz());
+        root = cq.from(entity.getClazz());
         build(fieldFilters);
     }
 

@@ -37,12 +37,12 @@
             <items>
                 <AnchorPane fx:id="leftContent">
                     <children>
-                        <fx:include fx:id="search" source="main/search.fxml"/>
+                        <fx:include fx:id="search" source="search.fxml"/>
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="rightContent" minHeight="0.0" minWidth="0.0" prefWidth="255.0">
                     <children>
-                        <fx:include fx:id="results" source="main/results.fxml"/>
+                        <fx:include fx:id="results" source="results.fxml"/>
                     </children>
                 </AnchorPane>
             </items>

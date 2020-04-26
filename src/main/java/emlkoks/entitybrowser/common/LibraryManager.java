@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser.common;
 
 import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.session.CannotCreateFieldPropertyException;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 
@@ -16,13 +17,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -172,70 +169,45 @@ public class LibraryManager {
         newFile.delete();
     }
 
-    public static SortedMap<String, FieldProperty> getEntityFields(Entity entity) {
+    public static Set<FieldProperty> getEntityFields(Entity entity) {
         return getFieldFromClass(entity.getClazz());
     }
 
-    public static SortedMap<String, FieldProperty> getFieldFromClass(Class clazz) {
-        SortedMap<String, FieldProperty> fields = new TreeMap<>();
-        for (Field field : clazz.getDeclaredFields()) {
-            if (isTransient(field) || isFinal(field)) {
-                continue;
-            }
-            FieldProperty fp = new FieldProperty(field.getName());
-            fp.setField(field);
-            fp.setParentClass(clazz);
-            try {
-                fp.setGetter(getGetter(field));
-                fp.setSetter(getSetter(field));
-            } catch (Exception e) {
-                continue;
-            }
-            fields.put(field.getName(), fp);
-        }
+    public static Set<FieldProperty> getFieldFromClass(Class clazz) {
+        return Stream.concat(
+                Stream.of(
+                        clazz.getDeclaredFields()),
+                getFieldsFromSuperclass(clazz))
+                .filter(LibraryManager::isNotTransient)
+                .filter(LibraryManager::isNotFinal)
+                .filter(LibraryManager::isNotSerialVersionUID)
+                .map(field -> {
+                    try {
+                        return new FieldProperty(field, clazz);
+                    } catch (CannotCreateFieldPropertyException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    private static Stream<Field> getFieldsFromSuperclass(Class clazz) {
         if (clazz.getSuperclass() != Object.class) {
-            fields.putAll(getFieldFromClass(clazz.getSuperclass()));
+            clazz.getSuperclass().getDeclaredFields();
         }
-
-        return fields;
+        return Stream.empty();
     }
 
-    private static boolean isFinal(Field field) {
-        return Modifier.isFinal(field.getModifiers());
+    private static boolean isNotFinal(Field field) {
+        return !Modifier.isFinal(field.getModifiers());
     }
 
-    private static boolean isTransient(Field field) {
-        return field.getAnnotation(Transient.class) != null;
+    private static boolean isNotTransient(Field field) {
+        return Objects.isNull(field.getAnnotation(Transient.class));
     }
 
-    private static Method getGetter(Field field) throws RuntimeException {
-        String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
-        boolean isBoolean = field.getType() == boolean.class;
-        try {
-            return field.getDeclaringClass().getMethod((isBoolean ? "is" : "get") + methodName);
-        } catch (NoSuchMethodException e) {
-            if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
-                throw new RuntimeException("skip");//TODO refactore
-            }
-            log.debug("Cannot find method " + (isBoolean ? "is" : "get") + methodName
-                    + " in class " + field.getDeclaringClass().getName());
-            throw new RuntimeException("skip");//TODO refactore
-            //TODO skip?
-        }
+    private static boolean isNotSerialVersionUID(Field field) {
+        return !"serialVersionUID".equals(field.getName());
     }
-
-    private static Method getSetter(Field field) throws RuntimeException {
-        String methodName = field.getName().substring(0,1).toUpperCase() + field.getName().substring(1);
-        try {
-            return field.getDeclaringClass().getMethod("set" + methodName, field.getType());
-        } catch (NoSuchMethodException e) {
-            if ("serialVersionUID".equals(field.getName())) { //TODO do exception name list
-                throw new RuntimeException("skip");//TODO refactore
-            }
-            log.debug("Cannot find method get" + methodName + " in class " + field.getDeclaringClass().getName());
-            throw new RuntimeException("skip");//TODO refactore
-            //TODO skip?
-        }
-    }
-
 }

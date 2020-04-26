@@ -128,7 +128,7 @@ public class SearchController {
             return;
         }
         String fieldName = fields.getValue();
-        FieldProperty field = session.getEntity(entities.getValue()).getField(fieldName);
+        FieldProperty field = session.getEntity(entities.getValue()).getFieldProperty(fieldName);
         AbstractComparator comparator = ComparatorFactory.getComparator(field);
         List<Node> filterRow = comparator.createFilterRow(field);
         filterRow.add(createDeleteFilter());
