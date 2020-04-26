@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser.mocked.entity;
 
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,4 +13,7 @@ public class MockedEntity1 {
     Integer id;
     String stringField;
     Integer integerField;
+
+    @Enumerated
+    ExampleEnum enumField;
 }

@@ -4,7 +4,7 @@ import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.view.ViewFile;
-import emlkoks.entitybrowser.view.controller.EntityDetailController;
+import emlkoks.entitybrowser.view.controller.EntityDetailsController;
 import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -101,7 +101,7 @@ public class ResultsTableController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewFile.ENTITY_DETAILS.getFile()), resources);
             parent = loader.load();
-            EntityDetailController controller = loader.getController();
+            EntityDetailsController controller = loader.getController();
             controller.loadEntity(entity);
         } catch (IOException e) {
             e.printStackTrace();

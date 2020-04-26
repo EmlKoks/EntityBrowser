@@ -3,6 +3,7 @@ package emlkoks.entitybrowser.query.comparator;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import javafx.scene.Node;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -16,6 +17,11 @@ public class CharacterComparator extends AbstractComparator<Character> {
     CharacterComparator() {
         expressions.add(new EqualExpression());
         expressions.add(new NotEqualExpression());
+    }
+
+    @Override
+    Node createFieldValueField(Class clazz) {
+        return null;//TODO
     }
 
     @Override

@@ -8,6 +8,8 @@ import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import javafx.scene.Node;
+
 import java.util.Date;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -26,6 +28,11 @@ public class DateComparator extends AbstractComparator<Date> {
         expressions.add(new LessExpression());
         expressions.add(new LessOrEqualExpression());
         expressions.add(new BetweenExpression());
+    }
+
+    @Override
+    Node createFieldValueField(Class clazz) {
+        return null;//TODO
     }
 
     @Override

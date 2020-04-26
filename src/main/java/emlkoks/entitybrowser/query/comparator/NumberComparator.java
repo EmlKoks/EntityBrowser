@@ -1,13 +1,14 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.BetweenExpression;
 import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.LessExpression;
 import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import emlkoks.entitybrowser.view.control.NumberTextField;
+import javafx.scene.Node;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -25,7 +26,12 @@ public class NumberComparator extends AbstractComparator<Number> {
         expressions.add(new MoreOrEqualExpression());
         expressions.add(new LessExpression());
         expressions.add(new LessOrEqualExpression());
-        expressions.add(new BetweenExpression());
+//        expressions.add(new BetweenExpression());//Remove?
+    }
+
+    @Override
+    Node createFieldValueField(Class clazz) {
+        return new NumberTextField(clazz);
     }
 
     @Override
@@ -39,4 +45,5 @@ public class NumberComparator extends AbstractComparator<Number> {
                 throw new RuntimeException("Expression " + fieldFilter.getExpression().getType() + " not allowed");
         }
     }
+
 }

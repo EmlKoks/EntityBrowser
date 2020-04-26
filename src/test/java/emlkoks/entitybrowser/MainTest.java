@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser;
 
+import emlkoks.entitybrowser.view.ViewFile;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,7 +23,7 @@ public class MainTest extends ApplicationTest{
     public void start(final Stage stage) throws Exception {
         ResourceBundle bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
         FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent root = fxmlLoader.load(getClass().getResource("/view/mainWindow.fxml"), bundle);
+        Parent root = fxmlLoader.load(getClass().getResource(ViewFile.MAIN_WINDOW.getFile()), bundle);
         stage.setScene(new Scene(root));
         stage.show();
     }

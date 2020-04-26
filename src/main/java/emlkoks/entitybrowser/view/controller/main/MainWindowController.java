@@ -59,7 +59,7 @@ public class MainWindowController implements Initializable {
         Main.setMainController(this);
         this.resources = resources;
         session = new MockSession();
-        searchController.initialize(this, leftContent, session);
+        searchController.initialize(resources, this, leftContent, session);
         resultsController.initialize(rightContent, resources);
 //        debugNewSession();
 //        debugOSP();

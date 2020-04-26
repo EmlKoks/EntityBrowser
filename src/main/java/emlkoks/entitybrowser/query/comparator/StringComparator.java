@@ -4,6 +4,8 @@ import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.comparator.expression.ContainsExpression;
 import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -20,6 +22,10 @@ public class StringComparator extends AbstractComparator<String> {
         expressions.add(new NotEqualExpression());
     }
 
+    @Override
+    Node createFieldValueField(Class clazz) {
+        return new TextField();
+    }
 
     @Override
     public Predicate createPredicate(CriteriaBuilder cb, Path<String> attributePath, FieldFilter fieldFilter) {
