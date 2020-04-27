@@ -20,7 +20,7 @@ public class Connector {
 
 
         EntityManagerFactoryCreator entityManagerFactoryCreator;
-        switch (provider){
+        switch (provider) {
             case Hibernate:
                 entityManagerFactoryCreator = new HibernateEntityManagerFactory(connection, classList);
                 break;

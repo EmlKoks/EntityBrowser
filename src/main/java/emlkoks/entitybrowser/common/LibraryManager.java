@@ -17,7 +17,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -180,7 +187,7 @@ public class LibraryManager {
                 getFieldsFromSuperclass(clazz))
                 .filter(LibraryManager::isNotTransient)
                 .filter(LibraryManager::isNotFinal)
-                .filter(LibraryManager::isNotSerialVersionUID)
+                .filter(LibraryManager::isNotSerialVersionUid)
                 .map(field -> {
                     try {
                         return new FieldProperty(field, clazz);
@@ -207,7 +214,7 @@ public class LibraryManager {
         return Objects.isNull(field.getAnnotation(Transient.class));
     }
 
-    private static boolean isNotSerialVersionUID(Field field) {
+    private static boolean isNotSerialVersionUid(Field field) {
         return !"serialVersionUID".equals(field.getName());
     }
 }

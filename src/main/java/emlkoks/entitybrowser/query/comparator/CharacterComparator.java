@@ -4,6 +4,7 @@ import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -21,7 +22,7 @@ public class CharacterComparator extends AbstractComparator<Character> {
 
     @Override
     Node createFieldValueField(Class clazz) {
-        return null;//TODO
+        return new TextField();
     }
 
     @Override

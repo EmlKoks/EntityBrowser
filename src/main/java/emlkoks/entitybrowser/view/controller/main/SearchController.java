@@ -55,7 +55,8 @@ public class SearchController {
     private Entity selectedEntity;
     private ResourceBundle resources;
 
-    public void initialize(ResourceBundle resources, MainWindowController parentController, Pane parentPane, Session session) {
+    public void initialize(ResourceBundle resources, MainWindowController parentController, Pane parentPane,
+                           Session session) {
         this.resources = resources;
         this.parentController = parentController;
         filtersPane.prefWidthProperty().bind(parentPane.widthProperty());
@@ -155,6 +156,7 @@ public class SearchController {
         filtersGrid.getChildren().removeAll(nodeToRemove);
         filtersGrid.getChildren().stream()
                 .filter(node -> GridPane.getRowIndex(node) > rowIndex)
-                .forEach(node -> GridPane.setRowIndex(node, GridPane.getRowIndex(node) - NUMBER_OF_CHILDREN_FILTER_GRID));
+                .forEach(node -> GridPane.setRowIndex(node,
+                        GridPane.getRowIndex(node) - NUMBER_OF_CHILDREN_FILTER_GRID));
     }
 }

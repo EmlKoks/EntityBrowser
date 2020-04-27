@@ -28,7 +28,8 @@ public class FieldProperty {
             setupGetter();
             setupSetter();
         } catch (MethodNotFoundException exception) {
-            log.debug("Cannot find method {} in class {}", exception.getMethodName(), field.getDeclaringClass().getName());
+            log.debug("Cannot find method {} in class {}",
+                    exception.getMethodName(), field.getDeclaringClass().getName());
             throw new CannotCreateFieldPropertyException();
         }
 

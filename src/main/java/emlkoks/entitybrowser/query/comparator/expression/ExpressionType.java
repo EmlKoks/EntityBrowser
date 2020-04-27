@@ -12,5 +12,6 @@ public enum ExpressionType {
     MORE_OR_EQUAL,
     LESS_OR_EQUAL,
     BETWEEN,
-    IS_NULL;
+    IS_NULL,
+    IS_NOT_NULL;
 }

@@ -1,9 +1,13 @@
 package emlkoks.entitybrowser.query.comparator;
 
+import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
 import javafx.scene.Node;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -21,7 +25,13 @@ public class BooleanComparator extends AbstractComparator<Boolean> {
 
     @Override
     Node createFieldValueField(Class clazz) {
-        return null;//TODO
+        ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton trueButton = new RadioButton(Main.bundle.getString("boolean.true"));
+        trueButton.setToggleGroup(toggleGroup);
+        trueButton.setSelected(true);
+        RadioButton falseButton = new RadioButton(Main.bundle.getString("boolean.false"));
+        falseButton.setToggleGroup(toggleGroup);
+        return new HBox(trueButton, falseButton);
     }
 
     @Override

@@ -33,14 +33,19 @@ public abstract class AbstractComparator<T> {
         ChoiceBox<Expression> comparatorChoiceBox = createComparationTypeChoiceBox();
         Node valueField = createFieldValueField(field.getField().getType());
         comparatorChoiceBox.valueProperty().addListener((observable, oldValue, newValue) ->
-            valueField.setDisable(isNull(newValue.getType()))
+            valueField.setDisable(isNull(newValue.getType()) || isNotNull(newValue.getType()))
         );
-        valueField.setDisable(isNull(comparatorChoiceBox.getValue().getType()));
+        valueField.setDisable(isNull(comparatorChoiceBox.getValue().getType())
+                || isNotNull(comparatorChoiceBox.getValue().getType()));
         return new ArrayList<>(Arrays.asList(new Label(field.getName()), comparatorChoiceBox, valueField));
     }
 
     private boolean isNull(ExpressionType expressionType) {
         return ExpressionType.IS_NULL.equals(expressionType);
+    }
+
+    private boolean isNotNull(ExpressionType expressionType) {
+        return ExpressionType.IS_NOT_NULL.equals(expressionType);
     }
 
 

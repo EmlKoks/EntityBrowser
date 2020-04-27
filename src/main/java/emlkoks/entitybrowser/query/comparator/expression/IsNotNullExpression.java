@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.query.comparator.expression;
 
-public class IsNullExpression extends Expression {
-    public IsNullExpression() {
+public class IsNotNullExpression extends Expression {
+    public IsNotNullExpression() {
         super(ExpressionType.IS_NULL);
     }
 }

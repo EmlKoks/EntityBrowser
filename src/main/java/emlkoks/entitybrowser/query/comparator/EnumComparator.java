@@ -8,11 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
-import lombok.extern.slf4j.Slf4j;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by EmlKoks on 15.06.19.

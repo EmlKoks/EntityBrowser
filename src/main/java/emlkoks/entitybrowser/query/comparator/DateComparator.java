@@ -8,9 +8,10 @@ import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
-import javafx.scene.Node;
-
 import java.util.Date;
+import javafx.scene.Node;
+import javafx.scene.control.DatePicker;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -32,7 +33,7 @@ public class DateComparator extends AbstractComparator<Date> {
 
     @Override
     Node createFieldValueField(Class clazz) {
-        return null;//TODO
+        return new DatePicker();
     }
 
     @Override

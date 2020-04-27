@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser.view.controller.main;
 
 import emlkoks.entitybrowser.Main;
+import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 import emlkoks.entitybrowser.view.ViewFile;
@@ -34,7 +35,7 @@ public class ResultsTableController {
 
     private Entity selectedEntity;
 
-    public void initialize(Pane parentPane, ResourceBundle resources) {
+    public void initialize(ResourceBundle resources, Pane parentPane) {
         this.parentPane = parentPane;
         this.resources = resources;
     }
@@ -45,16 +46,18 @@ public class ResultsTableController {
         createResultsTable(list);
         fillColumns();
         this.resultsTable.setVisible(true);
-
+        if (Mode.DEBUG.equals(Main.mode)) {
+            openDetails(list.get(0));
+        }
     }
 
-    private void createResultsTable(ObservableList<? extends Object> results) { //TODO set observable list
+    private void createResultsTable(ObservableList<? extends Object> results) {
         resultsTable.setItems(results);
         resultsTable.prefWidthProperty().bind(parentPane.widthProperty());
         resultsTable.prefHeightProperty().bind(parentPane.heightProperty());
         resultsTable.setRowFactory(v -> {
             TableRow<Object> row = new TableRow<>();
-            row.setOnMouseClicked(this::openDetails);
+            row.setOnMouseClicked(this::handleClickEvent);
             return row;
         });
 
@@ -86,10 +89,14 @@ public class ResultsTableController {
         return obj.toString();
     }
 
-    private void openDetails(MouseEvent event) {
+    private void handleClickEvent(MouseEvent event) {
         Object selectedItem = ((TableRow)event.getSource()).getItem();
-        Main.addEntity(selectedItem);
-        Stage dialog = createDietailsDialog(selectedItem);
+        openDetails(selectedItem);
+    }
+
+    private void openDetails(Object item) {
+        Main.addEntity(item);
+        Stage dialog = createDietailsDialog(item);
         dialog.show();
     }
 

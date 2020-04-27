@@ -1,8 +1,7 @@
 package emlkoks.entitybrowser.common;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.lang.reflect.Field;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Util {
