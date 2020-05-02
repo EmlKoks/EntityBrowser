@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Resources {
     public static final String DRIVERS_DIR = "drivers/";
-    public static final String SAVED_CONNECTION = "conf/savedConnection.xml";
+    public static final String SAVED_CONNECTION = "conf/savedConnections.xml";
     public static final String DRIVERS = "conf/drivers.xml";
     public static final String HOME_DIR_NAME = ".entityManager";
     public static final String CACHE_DIR;

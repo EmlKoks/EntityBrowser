@@ -37,17 +37,10 @@ import lombok.extern.slf4j.Slf4j;
 public class SearchController {
     private final static int NUMBER_OF_CHILDREN_FILTER_GRID = 4;
 
-    @FXML
-    private ChoiceBox<String> entities;
-
-    @FXML
-    private ChoiceBox<String> fields;
-
-    @FXML
-    private BorderPane filtersPane;
-
-    @FXML
-    private GridPane filtersGrid;
+    @FXML private ChoiceBox<String> entities;
+    @FXML private ChoiceBox<String> fields;
+    @FXML private BorderPane filtersPane;
+    @FXML private GridPane filtersGrid;
 
     private MainWindowController parentController;
 

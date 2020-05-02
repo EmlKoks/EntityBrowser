@@ -5,6 +5,7 @@ import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.Session;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +32,11 @@ public class MockSession extends Session {
 
     public static List getResultsList() {
         List results = new ArrayList();
-        results.add(new MockedEntity1(1, "str1", 1, VALUE_1));
-        results.add(new MockedEntity1(2, "str2", 2, VALUE_2));
-        results.add(new MockedEntity1(3, "str3", 3, VALUE_3));
-        results.add(new MockedEntity1(4, "str4", 4, VALUE_3));
+        results.add(new MockedEntity1(1, new Date()));
+//        results.add(new MockedEntity1(1, "str1", 1, true, true, new Date(), VALUE_1));
+//        results.add(new MockedEntity1(2, "str2", 2, true, true, new Date(), VALUE_2));
+//        results.add(new MockedEntity1(3, "str3", 3, true, true, new Date(), VALUE_3));
+//        results.add(new MockedEntity1(4, "str4", 4, true, true, new Date(), VALUE_3));
         return results;
     }
 }

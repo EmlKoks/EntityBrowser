@@ -3,7 +3,7 @@ package emlkoks.entitybrowser;
 import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.common.Properties;
 import emlkoks.entitybrowser.connection.DriverList;
-import emlkoks.entitybrowser.connection.SavedConnection;
+import emlkoks.entitybrowser.connection.SavedConnections;
 import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.main.MainWindowController;
@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     public static Mode mode = Mode.PROD;
     static Properties properties;
-    public static SavedConnection savedConnections = new SavedConnection();
+    public static SavedConnections savedConnections = new SavedConnections();
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;
     private static Queue<Object> entityDetailsQueue = new LinkedList<>();
@@ -37,7 +37,7 @@ public class Main extends Application {
     @Override
     public void init() {
         drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
-        savedConnections = Marshaller.unmarshal(SavedConnection.class, Resources.SAVED_CONNECTION);
+        savedConnections = Marshaller.unmarshal(SavedConnections.class, Resources.SAVED_CONNECTION);
 //        properties = new Properties();
     }
 

@@ -1,5 +1,6 @@
 *.idea
 *.iml
 /target
-/conf/savedConnection.xml
+/conf/savedConnections.xml
 /lib
+/clear/

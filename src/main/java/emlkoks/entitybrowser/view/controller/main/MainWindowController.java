@@ -2,20 +2,16 @@ package emlkoks.entitybrowser.view.controller.main;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
-import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
-import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.ViewFile;
-import emlkoks.entitybrowser.view.controller.NewSessionController;
+import emlkoks.entitybrowser.view.controller.ChooseConnectionController;
 import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -35,21 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MainWindowController implements Initializable {
 
-    @FXML
-    private SplitPane centerContent;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private AnchorPane leftContent;
-
-    @FXML
-    private AnchorPane rightContent;
-
-    @FXML
-    private ResultsTableController resultsController;
-
+    @FXML private SplitPane centerContent;
+    @FXML private ResourceBundle resources;
+    @FXML private AnchorPane leftContent;
+    @FXML private AnchorPane rightContent;
+    @FXML private ResultsTableController resultsController;
     @FXML SearchController searchController;
 
     private Session session;
@@ -61,11 +47,11 @@ public class MainWindowController implements Initializable {
         session = new MockSession();
         searchController.initialize(resources, this, leftContent, session);
         resultsController.initialize(resources, rightContent);
-//        debugNewSession();
+        if (Mode.DEBUG.equals(Main.mode)) {
+//            debugWithMock();
+            debugNewSession();
 //        debugOSP();
 //        debugResultsList();
-        if (Mode.DEBUG.equals(Main.mode)) {
-            debugWithMock();
         }
     }
 
@@ -96,7 +82,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void createNewSession() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewFile.NEW_SESSION.getFile()), resources);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewFile.CHOOSE_CONNECTION.getFile()), resources);
         try {
             loader.load();
         } catch (IOException e) {
@@ -104,7 +90,7 @@ public class MainWindowController implements Initializable {
         }
         Stage stage = createNewSessionStage(loader);
         stage.showAndWait();
-        openSession(((NewSessionController)loader.getController()).getSession());
+        openSession(((ChooseConnectionController)loader.getController()).getSession());
     }
 
     public void openSession(Session session) {
@@ -130,11 +116,11 @@ public class MainWindowController implements Initializable {
         return resultsController;
     }
 
-    private void debugResultsList() {
-        List<Connection> results = new ArrayList<>();
-        results.add(new Connection());
-        resultsController.showResults(results, new Entity(Connection.class));
-    }
+//    private void debugResultsList() {
+//        List<Connection> results = new ArrayList<>();
+//        results.add(new Connection());
+//        resultsController.showResults(results, new Entity(Connection.class));
+//    }
 
     private void debugNewSession() {
         createNewSession();
