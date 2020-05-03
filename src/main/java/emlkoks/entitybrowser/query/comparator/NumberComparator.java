@@ -7,7 +7,7 @@ import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreExpression;
 import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
-import emlkoks.entitybrowser.view.control.NumberTextField;
+import emlkoks.entitybrowser.view.control.field.NumberTextField;
 import javafx.scene.Node;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -30,7 +30,17 @@ public class NumberComparator extends AbstractComparator<Number> {
     }
 
     @Override
-    Node createFieldValueField(Class clazz) {
+    public boolean canUseForClass(Class<?> clazz) {
+        return clazz == int.class
+                || clazz == float.class
+                || clazz == long.class
+                || clazz == double.class
+                || clazz == short.class
+                || Number.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    Node createFieldValueField(Class<?> clazz) {
         return new NumberTextField(clazz);
     }
 

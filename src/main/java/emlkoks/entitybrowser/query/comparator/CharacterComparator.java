@@ -21,7 +21,12 @@ public class CharacterComparator extends AbstractComparator<Character> {
     }
 
     @Override
-    Node createFieldValueField(Class clazz) {
+    public boolean canUseForClass(Class<?> clazz) {
+        return clazz == char.class || Character.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    Node createFieldValueField(Class<?> clazz) {
         return new TextField();
     }
 

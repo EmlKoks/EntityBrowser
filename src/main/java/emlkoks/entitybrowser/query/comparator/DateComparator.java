@@ -32,7 +32,12 @@ public class DateComparator extends AbstractComparator<Date> {
     }
 
     @Override
-    Node createFieldValueField(Class clazz) {
+    public boolean canUseForClass(Class<?> clazz) {
+        return Date.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    Node createFieldValueField(Class<?> clazz) {
         return new DatePicker();
     }
 

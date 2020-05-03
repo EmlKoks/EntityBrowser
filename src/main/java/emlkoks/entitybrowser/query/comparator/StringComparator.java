@@ -23,7 +23,12 @@ public class StringComparator extends AbstractComparator<String> {
     }
 
     @Override
-    Node createFieldValueField(Class clazz) {
+    public boolean canUseForClass(Class<?> clazz) {
+        return clazz == String.class;
+    }
+
+    @Override
+    Node createFieldValueField(Class<?> clazz) {
         return new TextField();
     }
 

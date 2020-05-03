@@ -24,7 +24,12 @@ public class BooleanComparator extends AbstractComparator<Boolean> {
     }
 
     @Override
-    Node createFieldValueField(Class clazz) {
+    public boolean canUseForClass(Class<?> clazz) {
+        return clazz == boolean.class || Boolean.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    Node createFieldValueField(Class<?> clazz) {
         ToggleGroup toggleGroup = new ToggleGroup();
         RadioButton trueButton = new RadioButton(Main.bundle.getString("boolean.true"));
         trueButton.setToggleGroup(toggleGroup);

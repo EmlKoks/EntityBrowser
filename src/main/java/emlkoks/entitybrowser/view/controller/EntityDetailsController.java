@@ -31,7 +31,6 @@ public class EntityDetailsController implements Initializable {
 
     @FXML
     private ResourceBundle resources;
-    private Object rootEntity;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -39,7 +38,6 @@ public class EntityDetailsController implements Initializable {
     }
 
     public void loadEntity(Object entity) {
-        this.rootEntity = entity;
         TreeItem<Object> rootItem = createTreeItem(entity, "Root", 0);
         rootItem.setExpanded(true);
         tree.setRoot(rootItem);
@@ -71,7 +69,8 @@ public class EntityDetailsController implements Initializable {
                 item.getChildren().add(subitem);
             }
         }
-        item.setValue(fieldName + " : size = " + i + " (" + entity.getClass().getCanonicalName() + ")");
+        item.setValue(fieldName + " : " + resources.getString("entityDetails.size") + " = " + i
+                + " (" + entity.getClass().getCanonicalName() + ")");
         return item;
     }
 
@@ -94,17 +93,17 @@ public class EntityDetailsController implements Initializable {
     private TextFlow getTextValue(Object entity, String fieldName) {
         TextFlow textFlow = new TextFlow();
 
-        Label lFieldName = new Label(fieldName);
-        lFieldName.setStyle("-fx-font-weight: bold");
+        Label labelFieldName = new Label(fieldName);
+        labelFieldName.setStyle("-fx-font-weight: bold");
 
         String stringEntity = entity.toString();
-        Label lValue = new Label(stringEntity.length() > MAX_ITEM_LENGTH ?
-                stringEntity.substring(0, MAX_ITEM_LENGTH) + "..." : stringEntity);
-        lValue.setStyle("-fx-font-weight: bold");
+        Label labelValue = new Label(stringEntity.length() > MAX_ITEM_LENGTH
+                ? stringEntity.substring(0, MAX_ITEM_LENGTH) + "..." : stringEntity);
+        labelValue.setStyle("-fx-font-weight: bold");
 
-        Label lCannonicalName = new Label(" (" + entity.getClass().getCanonicalName() + ")");
+        Label labelCannonicalName = new Label(" (" + entity.getClass().getCanonicalName() + ")");
 
-        textFlow.getChildren().addAll(lFieldName, new Label(" = "), lValue, lCannonicalName);
+        textFlow.getChildren().addAll(labelFieldName, new Label(" = "), labelValue, labelCannonicalName);
         return textFlow;
     }
 

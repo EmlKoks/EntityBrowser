@@ -3,10 +3,10 @@ package emlkoks.entitybrowser.view.controller;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.common.Util;
 import emlkoks.entitybrowser.connection.Connection;
+import emlkoks.entitybrowser.connection.Connector;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Property;
 import emlkoks.entitybrowser.connection.Provider;
-import emlkoks.entitybrowser.connection.provider.HibernateProvider;
 import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.ViewFile;
@@ -19,12 +19,9 @@ import emlkoks.entitybrowser.view.dialog.WarningDialogCreator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,14 +30,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -63,16 +57,16 @@ public class ChooseConnectionController implements Initializable {
     @FXML private TextField passwordField;
     @FXML private TextField libraryPathField;
     @FXML private ChoiceBox<Provider> providersChoiceBox;
-    @FXML private VBox pane;
-    @FXML private ScrollPane advancedPane;
-    @FXML private TableView<Property> propertiesTable;
+//    @FXML private VBox pane;
+//    @FXML private ScrollPane advancedPane;
+//    @FXML private TableView<Property> propertiesTable;
     @FXML private TableColumn<Property, String> nameColumn;
     @FXML private TableColumn<Property, String> valueColumn;
 
     private Connection connection;
     private File entityLibrary;
     private Session session;
-    private ObservableList<Property> props;
+//    private ObservableList<Property> props;
 
 
     @Override
@@ -113,9 +107,9 @@ public class ChooseConnectionController implements Initializable {
     }
 
     private void initPropertiesTable() {
-        props = FXCollections.observableList(
-                new ArrayList<>(new HibernateProvider().getDefaultProperties()));
-        propertiesTable.setItems(props);
+//        props = FXCollections.observableList(
+//                new ArrayList<>(new HibernateProvider().getDefaultProperties()));
+//        propertiesTable.setItems(props);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
@@ -144,7 +138,7 @@ public class ChooseConnectionController implements Initializable {
                         resources.getString("error.title"),
                         resources.getString("newDriver.removeConnection") + connection.getName() + "?")
                         .showAndWait();
-        if (result.get() == ButtonType.OK) {
+        if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             Main.savedConnections.remove(connection.getId());
         }
     }
@@ -153,7 +147,7 @@ public class ChooseConnectionController implements Initializable {
     public void chooseLibrary() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter exFilter = new FileChooser.ExtensionFilter(
-                resources.getString("newSession.libFilter"), "*.jar", "*.war", "*.ear");
+                resources.getString("chooseConnection.libFilter"), "*.jar", "*.war", "*.ear");
         fileChooser.setSelectedExtensionFilter(exFilter);
         File selectedFile = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         if (selectedFile != null) {
@@ -224,9 +218,13 @@ public class ChooseConnectionController implements Initializable {
 
     @FXML
     public void testConnection() {
-        if (!checkFields()) {
-            //TODO nothing?
-        } else if (createConnection() == null) {
+        fillConnection();
+        if (!validateConnection()) {
+            new WarningDialogCreator(
+                    resources.getString("error.title"),
+                    resources.getString("chooseConnection.test.wrong.emptyFields"))
+                    .show();
+        } else if (Connector.testConnection(connection)) {
             new WarningDialogCreator(
                     resources.getString("chooseConnection.test.title"),
                     resources.getString("chooseConnection.test.wrong.content"))
@@ -249,31 +247,10 @@ public class ChooseConnectionController implements Initializable {
         connection.setProvider(providersChoiceBox.getValue());
     }
 
-    private Connection createConnection() {
-//        Connection connection = new Connection();
-//        connection.setName("Custom");//TODO use saved connection name
-//        connection.setDriver(Main.drivers.getDriver(drivers.getValue()));
-//        connection.setUrl(url.getText());
-//        connection.setUser(user.getText());
-//        connection.setPassword(password.getText());
-//        if (Connector.testConnection(connection)) {
-//            return connection;
-//        } else {
-            return null;
-//        }
-    }
-
-    private boolean checkFields() {
-        if (Resources.isNullOrEmpty(driversChoiceBox.getValue())
-                || Resources.isNullOrEmpty(urlField.getText())
-                || Resources.isNullOrEmpty(userField.getText())
-                || Resources.isNullOrEmpty(passwordField.getText())) {
-            new ErrorDialogCreator(
-                    resources.getString("error.title"),
-                    resources.getString("newDriver.error.content"))
-                    .show();
-            return false;
-        }
-        return true;
+    private boolean validateConnection() {
+        return !Resources.isNullOrEmpty(driversChoiceBox.getValue())//TODO add assertions
+                && !Resources.isNullOrEmpty(urlField.getText())
+                && !Resources.isNullOrEmpty(userField.getText())
+                && !Resources.isNullOrEmpty(passwordField.getText());
     }
 }

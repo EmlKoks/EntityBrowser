@@ -48,10 +48,10 @@ public class MainWindowController implements Initializable {
         searchController.initialize(resources, this, leftContent, session);
         resultsController.initialize(resources, rightContent);
         if (Mode.DEBUG.equals(Main.mode)) {
-//            debugWithMock();
-            debugNewSession();
+            debugWithMock();
+//            debugNewSession();
 //        debugOSP();
-//        debugResultsList();
+//            debugResultsList();
         }
     }
 
@@ -88,7 +88,7 @@ public class MainWindowController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Stage stage = createNewSessionStage(loader);
+        Stage stage = openChooseConnectionStage(loader);
         stage.showAndWait();
         openSession(((ChooseConnectionController)loader.getController()).getSession());
     }
@@ -103,11 +103,11 @@ public class MainWindowController implements Initializable {
         centerContent.setDisable(false);
     }
 
-    private Stage createNewSessionStage(FXMLLoader loader) {
+    private Stage openChooseConnectionStage(FXMLLoader loader) {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene dialogScene = new Scene(loader.getRoot());
-        stage.setTitle(resources.getString("newSession.title"));
+        stage.setTitle(resources.getString("chooseConnection.title"));
         stage.setScene(dialogScene);
         return stage;
     }

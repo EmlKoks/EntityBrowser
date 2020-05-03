@@ -13,12 +13,13 @@ import java.util.Date;
 public class MockedEntity1 {
     @Id
     Integer id;
-//    String stringField;
-//    Integer integerField;
-//    Boolean booleanField;
-//    boolean boolField;
+    String stringField;
+    Integer integerField;
+    Double doubleField;
+    Boolean booleanField;
+    boolean boolField;
     Date dateField;
 
-//    @Enumerated
-//    ExampleEnum enumField;
+    @Enumerated
+    ExampleEnum enumField;
 }

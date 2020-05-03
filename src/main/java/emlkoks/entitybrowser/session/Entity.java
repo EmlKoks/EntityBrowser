@@ -4,7 +4,6 @@ import emlkoks.entitybrowser.common.LibraryManager;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
@@ -54,8 +53,7 @@ public class Entity {
 
     public Object getIdValue(Object entityObject) {
         if (!entityObject.getClass().equals(clazz)) {
-            throw new RuntimeException("Wrong object type. Is " + entityObject.getClass().getName()
-                    + " but should be " + clazz.getName());
+            throw new WrongTypeException(entityObject.getClass(), clazz);
         }
         return fields.stream()
                 .filter(FieldProperty::isId)

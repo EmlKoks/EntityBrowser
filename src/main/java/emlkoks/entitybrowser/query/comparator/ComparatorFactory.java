@@ -2,43 +2,32 @@ package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.session.FieldProperty;
 
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by EmlKoks on 15.06.19.
  */
 public class ComparatorFactory {
+    private static Set<AbstractComparator<?>> comparators = new HashSet<>();
 
-    public static AbstractComparator getComparator(FieldProperty fieldProperty) {
+    static {
+        comparators.add(new BooleanComparator());
+        comparators.add(new CharacterComparator());
+        comparators.add(new DateComparator());
+        comparators.add(new EnumComparator());
+        comparators.add(new NumberComparator());
+        comparators.add(new StringComparator());
+    }
+
+    public static AbstractComparator<?> getComparator(FieldProperty fieldProperty) {
         return getComparator(fieldProperty.getField().getType());
     }
 
-    static AbstractComparator getComparator(Class clazz) {
-        if (clazz == String.class) {
-            return new StringComparator();
-        }
-
-        if (clazz == Character.class || clazz == char.class) {
-            return new CharacterComparator();
-        }
-
-        if (clazz == Date.class) {
-            return new DateComparator();
-        }
-
-        if (clazz == boolean.class || clazz == Boolean.class) {
-            return new BooleanComparator();
-        }
-
-        if (Number.class.isAssignableFrom(clazz) || clazz == int.class || clazz == float.class
-                || clazz == long.class || clazz == double.class || clazz == short.class) {
-            return new NumberComparator();
-        }
-
-        if (clazz.isEnum()) {
-            return new EnumComparator();
-        }
-
-        return null;
+    static AbstractComparator<?> getComparator(Class<?> clazz) {
+        return comparators.stream()
+                .filter(comparator -> comparator.canUseForClass(clazz))
+                .findFirst()
+                .orElse(null);
     }
 }

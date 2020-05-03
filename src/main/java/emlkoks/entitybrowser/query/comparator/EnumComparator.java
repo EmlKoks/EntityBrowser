@@ -11,13 +11,11 @@ import javafx.scene.control.ChoiceBox;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by EmlKoks on 15.06.19.
  */
-@Slf4j
-public class EnumComparator extends AbstractComparator {
+public class EnumComparator extends AbstractComparator<Enum> {
 
     EnumComparator() {
         expressions.add(new EqualExpression());
@@ -25,19 +23,23 @@ public class EnumComparator extends AbstractComparator {
     }
 
     @Override
-    Node createFieldValueField(Class clazz) {
-        ChoiceBox values = new ChoiceBox(createValueList(clazz));
-        return values;
+    public boolean canUseForClass(Class<?> clazz) {
+        return clazz.isEnum();
     }
 
-    public ObservableList<Enum> createValueList(Class clazz) {
+    @Override
+    Node createFieldValueField(Class<?> clazz) {
+        return new ChoiceBox<>(createValueList(clazz));
+    }
+
+    public ObservableList<Enum> createValueList(Class<?> clazz) {
         ObservableList<Enum> values = FXCollections.observableArrayList();
         values.addAll(Util.getEnumValues(clazz));
         return values;
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+    public Predicate createPredicate(CriteriaBuilder cb, Path<Enum> attributePath, FieldFilter fieldFilter) {
         return null;//TODO
     }
 

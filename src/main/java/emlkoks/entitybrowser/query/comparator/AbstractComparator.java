@@ -56,7 +56,9 @@ public abstract class AbstractComparator<T> {
         return expressionChoiceBox;
     }
 
-    abstract Node createFieldValueField(Class clazz);
+    public abstract boolean canUseForClass(Class<?> clazz);
+
+    abstract Node createFieldValueField(Class<?> clazz);
 
     public abstract Predicate createPredicate(CriteriaBuilder cb, Path<T> attributePath, FieldFilter fieldFilter);
 }
