@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.view.controller;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.common.Util;
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.connection.Connector;
+import emlkoks.entitybrowser.connection.ConnectionHelper;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Property;
 import emlkoks.entitybrowser.connection.Provider;
@@ -224,7 +224,7 @@ public class ChooseConnectionController implements Initializable {
                     resources.getString("error.title"),
                     resources.getString("chooseConnection.test.wrong.emptyFields"))
                     .show();
-        } else if (Connector.testConnection(connection)) {
+        } else if (ConnectionHelper.testConnection(connection)) {
             new WarningDialogCreator(
                     resources.getString("chooseConnection.test.title"),
                     resources.getString("chooseConnection.test.wrong.content"))

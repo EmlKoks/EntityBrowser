@@ -11,10 +11,8 @@ public class NumberTextField extends TextField {
     public NumberTextField(Class<?> type) {
         this.type = type;
         this.setTextFormatter(new TextFormatter<Object>(change -> {
-                if (change.isAdded()) {
-                    if (!matchValue(change.getControlText() + change.getText())) {
-                        change.setText("");
-                    }
+                if (change.isAdded() && !matchValue(change.getControlText() + change.getText())) {
+                    change.setText("");
                 }
                 return change;
             }));

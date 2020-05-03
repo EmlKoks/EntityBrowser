@@ -4,11 +4,14 @@ import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.view.CannotOpenStageException;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.EntityDetailsController;
+import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -96,11 +99,16 @@ public class ResultsTableController {
 
     private void openDetails(Object item) {
         Main.addEntity(item);
-        Stage dialog = createDietailsDialog(item);
-        dialog.show();
+        try {
+            Stage dialog = createDetailsDialog(item);
+            dialog.show();
+        } catch (CannotOpenStageException exception) {
+            new ErrorDialogCreator("Cannot open details dialog")//TODO get from lang
+                    .show();
+        }
     }
 
-    private Stage createDietailsDialog(Object entity) {
+    private Stage createDetailsDialog(Object entity) throws CannotOpenStageException {
         Stage dialog = new Stage();
         dialog.initModality(Modality.NONE);
         dialog.initOwner(parentPane.getScene().getWindow());
@@ -112,7 +120,7 @@ public class ResultsTableController {
             controller.loadEntity(entity);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Cannot open details dialog");//TODO message from lang
+            throw new CannotOpenStageException();
         }
         Scene dialogScene = new Scene(parent);
         dialog.setTitle(getDetailsTitle(entity));

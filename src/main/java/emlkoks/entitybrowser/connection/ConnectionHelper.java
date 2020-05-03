@@ -12,7 +12,7 @@ import javax.persistence.EntityManagerFactory;
 /**
  * Created by EmlKoks on 10.03.17.
  */
-public class Connector {
+public class ConnectionHelper {
 
     public static EntityManagerFactory createConnection(
             Connection connection, List<Class> classList, Provider provider) {

@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     public static Mode mode = Mode.PROD;
-    static Properties properties;
+//    public static Properties properties;
     public static SavedConnections savedConnections = new SavedConnections();
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;

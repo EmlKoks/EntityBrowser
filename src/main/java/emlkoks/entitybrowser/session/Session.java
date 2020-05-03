@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.session;
 
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.connection.Connector;
+import emlkoks.entitybrowser.connection.ConnectionHelper;
 import emlkoks.entitybrowser.connection.Provider;
 
 import java.io.File;
@@ -34,7 +34,7 @@ public class Session {
     }
 
     public boolean connect() {
-        EntityManagerFactory emf = Connector.createConnection(connection, entityList.getClasses(), provider);
+        EntityManagerFactory emf = ConnectionHelper.createConnection(connection, entityList.getClasses(), provider);
         if (emf != null) {
             entityManager = emf.createEntityManager();
             return true;

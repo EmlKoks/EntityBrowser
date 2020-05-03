@@ -12,14 +12,14 @@ import java.util.Date;
 @AllArgsConstructor
 public class MockedEntity1 {
     @Id
-    Integer id;
-    String stringField;
-    Integer integerField;
-    Double doubleField;
-    Boolean booleanField;
-    boolean boolField;
-    Date dateField;
+    private Integer id;
+    private String stringField;
+    private Integer integerField;
+    private Double doubleField;
+    private Boolean booleanField;
+    private boolean boolField;
+    private Date dateField;
 
     @Enumerated
-    ExampleEnum enumField;
+    private ExampleEnum enumField;
 }

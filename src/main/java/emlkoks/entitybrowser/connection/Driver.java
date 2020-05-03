@@ -23,12 +23,6 @@ public class Driver {
     @XmlTransient
     private boolean wasLoaded = false;
 
-    public Driver(String lib, String className, String url) {
-        this.lib = lib;
-        this.className = className;
-        this.url = url;
-    }
-
     private URL getLibUrl() {
         try {
             return new File(Resources.DRIVERS_DIR + lib).toURL();
@@ -38,14 +32,14 @@ public class Driver {
         return null;
     }
 
-    void loadDriver() {
+    public void loadDriver() {
         if (wasLoaded) {
             return;
         }
         try {
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
-            method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{getLibUrl()});
+            method.invoke(ClassLoader.getSystemClassLoader(), getLibUrl());
             wasLoaded = true;
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();

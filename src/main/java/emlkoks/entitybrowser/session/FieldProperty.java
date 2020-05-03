@@ -14,13 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Slf4j
 public class FieldProperty {
-    String name;
-    Method setter;
-    Method getter;
-    Field field;
-    Class parentClass;
+    private String name;
+    private Method setter;
+    private Method getter;
+    private Field field;
+    private Class<?> parentClass;
 
-    public FieldProperty(Field field, Class parentClass) {
+    public FieldProperty(Field field, Class<?> parentClass) {
         this.field = field;
         this.parentClass = parentClass;
         this.name = field.getName();
