@@ -6,6 +6,7 @@ import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
 import emlkoks.entitybrowser.session.Session;
+import emlkoks.entitybrowser.update.Updater;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.ChooseConnectionController;
 import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
@@ -48,11 +49,13 @@ public class MainWindowController implements Initializable {
         searchController.initialize(resources, this, leftContent, session);
         resultsController.initialize(resources, rightContent);
         if (Mode.DEBUG.equals(Main.mode)) {
-            debugWithMock();
+//            debugWithMock();
 //            debugNewSession();
 //        debugOSP();
 //            debugResultsList();
         }
+
+        Platform.runLater(Updater::new);
     }
 
 

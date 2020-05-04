@@ -4,7 +4,8 @@ public enum ViewFile {
     CHOOSE_CONNECTION("/view/chooseConnection.fxml"),
     ENTITY_DETAILS("/view/entityDetails.fxml"),
     MAIN_WINDOW("/view/main/mainWindow.fxml"),
-    NEW_DRIVER("/view/newDriver.fxml");
+    NEW_DRIVER("/view/newDriver.fxml"),
+    UPDATE_AVAILABLE("/view/updateAvailable.fxml");
 
     private String file;
 

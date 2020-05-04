@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.connection;
 
-import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.common.Resources;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;

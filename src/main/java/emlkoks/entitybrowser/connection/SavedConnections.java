@@ -2,7 +2,7 @@ package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.common.Util;
-import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.common.Resources;
 import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

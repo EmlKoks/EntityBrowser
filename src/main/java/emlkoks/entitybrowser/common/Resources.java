@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.resources;
+package emlkoks.entitybrowser.common;
 
 import java.io.File;
 import java.io.FileInputStream;

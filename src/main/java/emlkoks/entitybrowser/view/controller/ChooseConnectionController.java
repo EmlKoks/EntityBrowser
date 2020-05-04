@@ -7,7 +7,7 @@ import emlkoks.entitybrowser.connection.ConnectionHelper;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Property;
 import emlkoks.entitybrowser.connection.Provider;
-import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.control.ConnectionListCell;

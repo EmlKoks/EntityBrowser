@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.common.Marshaller;
-import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.common.Resources;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;

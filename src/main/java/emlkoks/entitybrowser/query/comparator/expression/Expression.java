@@ -11,7 +11,7 @@ public abstract class Expression {
 
     Expression(ExpressionType expressionType) {
         this.expressionType = expressionType;                       //TODO depends by comparator type
-        this.expressionLabel = Main.bundle.getString("expression." + expressionType.name().toLowerCase());
+        this.expressionLabel = Main.resources.getString("expression." + expressionType.name().toLowerCase());
     }
 
     public String toString() {

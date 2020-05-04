@@ -31,10 +31,10 @@ public class BooleanComparator extends AbstractComparator<Boolean> {
     @Override
     Node createFieldValueField(Class<?> clazz) {
         ToggleGroup toggleGroup = new ToggleGroup();
-        RadioButton trueButton = new RadioButton(Main.bundle.getString("boolean.true"));
+        RadioButton trueButton = new RadioButton(Main.resources.getString("boolean.true"));
         trueButton.setToggleGroup(toggleGroup);
         trueButton.setSelected(true);
-        RadioButton falseButton = new RadioButton(Main.bundle.getString("boolean.false"));
+        RadioButton falseButton = new RadioButton(Main.resources.getString("boolean.false"));
         falseButton.setToggleGroup(toggleGroup);
         return new HBox(trueButton, falseButton);
     }

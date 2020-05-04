@@ -2,7 +2,7 @@ package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.connection.Driver;
-import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 import java.io.File;
 import java.io.IOException;
@@ -22,25 +22,15 @@ import org.apache.commons.io.FileUtils;
  */
 public class NewDriverController implements Initializable {
 
-    @FXML
-    private GridPane newDriverPane;
-
-    @FXML
-    private TextField driver;
-
-    @FXML
-    private TextField name;
-
-    @FXML
-    private TextField clazz;
-
-    @FXML
-    private TextField urlTemplate;
+    @FXML private GridPane newDriverPane;
+    @FXML private TextField driver;
+    @FXML private TextField name;
+    @FXML private TextField clazz;
+    @FXML private TextField urlTemplate;
+    @FXML private ResourceBundle resources;
 
     private File lib;
 
-    @FXML
-    private ResourceBundle resources;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

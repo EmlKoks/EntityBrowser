@@ -1,6 +1,5 @@
 package emlkoks.entitybrowser.common;
 
-import emlkoks.entitybrowser.resources.Resources;
 import emlkoks.entitybrowser.session.CannotCreateFieldPropertyException;
 import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;

@@ -50,7 +50,7 @@ public class ResultsTableController {
         fillColumns();
         this.resultsTable.setVisible(true);
         if (Mode.DEBUG.equals(Main.mode)) {
-            openDetails(list.get(0));
+//            openDetails(list.get(0));
         }
     }
 

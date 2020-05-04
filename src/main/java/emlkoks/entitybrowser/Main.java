@@ -4,7 +4,7 @@ import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.common.Properties;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnections;
-import emlkoks.entitybrowser.resources.Resources;
+import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.main.MainWindowController;
 import java.util.LinkedList;
@@ -20,12 +20,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     public static Mode mode = Mode.PROD;
-//    public static Properties properties;
+    public static Properties properties;
     public static SavedConnections savedConnections = new SavedConnections();
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;
     private static Queue<Object> entityDetailsQueue = new LinkedList<>();
-    public static ResourceBundle bundle;
+    public static ResourceBundle resources;
 
     public static void main(String[] args) {
         if  (args.length > 0) {
@@ -38,21 +38,22 @@ public class Main extends Application {
     public void init() {
         drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
         savedConnections = Marshaller.unmarshal(SavedConnections.class, Resources.SAVED_CONNECTION);
-//        properties = new Properties();
+        properties = new Properties();
     }
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        bundle = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
+
+        resources = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
         FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent root = fxmlLoader.load(getClass().getResource(ViewFile.MAIN_WINDOW.getFile()), bundle);
+        Parent root = fxmlLoader.load(getClass().getResource(ViewFile.MAIN_WINDOW.getFile()), resources);
         primaryStage.setTitle("Entity Browser");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-        if (Mode.DEBUG.equals(mode)) {
-            initDebugData();
-        }
+//        if (Mode.DEBUG.equals(mode)) {
+//            initDebugData();
+//        }
     }
 
     private void initDebugData() {
