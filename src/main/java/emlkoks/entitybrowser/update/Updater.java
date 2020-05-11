@@ -4,6 +4,12 @@ import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.UpdateAvailableController;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -11,13 +17,6 @@ import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
 
 import static emlkoks.entitybrowser.update.GithubReleaseProperties.*;
 
@@ -50,6 +49,7 @@ public class Updater {
             log.info("Not found downloadable asset");
             return;
         }
+        log.info("ReleaseInfo {}", releaseInfo);
         if (isNew()) {
             showNewVersionDialog();
         }
@@ -74,8 +74,8 @@ public class Updater {
     }
 
     private void createReleaseNotes(String response) {
-        JSONObject responseJSON = new JSONArray(response).getJSONObject(0);
-        JSONArray assets = responseJSON.getJSONArray(ASSETS.getValue());
+        JSONObject responseJson = new JSONArray(response).getJSONObject(0);
+        JSONArray assets = responseJson.getJSONArray(ASSETS.getValue());
         if (assets.isEmpty()) {
             throw new ReleaseAssetNotFound();
         }
@@ -89,9 +89,9 @@ public class Updater {
         this.releaseInfo = ReleaseInfo.builder()
                 .currentVersion(Main.properties.getVersion())
                 .downloadUrl(downloadUrl)
-                .lastVersion(responseJSON.getString(VERSION.getValue()))
-                .releaseTitle(responseJSON.getString(TITLE.getValue()))
-                .releaseNotes(responseJSON.getString(CONTENT.getValue()))
+                .lastVersion(responseJson.getString(VERSION.getValue()))
+                .releaseTitle(responseJson.getString(TITLE.getValue()))
+                .releaseNotes(responseJson.getString(CONTENT.getValue()))
                 .build();
     }
 
@@ -119,7 +119,7 @@ public class Updater {
         return content.toString();
     }
 
-    private String mockedRelease() throws IOException{
+    private String mockedRelease() throws IOException {
         return "[{\"url\": \"https://api.github.com/repos/EmlKoks/EntityBrowser/releases/25901126\", \"assets_url\": \"https://api.github.com/repos/EmlKoks/EntityBrowser/releases/25901126/assets\", \"upload_url\": \"https://uploads.github.com/repos/EmlKoks/EntityBrowser/releases/25901126/assets{?name,label}\", \"html_url\": \"https://github.com/EmlKoks/EntityBrowser/releases/tag/v0.1-alpha\", \"id\": 25901126, \"node_id\": \"MDc6UmVsZWFzZTI1OTAxMTI2\", \"tag_name\": \"v0.1-alpha\", \"target_commitish\": \"master\", \"name\": \"First release title\", \"draft\": false, \"author\": {\"login\": \"EmlKoks\", \"id\": 18641029, \"node_id\": \"MDQ6VXNlcjE4NjQxMDI5\", \"avatar_url\": \"https://avatars1.githubusercontent.com/u/18641029?v=4\", \"gravatar_id\": \"\", \"url\": \"https://api.github.com/users/EmlKoks\", \"html_url\": \"https://github.com/EmlKoks\", \"followers_url\": \"https://api.github.com/users/EmlKoks/followers\", \"following_url\": \"https://api.github.com/users/EmlKoks/following{/other_user}\", \"gists_url\": \"https://api.github.com/users/EmlKoks/gists{/gist_id}\", \"starred_url\": \"https://api.github.com/users/EmlKoks/starred{/owner}{/repo}\", \"subscriptions_url\": \"https://api.github.com/users/EmlKoks/subscriptions\", \"organizations_url\": \"https://api.github.com/users/EmlKoks/orgs\", \"repos_url\": \"https://api.github.com/users/EmlKoks/repos\", \"events_url\": \"https://api.github.com/users/EmlKoks/events{/privacy}\", \"received_events_url\": \"https://api.github.com/users/EmlKoks/received_events\", \"type\": \"User\", \"site_admin\": false}, \"prerelease\": true, \"created_at\": \"2020-04-26T19:18:19Z\", \"published_at\": \"2020-04-26T22:06:55Z\", \"assets\": [{\"url\": \"https://api.github.com/repos/EmlKoks/EntityBrowser/releases/assets/20175519\", \"id\": 20175519, \"node_id\": \"MDEyOlJlbGVhc2VBc3NldDIwMTc1NTE5\", \"name\": \"entity-browser-0.1-alpha.jar\", \"label\": null, \"uploader\": {\"login\": \"EmlKoks\", \"id\": 18641029, \"node_id\": \"MDQ6VXNlcjE4NjQxMDI5\", \"avatar_url\": \"https://avatars1.githubusercontent.com/u/18641029?v=4\", \"gravatar_id\": \"\", \"url\": \"https://api.github.com/users/EmlKoks\", \"html_url\": \"https://github.com/EmlKoks\", \"followers_url\": \"https://api.github.com/users/EmlKoks/followers\", \"following_url\": \"https://api.github.com/users/EmlKoks/following{/other_user}\", \"gists_url\": \"https://api.github.com/users/EmlKoks/gists{/gist_id}\", \"starred_url\": \"https://api.github.com/users/EmlKoks/starred{/owner}{/repo}\", \"subscriptions_url\": \"https://api.github.com/users/EmlKoks/subscriptions\", \"organizations_url\": \"https://api.github.com/users/EmlKoks/orgs\", \"repos_url\": \"https://api.github.com/users/EmlKoks/repos\", \"events_url\": \"https://api.github.com/users/EmlKoks/events{/privacy}\", \"received_events_url\": \"https://api.github.com/users/EmlKoks/received_events\", \"type\": \"User\", \"site_admin\": false}, \"content_type\": \"application/x-java-archive\", \"state\": \"uploaded\", \"size\": 113354, \"download_count\": 0, \"created_at\": \"2020-04-26T22:06:00Z\", \"updated_at\": \"2020-04-26T22:06:01Z\", \"browser_download_url\": \"https://github.com/EmlKoks/EntityBrowser/releases/download/v0.1-alpha/entity-browser-0.1-alpha.jar\"}], \"tarball_url\": \"https://api.github.com/repos/EmlKoks/EntityBrowser/tarball/v0.1-alpha\", \"zipball_url\": \"https://api.github.com/repos/EmlKoks/EntityBrowser/zipball/v0.1-alpha\", \"body\": \"First release body\"}]";
     }
 

@@ -2,6 +2,8 @@ package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.Main;
 import java.util.Objects;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
@@ -23,6 +25,7 @@ public class Connection implements Cloneable {
     private String password;
     private String libraryPath;
     private Provider provider;
+    private ObservableList<Property> properties = FXCollections.observableArrayList();
 
     @XmlTransient
     public Driver getDriver() {

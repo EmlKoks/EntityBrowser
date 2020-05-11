@@ -38,6 +38,7 @@ public class Main extends Application {
     public void init() {
         drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
         savedConnections = Marshaller.unmarshal(SavedConnections.class, Resources.SAVED_CONNECTION);
+        savedConnections.setupConnectionLastId();
         properties = new Properties();
     }
 

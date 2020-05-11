@@ -1,8 +1,8 @@
 package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
-import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.common.Resources;
+import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 import java.io.File;
 import java.io.IOException;

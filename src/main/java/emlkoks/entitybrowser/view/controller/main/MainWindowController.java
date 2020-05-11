@@ -2,6 +2,8 @@ package emlkoks.entitybrowser.view.controller.main;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
+import emlkoks.entitybrowser.connection.Connection;
+import emlkoks.entitybrowser.connection.Provider;
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
@@ -11,6 +13,7 @@ import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.ChooseConnectionController;
 import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -81,6 +84,18 @@ public class MainWindowController implements Initializable {
     @FXML
     private void showAbout() {
         new InformationDialogCreator("About", "Test").show();
+    }
+
+    private void debugOSP() {
+        Connection connection = Main.savedConnections.getConnections()
+                .filtered(c -> "OSP".equals(c.getName()))
+                .get(0);
+        File lib = new File("/home/nn/projects/EntityBrowser/osp.war");
+        session = new Session(connection, lib, Provider.Hibernate);
+        if (session.connect()) {
+            searchController.updateEntities(session);
+//            validateEntities(session);
+        }
     }
 
     @FXML

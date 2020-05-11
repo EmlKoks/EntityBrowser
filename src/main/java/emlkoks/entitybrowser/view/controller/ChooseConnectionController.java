@@ -1,13 +1,14 @@
 package emlkoks.entitybrowser.view.controller;
 
 import emlkoks.entitybrowser.Main;
+import emlkoks.entitybrowser.Mode;
+import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.common.Util;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.ConnectionHelper;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Property;
 import emlkoks.entitybrowser.connection.Provider;
-import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.control.ConnectionListCell;
@@ -30,7 +31,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -48,6 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ChooseConnectionController implements Initializable {
 
     @FXML private BorderPane mainPane;
+    @FXML private TabPane tabPane;
     @FXML private ResourceBundle resources;
     @FXML private ListView<Connection> savedConnections;
     @FXML private TextField connectionNameField;
@@ -57,16 +61,13 @@ public class ChooseConnectionController implements Initializable {
     @FXML private TextField passwordField;
     @FXML private TextField libraryPathField;
     @FXML private ChoiceBox<Provider> providersChoiceBox;
-//    @FXML private VBox pane;
-//    @FXML private ScrollPane advancedPane;
-//    @FXML private TableView<Property> propertiesTable;
+    @FXML private TableView<Property> propertiesTable;
     @FXML private TableColumn<Property, String> nameColumn;
     @FXML private TableColumn<Property, String> valueColumn;
 
     private Connection connection;
     private File entityLibrary;
     private Session session;
-//    private ObservableList<Property> props;
 
 
     @Override
@@ -84,10 +85,14 @@ public class ChooseConnectionController implements Initializable {
             connection = newValue;
             fillView();
         });
+        if (Mode.DEBUG.equals(Main.mode)) {
+            savedConnections.getSelectionModel().select(2);
+            tabPane.getSelectionModel().select(1);
+        }
     }
 
     private void fillSavedConnections() {
-        savedConnections.setItems(Main.savedConnections.getList());
+        savedConnections.setItems(Main.savedConnections.getConnections());
         savedConnections.setCellFactory(view -> new ConnectionListCell());
     }
 
@@ -107,12 +112,12 @@ public class ChooseConnectionController implements Initializable {
     }
 
     private void initPropertiesTable() {
-//        props = FXCollections.observableList(
-//                new ArrayList<>(new HibernateProvider().getDefaultProperties()));
-//        propertiesTable.setItems(props);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
+        nameColumn.setOnEditCommit(event -> event.getRowValue().setName(event.getNewValue()));
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
+        valueColumn.setOnEditCommit(event -> event.getRowValue().setValue(event.getNewValue()));
     }
 
     @FXML
@@ -129,6 +134,7 @@ public class ChooseConnectionController implements Initializable {
         passwordField.setText(connection.getPassword());
         libraryPathField.setText(connection.getLibraryPath());
         providersChoiceBox.setValue(connection.getProvider());
+        propertiesTable.setItems(connection.getProperties());
     }
 
     @FXML
@@ -235,6 +241,21 @@ public class ChooseConnectionController implements Initializable {
                     resources.getString("chooseConnection.test.correct.content"))
                     .show();
         }
+    }
+
+    @FXML
+    private void addRow() {
+        connection.getProperties().add(new Property());
+    }
+
+    @FXML
+    private void deleteRow() {
+        connection.getProperties().removeAll(propertiesTable.getSelectionModel().getSelectedItems());
+    }
+
+    @FXML
+    private void copyRow() {
+
     }
 
     private void fillConnection() {
