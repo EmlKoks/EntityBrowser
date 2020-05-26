@@ -2,7 +2,8 @@ package emlkoks.entitybrowser.session;
 
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.ConnectionHelper;
-import emlkoks.entitybrowser.connection.Provider;
+import emlkoks.entitybrowser.entity.EntityDetails;
+import emlkoks.entitybrowser.entity.EntityList;
 
 import java.io.File;
 import java.util.List;
@@ -16,17 +17,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 public class Session {
     protected EntityList entityList;
     private Connection connection;
-    private Provider provider;
     private EntityManager entityManager;
 
-    public Session(Connection connection, File entityJar, Provider provider) {
+    public Session(Connection connection) {
         this.connection = connection;
-        entityList = new EntityList(entityJar);
-        this.provider = provider;
-    }
-
-    public List<Class> getEntityClasses() {
-        return entityList.getClasses();
+        File entityLibrary = new File(connection.getLibraryPath());
+        if (!entityLibrary.exists()) {
+            throw new RuntimeException();
+        }
+        entityList = new EntityList(entityLibrary);
     }
 
     public List<String> getClassNames() {
@@ -34,7 +33,7 @@ public class Session {
     }
 
     public boolean connect() {
-        EntityManagerFactory emf = ConnectionHelper.createConnection(connection, entityList.getClasses(), provider);
+        EntityManagerFactory emf = ConnectionHelper.createConnection(connection, entityList.getClasses());
         if (emf != null) {
             entityManager = emf.createEntityManager();
             return true;
@@ -43,7 +42,7 @@ public class Session {
         }
     }
 
-    public Entity getEntity(String entityName) {
+    public EntityDetails getEntity(String entityName) {
         return entityList.getEntity(entityName);
     }
 

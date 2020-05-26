@@ -1,15 +1,12 @@
 package emlkoks.entitybrowser;
 
-import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.common.Properties;
+import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.connection.DriverList;
 import emlkoks.entitybrowser.connection.SavedConnections;
-import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.main.MainWindowController;
-import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +21,6 @@ public class Main extends Application {
     public static SavedConnections savedConnections = new SavedConnections();
     public static DriverList drivers = new DriverList();
     private static MainWindowController mainController;
-    private static Queue<Object> entityDetailsQueue = new LinkedList<>();
     public static ResourceBundle resources;
 
     public static void main(String[] args) {
@@ -36,9 +32,7 @@ public class Main extends Application {
 
     @Override
     public void init() {
-        drivers = Marshaller.unmarshal(DriverList.class, Resources.DRIVERS);
-        savedConnections = Marshaller.unmarshal(SavedConnections.class, Resources.SAVED_CONNECTION);
-        savedConnections.setupConnectionLastId();
+        Resources.loadResources(this.getClass());
         properties = new Properties();
     }
 
@@ -67,13 +61,5 @@ public class Main extends Application {
 
     public static void setMainController(MainWindowController mainController) {
         Main.mainController = mainController;
-    }
-
-    public static void addEntity(Object o) {
-        entityDetailsQueue.add(o);
-    }
-
-    public static Object getEntity() {
-        return entityDetailsQueue.poll();
     }
 }

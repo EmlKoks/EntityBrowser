@@ -2,14 +2,15 @@ package emlkoks.entitybrowser.view.controller.main;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
+import emlkoks.entitybrowser.entity.EntityDetails;
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.SearchService;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
-import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 
@@ -45,27 +46,33 @@ public class SearchController {
     private MainWindowController parentController;
 
     private Session session;
-    private Entity selectedEntity;
+    private EntityDetails selectedEntity;
     private ResourceBundle resources;
 
-    public void initialize(ResourceBundle resources, MainWindowController parentController, Pane parentPane,
-                           Session session) {
+    private SearchService searchService;
+
+    public void initialize(ResourceBundle resources, MainWindowController parentController, Pane parentPane) {
         this.resources = resources;
         this.parentController = parentController;
         filtersPane.prefWidthProperty().bind(parentPane.widthProperty());
         filtersPane.prefHeightProperty().bind(parentPane.heightProperty());
-        this.session = session;
         entities.valueProperty().addListener((observable, oldValue, newValue) -> {
-            selectedEntity = session.getEntity(newValue);
+            selectedEntity = getSession().getEntity(newValue);
             fields.getItems().clear();
             fields.getItems().addAll(selectedEntity.getFieldsNames());
             fields.setValue(fields.getItems().get(0));
             filtersGrid.getChildren().clear();
         });
+        searchService = new SearchService(session);
     }
 
-    public void updateEntities(Session session) {
+    private Session getSession() {
+        return session;
+    }
+
+    public void updateSession(Session session) {
         this.session = session;
+        searchService = new SearchService(session);
         entities.getItems().addAll(session.getClassNames());
         if (Mode.DEBUG.equals(Main.mode)) {
             entities.setValue(entities.getItems().get(0));
@@ -75,16 +82,16 @@ public class SearchController {
     @FXML
     public void doSearch() {
         try {
-            List resultList;
+            SearchResults searchResults;
             if (Mode.PROD.equals(Main.mode)) {
-                resultList = SearchService.searchResults(session, selectedEntity, getFieldFilters());
+                searchResults = searchService.search(selectedEntity, getFieldFilters());
             } else {
-                resultList = MockSession.getResultsList();
+                searchResults = MockSession.getSearchResults();
             }
-            parentController.getResultsController().showResults(resultList, selectedEntity);
+            parentController.getResultsController().showResults(searchResults);
         } catch (Exception e) {
             e.printStackTrace();
-            new ErrorDialogCreator("Cannot find results")
+            new ErrorDialogCreator("Cannot find results: " + e.getMessage())
                     .show();
         }
     }

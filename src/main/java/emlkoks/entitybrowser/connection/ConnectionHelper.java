@@ -14,13 +14,11 @@ import javax.persistence.EntityManagerFactory;
  */
 public class ConnectionHelper {
 
-    public static EntityManagerFactory createConnection(
-            Connection connection, List<Class> classList, Provider provider) {
+    public static EntityManagerFactory createConnection(Connection connection, List<Class> classList) {
         connection.getDriver().loadDriver();
 
-
         EntityManagerFactoryCreator entityManagerFactoryCreator;
-        switch (provider) {
+        switch (connection.getProvider()) {
             case Hibernate:
                 entityManagerFactoryCreator = new HibernateEntityManagerFactory(connection, classList);
                 break;
@@ -28,7 +26,7 @@ public class ConnectionHelper {
                 entityManagerFactoryCreator = new EclipseLinkEntityManagerFactoryCreator(connection);
                 break;
             default:
-                throw new EntityManagerNotFoundException(provider);
+                throw new EntityManagerNotFoundException(connection.getProvider());
         }
 
         return entityManagerFactoryCreator.createEntityManagerFactory();

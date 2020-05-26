@@ -24,8 +24,13 @@ public class Driver {
     private boolean wasLoaded = false;
 
     private URL getLibUrl() {
+        String driverUrl = Resources.DRIVERS_DIR_PATH + lib;
+        File driverFile = new File(driverUrl);
+        if (!driverFile.exists()) {
+            throw new RuntimeException("Cannot find driver file " + driverUrl);
+        }
         try {
-            return new File(Resources.DRIVERS_DIR + lib).toURL();
+            return driverFile.toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -34,7 +34,7 @@ public class EnumComparator extends AbstractComparator<Enum> {
 
     public ObservableList<Enum> createValueList(Class<?> clazz) {
         ObservableList<Enum> values = FXCollections.observableArrayList();
-        values.addAll(Util.getEnumValues(clazz));
+//        values.addAll(Util.getEnumValues(clazz)); TODO
         return values;
     }
 

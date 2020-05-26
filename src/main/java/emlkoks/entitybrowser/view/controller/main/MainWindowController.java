@@ -3,19 +3,17 @@ package emlkoks.entitybrowser.view.controller.main;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.connection.Provider;
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
 import emlkoks.entitybrowser.session.Session;
-import emlkoks.entitybrowser.update.Updater;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.ChooseConnectionController;
 import emlkoks.entitybrowser.view.dialog.InformationDialogCreator;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -48,8 +46,7 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Main.setMainController(this);
         this.resources = resources;
-        session = new MockSession();
-        searchController.initialize(resources, this, leftContent, session);
+        searchController.initialize(resources, this, leftContent);
         resultsController.initialize(resources, rightContent);
         if (Mode.DEBUG.equals(Main.mode)) {
 //            debugWithMock();
@@ -58,7 +55,7 @@ public class MainWindowController implements Initializable {
 //            debugResultsList();
         }
 
-        Platform.runLater(Updater::new);
+//        Platform.runLater(Updater::new);//TODO run not blocking main thread
     }
 
 
@@ -90,10 +87,10 @@ public class MainWindowController implements Initializable {
         Connection connection = Main.savedConnections.getConnections()
                 .filtered(c -> "OSP".equals(c.getName()))
                 .get(0);
-        File lib = new File("/home/nn/projects/EntityBrowser/osp.war");
-        session = new Session(connection, lib, Provider.Hibernate);
+//        File lib = new File("/home/nn/projects/EntityBrowser/osp.war");
+        session = new Session(connection);
         if (session.connect()) {
-            searchController.updateEntities(session);
+            openSession(session);
 //            validateEntities(session);
         }
     }
@@ -112,12 +109,15 @@ public class MainWindowController implements Initializable {
     }
 
     public void openSession(Session session) {
+        if (Objects.isNull(session)) {
+            return;
+        }
         this.session = session;
         updateView();
     }
 
     private void updateView() {
-        searchController.updateEntities(session);
+        searchController.updateSession(session);
         centerContent.setDisable(false);
     }
 
@@ -137,7 +137,7 @@ public class MainWindowController implements Initializable {
 //    private void debugResultsList() {
 //        List<Connection> results = new ArrayList<>();
 //        results.add(new Connection());
-//        resultsController.showResults(results, new Entity(Connection.class));
+//        resultsController.showResults(results, new EntityDetails(Connection.class));
 //    }
 
     private void debugNewSession() {
@@ -145,7 +145,8 @@ public class MainWindowController implements Initializable {
     }
 
     private void debugWithMock() {
-        openSession(new MockSession());
+        session = new MockSession();
+        openSession(session);
         searchController.doSearch();
     }
 }

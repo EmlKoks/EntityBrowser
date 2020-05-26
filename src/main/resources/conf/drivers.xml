@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<driverList>
+    <drivers>
+        <className>com.mysql.jdbc.Driver</className>
+        <lib>mysql-connector-java-5.1.41-bin.jar</lib>
+        <name>MySQL</name>
+        <url>jdbc:mysql://&lt;host&gt;:&lt;port&gt;/&lt;database_name&lt;?property1=value1&amp;property2=value2</url>
+    </drivers>
+    <drivers>
+        <className>oracle.jdbc.driver.OracleDriver</className>
+        <lib>ojdbc7.jar</lib>
+        <name>Oracle</name>
+        <url>jdbc:oracle:&lt;drivertype&gt;:&lt;user&gt;/&lt;password&gt;@&lt;database&gt;</url>
+    </drivers>
+    <drivers>
+        <className>com.microsoft.sqlserver.jdbc.SQLServerDriver</className>
+        <lib>mssql-jdbc-7.2.1.jre8.jar</lib>
+        <name>MsSql</name>
+        <url>jdbc:sqlserver://&lt;host&gt;:&lt;port&gt;/&lt;database_name&lt;?property1=value1&amp;property2=value2</url>
+    </drivers>
+</driverList>

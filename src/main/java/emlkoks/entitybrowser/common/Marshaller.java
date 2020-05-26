@@ -22,6 +22,7 @@ public class Marshaller {
     }
 
     public static <T> T unmarshal(Class<T> clazz, String fileName) {
+        System.out.println("fileName = " + fileName);
         try {
             File file = new File(fileName);
             JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
@@ -34,6 +35,19 @@ public class Marshaller {
             } catch (ReflectiveOperationException e1) {
                 e1.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static <T> T unmarshalOrNull(Class<T> clazz, String fileName) {
+        System.out.println("fileName = " + fileName);
+        try {
+            File file = new File(fileName);
+            JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            return clazz.cast(jaxbUnmarshaller.unmarshal(file));
         } catch (Exception e) {
             e.printStackTrace();
         }

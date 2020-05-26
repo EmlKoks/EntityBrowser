@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MockedEntity1 {
+public class MockedEntity2 {
     @Id
     private Integer id;
     private String stringField;

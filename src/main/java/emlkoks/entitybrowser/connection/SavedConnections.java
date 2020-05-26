@@ -74,6 +74,6 @@ public class SavedConnections {
     }
 
     public void save() {
-        Marshaller.marshal(this, Resources.SAVED_CONNECTION);
+        Marshaller.marshal(this, Resources.SAVED_CONNECTIONS_PATH);
     }
 }

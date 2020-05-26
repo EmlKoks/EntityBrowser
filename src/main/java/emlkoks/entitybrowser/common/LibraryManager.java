@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.common;
 
+import emlkoks.entitybrowser.entity.EntityDetails;
 import emlkoks.entitybrowser.session.CannotCreateFieldPropertyException;
-import emlkoks.entitybrowser.session.Entity;
 import emlkoks.entitybrowser.session.FieldProperty;
 
 import java.io.File;
@@ -17,12 +17,12 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,8 +40,8 @@ import org.apache.commons.io.FileUtils;
 @Slf4j
 public class LibraryManager {
 
-    public static Map<String, Entity> getEntitesFromLib(File lib) {
-        Map<String, Entity> classMap = new TreeMap<>();
+    public static Map<String, EntityDetails> getEntitesFromLib(File lib) {
+        Map<String, EntityDetails> classMap = new TreeMap<>();
         List<File> libWithClassToLoad = getLibraryListFromFile(lib);
         libWithClassToLoad.forEach(f ->
             classMap.putAll(loadEntityClass(f))
@@ -100,9 +100,9 @@ public class LibraryManager {
     }
 
     /**
-     *  Get list of library from lib.
+     *  Get connections of library from lib.
      * @param library TODO
-     * @return - library list with persistance
+     * @return - library connections with persistance
      */
     private static List<File> getLibraryListFromFile(File library) {
         List<File> fileList;
@@ -128,8 +128,8 @@ public class LibraryManager {
         }
     }
 
-    private static Map<String, Entity> loadEntityClass(File file) {
-        Map<String, Entity> classMap = new TreeMap<>();
+    private static Map<String, EntityDetails> loadEntityClass(File file) {
+        Map<String, EntityDetails> classMap = new TreeMap<>();
         try {
             ZipFile zip = new ZipFile(file);
             Enumeration<ZipEntry> zipEnum = (Enumeration<ZipEntry>) zip.entries();
@@ -147,22 +147,20 @@ public class LibraryManager {
         return classMap;
     }
 
-    private static void loadClass(ZipEntry entry, Map<String, Entity> classMap) {
+    private static void loadClass(ZipEntry entry, Map<String, EntityDetails> classMap) {
         String classPath = entry.getName().replace("WEB-INF/", "").replace("classes/", "");
         String className = classPath.replace('/', '.').replace(".class", "");
         try {
-//            log.debug("className = " + className);
             Class clazz = Class.forName(className);
             if (clazz.getAnnotation(javax.persistence.Entity.class) != null) {
-                Entity entity = new Entity(clazz);
+                EntityDetails entity = new EntityDetails(clazz);
                 classMap.put(className.substring(className.lastIndexOf(".") + 1), entity);
             }
-        } catch (ClassNotFoundException | LinkageError | ArrayStoreException e) {
-            //skip
-        }
+        } catch (ClassNotFoundException | LinkageError | ArrayStoreException e) { }
     }
 
-    private static void loadJarOrWar(File file, ZipEntry entry, Map<String, Entity> classMap) throws IOException {
+    private static void loadJarOrWar(File file, ZipEntry entry, Map<String, EntityDetails> classMap)
+            throws IOException {
         ZipFile zf = new ZipFile(file);
         InputStream entryIs = zf.getInputStream(entry);
         String fileName = "temp/" + new Date().getTime();
@@ -175,34 +173,35 @@ public class LibraryManager {
         newFile.delete();
     }
 
-    public static Set<FieldProperty> getEntityFields(Entity entity) {
-        return getFieldFromClass(entity.getClazz());
+    public List<FieldProperty> getEntityFields(EntityDetails entityDetails) {
+        return getFieldFromEntity(entityDetails);
     }
 
-    public static Set<FieldProperty> getFieldFromClass(Class clazz) {
+    public List<FieldProperty> getFieldFromEntity(EntityDetails entityDetails) {
         return Stream.concat(
                 Stream.of(
-                        clazz.getDeclaredFields()),
-                getFieldsFromSuperclass(clazz))
+                        entityDetails.getClazz().getDeclaredFields()),
+                getFieldsFromEntitySuperclass(entityDetails))
                 .filter(LibraryManager::isNotTransient)
                 .filter(LibraryManager::isNotFinal)
                 .filter(LibraryManager::isNotSerialVersionUid)
                 .map(field -> {
                     try {
-                        return new FieldProperty(field, clazz);
+                        return new FieldProperty(field, entityDetails);
                     } catch (CannotCreateFieldPropertyException e) {
                         return null;
                     }
                 })
                 .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    private static Stream<Field> getFieldsFromSuperclass(Class clazz) {
-        if (clazz.getSuperclass() != Object.class) {
-            clazz.getSuperclass().getDeclaredFields();
-        }
-        return Stream.empty();
+    private Stream<Field> getFieldsFromEntitySuperclass(EntityDetails entityDetails) {
+        return entityDetails.getSuperEntity()
+                .map(EntityDetails::getClazz)
+                .map(Class::getDeclaredFields)
+                .map(Arrays::stream)
+                .orElse(Stream.empty());
     }
 
     private static boolean isNotFinal(Field field) {

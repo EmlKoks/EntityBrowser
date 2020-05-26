@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser.view.controller;
 
+import com.google.common.base.Strings;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.common.Resources;
@@ -165,9 +166,7 @@ public class ChooseConnectionController implements Initializable {
 
     @FXML
     public void connect() {
-        entityLibrary = new File(libraryPathField.getText());
-        if (entityLibrary.exists()) {
-            createSession();
+        if (createSession()) {
             ((Stage) mainPane.getScene().getWindow()).close();
         }
     }
@@ -177,11 +176,12 @@ public class ChooseConnectionController implements Initializable {
         ((Stage) mainPane.getScene().getWindow()).close();
     }
 
-    private void createSession() {
+    private boolean createSession() {
+
         try {
-            //TODO bind properties to connection
-            session = new Session(new Connection(), entityLibrary, providersChoiceBox.getValue());
+            session = new Session(connection);
             session.connect();
+            return true;
         } catch (Exception ex) {
             ex.printStackTrace();
 
@@ -190,6 +190,7 @@ public class ChooseConnectionController implements Initializable {
                     ex.getMessage())
                     .show();
         }
+        return false;
     }
 
     public Session getSession() {
@@ -219,7 +220,14 @@ public class ChooseConnectionController implements Initializable {
     @FXML
     public void saveConnection() {
         fillConnection();
-        Main.savedConnections.saveConnection(connection);
+        if (Strings.isNullOrEmpty(connection.getName())) {
+            new WarningDialogCreator(
+                    resources.getString("error.title"),
+                    resources.getString("chooseConnection.emptyName"))
+                    .show();
+        } else {
+            Main.savedConnections.saveConnection(connection);
+        }
     }
 
     @FXML
@@ -230,7 +238,8 @@ public class ChooseConnectionController implements Initializable {
                     resources.getString("error.title"),
                     resources.getString("chooseConnection.test.wrong.emptyFields"))
                     .show();
-        } else if (ConnectionHelper.testConnection(connection)) {
+        } else if (!ConnectionHelper.testConnection(connection)) {
+            //TODO show dialog with exception details
             new WarningDialogCreator(
                     resources.getString("chooseConnection.test.title"),
                     resources.getString("chooseConnection.test.wrong.content"))
@@ -259,6 +268,9 @@ public class ChooseConnectionController implements Initializable {
     }
 
     private void fillConnection() {
+        if (Objects.isNull(connection)) {
+            connection = new Connection();
+        }
         connection.setName(connectionNameField.getText());
         connection.setDriver(Main.drivers.getDriver(driversChoiceBox.getValue()));
         connection.setUrl(urlField.getText());

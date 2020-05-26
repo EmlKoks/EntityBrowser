@@ -1,9 +1,13 @@
 package emlkoks.entitybrowser.session;
 
+import emlkoks.entitybrowser.entity.EntityDetails;
+import emlkoks.entitybrowser.entity.EntityWrapper;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import javax.persistence.Id;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,29 +19,42 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FieldProperty {
     private String name;
+    @Deprecated
     private Method setter;
+    @Deprecated
     private Method getter;
     private Field field;
-    private Class<?> parentClass;
+    private EntityDetails owner;
 
-    public FieldProperty(Field field, Class<?> parentClass) {
+    public FieldProperty(Field field, EntityDetails owner) {
         this.field = field;
-        this.parentClass = parentClass;
+        this.field.setAccessible(true);
+        this.owner = owner;
         this.name = field.getName();
-        try {
-            setupGetter();
-            setupSetter();
-        } catch (MethodNotFoundException exception) {
-            log.debug("Cannot find method {} in class {}",
-                    exception.getMethodName(), field.getDeclaringClass().getName());
-            throw new CannotCreateFieldPropertyException();
-        }
+//        try {
+//            setupGetter();
+//            setupSetter();
+//        } catch (MethodNotFoundException exception) {
+//            log.debug("Cannot find method {} in class {}",
+//                    exception.getMethodName(), field.getDeclaringClass().getName());
+//            throw new CannotCreateFieldPropertyException();
+//        }
 
     }
 
-    public Object getValue(Object object) {
+    public EntityWrapper getValue(EntityWrapper entity) {
         try {
-            return getter.invoke(object);
+            return new EntityWrapper(field.get(entity.getValue()));
+        } catch (IllegalAccessException e) {
+            log.error("Cannot get field value", e);
+            return null;
+        }
+    }
+
+    @Deprecated
+    public EntityWrapper getValueOld(EntityWrapper entity) {
+        try {
+            return new EntityWrapper(getter.invoke(entity.getValue()));
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -48,6 +65,7 @@ public class FieldProperty {
         return field.isAnnotationPresent(Id.class);
     }
 
+    @Deprecated
     private void setupGetter() throws RuntimeException {
         boolean isBoolean = field.getType() == boolean.class;
         String methodName = new StringBuilder()
@@ -62,6 +80,7 @@ public class FieldProperty {
         }
     }
 
+    @Deprecated
     private void setupSetter() throws RuntimeException {
         String methodName = new StringBuilder()
                 .append("set")
@@ -73,6 +92,10 @@ public class FieldProperty {
         } catch (NoSuchMethodException e) {
             throw new MethodNotFoundException(methodName);
         }
+    }
+
+    public boolean isFinal() {
+        return Modifier.isFinal(field.getModifiers());
     }
 }
 

@@ -1,10 +1,11 @@
-package emlkoks.entitybrowser.session;
+package emlkoks.entitybrowser.entity;
 
 import emlkoks.entitybrowser.common.LibraryManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import lombok.Data;
 
 /**
@@ -12,7 +13,7 @@ import lombok.Data;
  */
 @Data
 public class EntityList {
-    private Map<String, Entity> classMap;
+    private Map<String, EntityDetails> classMap;
 
     public EntityList(File libFile) {
         if (libFile != null) {
@@ -32,7 +33,7 @@ public class EntityList {
         return names;
     }
 
-    public Entity getEntity(String entityName) {
+    public EntityDetails getEntity(String entityName) {
         return classMap.get(entityName);
     }
 
