@@ -1,13 +1,12 @@
-package emlkoks.entitybrowser.session;
+package emlkoks.entitybrowser.entity;
 
-import emlkoks.entitybrowser.entity.EntityDetails;
-import emlkoks.entitybrowser.entity.EntityWrapper;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import javax.persistence.Id;
 
+import emlkoks.entitybrowser.session.exception.MethodNotFoundException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

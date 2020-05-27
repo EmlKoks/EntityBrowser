@@ -32,6 +32,9 @@ public class EntityWrapper {
     }
 
     public String createDetailsTitle() {
+        if (isNull()) {
+            throw new NullPointerException("Cannot create details title. Value is null");
+        }
         try {
             return entityDetails.getSimpleName() + "(Id: " + entityDetails.getIdValue(this) + ")";
         } catch (RuntimeException e) {

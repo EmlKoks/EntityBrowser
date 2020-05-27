@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.query;
 import emlkoks.entitybrowser.entity.EntityDetails;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
-import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

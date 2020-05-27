@@ -4,7 +4,7 @@ import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
 import emlkoks.entitybrowser.query.comparator.expression.ExpressionType;
 import emlkoks.entitybrowser.query.comparator.expression.IsNullExpression;
-import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

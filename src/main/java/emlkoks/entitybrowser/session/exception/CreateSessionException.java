@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.session;
+package emlkoks.entitybrowser.session.exception;
 
 /**
  * Created by EmlKoks on 11.08.19.

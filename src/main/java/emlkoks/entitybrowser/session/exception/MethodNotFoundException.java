@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.session;
+package emlkoks.entitybrowser.session.exception;
 
 import lombok.Data;
 

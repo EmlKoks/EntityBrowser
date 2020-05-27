@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.query;
 
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
-import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.entity.FieldProperty;
 import lombok.Value;
 
 /**

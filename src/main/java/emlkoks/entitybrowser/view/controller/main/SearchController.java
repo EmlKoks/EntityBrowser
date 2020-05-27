@@ -9,7 +9,7 @@ import emlkoks.entitybrowser.query.SearchService;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
-import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.entity.FieldProperty;
 import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;

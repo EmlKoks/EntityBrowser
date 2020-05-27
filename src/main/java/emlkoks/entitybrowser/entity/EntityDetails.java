@@ -1,12 +1,11 @@
 package emlkoks.entitybrowser.entity;
 
-import emlkoks.entitybrowser.common.LibraryManager;
-import emlkoks.entitybrowser.session.FieldProperty;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,10 +22,18 @@ public class EntityDetails {
     public static final String ENUM_VALUES = "$VALUES";
     @Getter
     private Class clazz;
-    private List<FieldProperty> fields;
+    private EntityFields fields;
 
     public EntityDetails(Class entity) {
+        if (Objects.isNull(entity)) {
+            throw new NullPointerException("Entity class is null");
+        }
         clazz = entity;
+        fields = new EntityFields(this);
+    }
+
+    public List<FieldProperty> getFields() {
+        return fields.get();
     }
 
     public String getSimpleName() {
@@ -38,33 +45,20 @@ public class EntityDetails {
     }
 
     public Set<String> getFieldsNames() {
-        if (fields == null) {
-            fields = new LibraryManager().getEntityFields(this);
-        }
-        return fields.stream()
+        return fields.get().stream()
                 .map(FieldProperty::getName)
                 .collect(Collectors.toSet());
     }
 
     public FieldProperty getFieldProperty(String name) {
-        if (fields == null) {
-            fields = new LibraryManager().getEntityFields(this);
-        }
-        return fields.stream()
+        return fields.get().stream()
                 .filter(fieldProperty -> name.equals(fieldProperty.getName()))
                 .findAny()
                 .orElse(null);
     }
 
-    public List<FieldProperty> getFields() {
-        if (fields == null) {
-            fields = new LibraryManager().getEntityFields(this);
-        }
-        return fields;
-    }
-
     public Object getIdValue(EntityWrapper entityObject) {
-        return fields.stream()
+        return fields.get().stream()
                 .filter(FieldProperty::isId)
                 .findFirst()
                 .map(fieldProperty -> fieldProperty.getValue(entityObject))

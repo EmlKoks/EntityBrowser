@@ -35,7 +35,7 @@ public class Resources {
     public static final String SAVED_CONNECTIONS_PATH;
 
     static {
-        HOME_DIR_PATH = System.getProperty("user.home") + File.separator + HOME_DIR;
+        HOME_DIR_PATH = getHomeDir() + File.separator + HOME_DIR;
         CONF_DIR_PATH = HOME_DIR_PATH + File.separator + CONF_DIR;
         createHomeDirs();
         CACHE_DIR = HOME_DIR_PATH + File.separator + "cache";
@@ -43,6 +43,10 @@ public class Resources {
         DRIVERS_DIR_PATH = HOME_DIR_PATH + File.separator + DRIVERS_DIR + File.separator;
         DRIVERS_DEFAULT_PATH = File.separator + CONF_DIR + File.separator + DRIVERS;
         SAVED_CONNECTIONS_PATH = HOME_DIR_PATH + File.separator + CONF_DIR + File.separator + SAVED_CONNECTIONS;
+    }
+
+    public static String getHomeDir() {
+        return System.getProperty("user.home");
     }
 
     private static void createHomeDirs() {
@@ -56,7 +60,6 @@ public class Resources {
         }
 
     }
-
 
     static List<File> driverList() {
         List<File> driverList = new ArrayList<>();

@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.query.comparator;
 
-import emlkoks.entitybrowser.session.FieldProperty;
+import emlkoks.entitybrowser.entity.FieldProperty;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -51,7 +51,7 @@ public class MainWindowController implements Initializable {
         if (Mode.DEBUG.equals(Main.mode)) {
 //            debugWithMock();
 //            debugNewSession();
-//        debugOSP();
+            debugOsp();
 //            debugResultsList();
         }
 
@@ -83,7 +83,7 @@ public class MainWindowController implements Initializable {
         new InformationDialogCreator("About", "Test").show();
     }
 
-    private void debugOSP() {
+    private void debugOsp() {
         Connection connection = Main.savedConnections.getConnections()
                 .filtered(c -> "OSP".equals(c.getName()))
                 .get(0);

@@ -1,35 +1,26 @@
 package emlkoks.entitybrowser.common;
 
 import emlkoks.entitybrowser.entity.EntityDetails;
-import emlkoks.entitybrowser.session.CannotCreateFieldPropertyException;
-import emlkoks.entitybrowser.session.FieldProperty;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-import javax.persistence.Transient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
@@ -172,47 +163,4 @@ public class LibraryManager {
         classMap.putAll(loadEntityClass(newFile));
         newFile.delete();
     }
-
-    public List<FieldProperty> getEntityFields(EntityDetails entityDetails) {
-        return getFieldFromEntity(entityDetails);
-    }
-
-    public List<FieldProperty> getFieldFromEntity(EntityDetails entityDetails) {
-        return Stream.concat(
-                Stream.of(
-                        entityDetails.getClazz().getDeclaredFields()),
-                getFieldsFromEntitySuperclass(entityDetails))
-                .filter(LibraryManager::isNotTransient)
-                .filter(LibraryManager::isNotFinal)
-                .filter(LibraryManager::isNotSerialVersionUid)
-                .map(field -> {
-                    try {
-                        return new FieldProperty(field, entityDetails);
-                    } catch (CannotCreateFieldPropertyException e) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
-
-    private Stream<Field> getFieldsFromEntitySuperclass(EntityDetails entityDetails) {
-        return entityDetails.getSuperEntity()
-                .map(EntityDetails::getClazz)
-                .map(Class::getDeclaredFields)
-                .map(Arrays::stream)
-                .orElse(Stream.empty());
-    }
-
-    private static boolean isNotFinal(Field field) {
-        return !Modifier.isFinal(field.getModifiers());
-    }
-
-    private static boolean isNotTransient(Field field) {
-        return Objects.isNull(field.getAnnotation(Transient.class));
-    }
-
-    private static boolean isNotSerialVersionUid(Field field) {
-        return !"serialVersionUID".equals(field.getName());
-    }
-}
+ }
