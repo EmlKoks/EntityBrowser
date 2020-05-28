@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.entity;
+package emlkoks.entitybrowser.session.entity;
 
 import java.util.Objects;
 import lombok.AllArgsConstructor;

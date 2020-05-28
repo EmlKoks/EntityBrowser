@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.EntityDetails;
 import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.session.Session;
 

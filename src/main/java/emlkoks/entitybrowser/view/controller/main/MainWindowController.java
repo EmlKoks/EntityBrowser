@@ -66,7 +66,7 @@ public class MainWindowController implements Initializable {
                 .forEach(entity -> entity.getFields().stream()
                     .forEach(field -> {
                         try {
-                            ComparatorManager.getExpressionByField(field.getField());
+                            ComparatorManager.getExpressionByField(field);
                         } catch (ComparatorNotFoundException e) {
                             System.out.println(e.getMessage());
                         }

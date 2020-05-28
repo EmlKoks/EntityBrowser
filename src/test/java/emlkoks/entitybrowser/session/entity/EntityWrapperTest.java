@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.entity;
+package emlkoks.entitybrowser.session.entity;
 
 import org.junit.Test;
 import java.util.ArrayList;

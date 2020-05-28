@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.common;
 
-import emlkoks.entitybrowser.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.EntityDetails;
 
 import java.io.File;
 import java.io.FileInputStream;

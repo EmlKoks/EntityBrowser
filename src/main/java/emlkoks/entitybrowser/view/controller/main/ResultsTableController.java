@@ -2,9 +2,9 @@ package emlkoks.entitybrowser.view.controller.main;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
-import emlkoks.entitybrowser.entity.EntityDetails;
-import emlkoks.entitybrowser.entity.EntityWrapper;
-import emlkoks.entitybrowser.entity.FieldProperty;
+import emlkoks.entitybrowser.session.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.EntityWrapper;
+import emlkoks.entitybrowser.session.entity.FieldProperty;
 import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.view.CannotOpenStageException;
 import emlkoks.entitybrowser.view.ViewFile;

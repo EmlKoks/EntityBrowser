@@ -4,7 +4,7 @@ import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
 import emlkoks.entitybrowser.query.comparator.expression.ExpressionType;
 import emlkoks.entitybrowser.query.comparator.expression.IsNullExpression;
-import emlkoks.entitybrowser.entity.FieldProperty;
+import emlkoks.entitybrowser.session.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +31,7 @@ public abstract class AbstractComparator<T> {
 
     public List<Node> createFilterRow(FieldProperty field) {
         ChoiceBox<Expression> comparatorChoiceBox = createComparationTypeChoiceBox();
-        Node valueField = createFieldValueField(field.getField().getType());
+        Node valueField = createFieldValueField(field.getType());
         comparatorChoiceBox.valueProperty().addListener((observable, oldValue, newValue) ->
             valueField.setDisable(isNull(newValue.getType()) || isNotNull(newValue.getType()))
         );

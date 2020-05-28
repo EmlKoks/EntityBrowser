@@ -1,7 +1,4 @@
-package emlkoks.entitybrowser.entity;
-
-import emlkoks.entitybrowser.session.exception.CannotCreateFieldPropertyException;
-
+package emlkoks.entitybrowser.session.entity;
 import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -34,13 +31,7 @@ public class EntityFields {
                 .filter(this::isNotTransient)
                 .filter(this::isNotFinal)
                 .filter(this::isNotSerialVersionUid)
-                .map(field -> {
-                    try {
-                        return new FieldProperty(field, ownerEntity);
-                    } catch (CannotCreateFieldPropertyException e) {
-                        return null;
-                    }
-                })
+                .map(FieldProperty::new)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }

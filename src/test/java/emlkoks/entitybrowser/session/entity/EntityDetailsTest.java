@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.entity;
+package emlkoks.entitybrowser.session.entity;
 
 import org.junit.Test;
 
@@ -60,5 +60,53 @@ public class EntityDetailsTest {
         return fieldNames.stream()
                 .filter(name -> !"$jacocoData".equals(name))//Added by JaCoco
                 .collect(Collectors.toSet());
+    }
+
+    @Test
+    public void getCorrectFieldProperty() {
+        class Test {
+            String field;
+        }
+        EntityDetails entityDetails = new EntityDetails(Test.class);
+
+        assertEquals("field", entityDetails.getFieldProperty("field").getName());
+    }
+
+    @Test
+    public void getWrongFieldProperty() {
+        class Test {
+            String field;
+        }
+        EntityDetails entityDetails = new EntityDetails(Test.class);
+
+        assertNotEquals("wrong", entityDetails.getFieldProperty("field").getName());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getNullFieldProperty() {
+        class Test {
+            String field;
+        }
+        EntityDetails entityDetails = new EntityDetails(Test.class);
+
+        entityDetails.getFieldProperty(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getEmptyFieldProperty() {
+        class Test {
+            String field;
+        }
+        EntityDetails entityDetails = new EntityDetails(Test.class);
+
+        entityDetails.getFieldProperty("");
+    }
+
+    @Test
+    public void getFieldPropertyFromEmptyClass() {
+        class Test { }
+        EntityDetails entityDetails = new EntityDetails(Test.class);
+
+        assertNull(entityDetails.getFieldProperty("test"));
     }
 }

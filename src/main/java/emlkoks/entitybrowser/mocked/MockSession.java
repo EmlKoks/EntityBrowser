@@ -1,8 +1,8 @@
 package emlkoks.entitybrowser.mocked;
 
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.entity.EntityDetails;
-import emlkoks.entitybrowser.entity.EntityList;
+import emlkoks.entitybrowser.session.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity1;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity2;
 import emlkoks.entitybrowser.session.SearchResults;

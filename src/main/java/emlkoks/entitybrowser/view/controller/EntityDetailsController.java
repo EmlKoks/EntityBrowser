@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.view.controller;
 
-import emlkoks.entitybrowser.entity.EntityWrapper;
+import emlkoks.entitybrowser.session.entity.EntityWrapper;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;

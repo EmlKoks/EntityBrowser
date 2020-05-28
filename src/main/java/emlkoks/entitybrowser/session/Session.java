@@ -2,8 +2,8 @@ package emlkoks.entitybrowser.session;
 
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.ConnectionHelper;
-import emlkoks.entitybrowser.entity.EntityDetails;
-import emlkoks.entitybrowser.entity.EntityList;
+import emlkoks.entitybrowser.session.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.EntityList;
 
 import java.io.File;
 import java.util.List;

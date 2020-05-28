@@ -6,7 +6,7 @@
 
     <groupId>emlkoks.entitybrowser</groupId>
     <artifactId>entity-browser</artifactId>
-    <version>0.1-alpha</version>
+    <version>0.2-alpha</version>
     <packaging>jar</packaging>
 
     <name>EntityBrowser</name>
@@ -18,11 +18,11 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>14</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-controls</artifactId>-->
+<!--            <version>14</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
@@ -193,6 +193,12 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>

@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.session;
 
-import emlkoks.entitybrowser.entity.EntityDetails;
-import emlkoks.entitybrowser.entity.EntityWrapper;
+import emlkoks.entitybrowser.session.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.EntityWrapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;

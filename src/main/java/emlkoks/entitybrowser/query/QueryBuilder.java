@@ -1,9 +1,9 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.EntityDetails;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
-import emlkoks.entitybrowser.entity.FieldProperty;
+import emlkoks.entitybrowser.session.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,13 +43,13 @@ public class QueryBuilder {
     }
 
     private void createPredicate(FieldFilter fieldFilter) {
-        if (fieldFilter.getFieldProperty().getField().getAnnotation(OneToMany.class) != null) {
+        if (fieldFilter.getFieldProperty().hasAnnotation(OneToMany.class)) {
             log.debug("OneToMany");
         }
-        if (fieldFilter.getFieldProperty().getField().getAnnotation(ManyToOne.class) != null) {
+        if (fieldFilter.getFieldProperty().hasAnnotation(ManyToOne.class)) {
             log.debug("ManyToOne");
         }
-        if (fieldFilter.getFieldProperty().getField().getAnnotation(ManyToMany.class) != null) {
+        if (fieldFilter.getFieldProperty().hasAnnotation(ManyToMany.class)) {
             log.debug("ManyToMany");
         }
         AbstractComparator comparator = new ComparatorFactory().getComparator(fieldFilter.getFieldProperty());

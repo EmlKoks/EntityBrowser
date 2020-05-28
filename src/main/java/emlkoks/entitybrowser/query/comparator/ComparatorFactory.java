@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.query.comparator;
 
-import emlkoks.entitybrowser.entity.FieldProperty;
+import emlkoks.entitybrowser.session.entity.FieldProperty;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +21,7 @@ public class ComparatorFactory {
     }
 
     public static AbstractComparator<?> getComparator(FieldProperty fieldProperty) {
-        return getComparator(fieldProperty.getField().getType());
+        return getComparator(fieldProperty.getType());
     }
 
     static AbstractComparator<?> getComparator(Class<?> clazz) {

@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.entity;
+package emlkoks.entitybrowser.session.entity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,8 +52,11 @@ public class EntityDetails {
     }
 
     public FieldProperty getFieldProperty(String name) {
+        if (Strings.isNullOrEmpty(name)) {
+            throw new NullPointerException("Name cannot be null or empty");
+        }
         return fields.get().stream()
-                .filter(fieldProperty -> name.equals(fieldProperty.getName()))
+                .filter(fieldProperty -> fieldProperty.getName().equals(name))
                 .findAny()
                 .orElse(null);
     }

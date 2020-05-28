@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.entity;
+package emlkoks.entitybrowser.session.entity;
 
 import emlkoks.entitybrowser.common.LibraryManager;
 import java.io.File;
