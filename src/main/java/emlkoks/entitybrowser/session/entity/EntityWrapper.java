@@ -10,13 +10,13 @@ import lombok.Getter;
 public class EntityWrapper {
     public static final Integer MAX_STRING_LENGTH = 30;
 
-    private EntityDetails entityDetails;
+    private ClassDetails classDetails;
     private Object value;
 
     public EntityWrapper(Object value) {
         this.value = value;
         if (!isNull()) {
-            entityDetails = new EntityDetails(value.getClass());
+            classDetails = new ClassDetails(value.getClass());
         }
     }
 
@@ -36,11 +36,11 @@ public class EntityWrapper {
             throw new NullPointerException("Cannot create details title. Value is null");
         }
         try {
-            return entityDetails.getSimpleName() + "(Id: " + entityDetails.getIdValue(this) + ")";
+            return classDetails.getSimpleName() + "(Id: " + classDetails.getIdValue(this) + ")";
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        return entityDetails.getSimpleName();
+        return classDetails.getSimpleName();
     }
 
     public boolean isNull() {

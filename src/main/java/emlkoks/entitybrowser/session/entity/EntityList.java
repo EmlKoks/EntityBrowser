@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 public class EntityList {
-    private Map<String, EntityDetails> classMap;
+    private Map<String, ClassDetails> classMap;
 
     public EntityList(File libFile) {
         if (libFile != null) {
@@ -33,7 +33,7 @@ public class EntityList {
         return names;
     }
 
-    public EntityDetails getEntity(String entityName) {
+    public ClassDetails getEntity(String entityName) {
         return classMap.get(entityName);
     }
 

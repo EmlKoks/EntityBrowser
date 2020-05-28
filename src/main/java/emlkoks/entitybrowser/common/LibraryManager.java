@@ -1,7 +1,5 @@
 package emlkoks.entitybrowser.common;
 
-import emlkoks.entitybrowser.session.entity.EntityDetails;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,6 +19,8 @@ import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import emlkoks.entitybrowser.session.entity.ClassDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
@@ -31,8 +31,8 @@ import org.apache.commons.io.FileUtils;
 @Slf4j
 public class LibraryManager {
 
-    public static Map<String, EntityDetails> getEntitesFromLib(File lib) {
-        Map<String, EntityDetails> classMap = new TreeMap<>();
+    public static Map<String, ClassDetails> getEntitesFromLib(File lib) {
+        Map<String, ClassDetails> classMap = new TreeMap<>();
         List<File> libWithClassToLoad = getLibraryListFromFile(lib);
         libWithClassToLoad.forEach(f ->
             classMap.putAll(loadEntityClass(f))
@@ -119,8 +119,8 @@ public class LibraryManager {
         }
     }
 
-    private static Map<String, EntityDetails> loadEntityClass(File file) {
-        Map<String, EntityDetails> classMap = new TreeMap<>();
+    private static Map<String, ClassDetails> loadEntityClass(File file) {
+        Map<String, ClassDetails> classMap = new TreeMap<>();
         try {
             ZipFile zip = new ZipFile(file);
             Enumeration<ZipEntry> zipEnum = (Enumeration<ZipEntry>) zip.entries();
@@ -138,19 +138,19 @@ public class LibraryManager {
         return classMap;
     }
 
-    private static void loadClass(ZipEntry entry, Map<String, EntityDetails> classMap) {
+    private static void loadClass(ZipEntry entry, Map<String, ClassDetails> classMap) {
         String classPath = entry.getName().replace("WEB-INF/", "").replace("classes/", "");
         String className = classPath.replace('/', '.').replace(".class", "");
         try {
             Class clazz = Class.forName(className);
             if (clazz.getAnnotation(javax.persistence.Entity.class) != null) {
-                EntityDetails entity = new EntityDetails(clazz);
+                ClassDetails entity = new ClassDetails(clazz);
                 classMap.put(className.substring(className.lastIndexOf(".") + 1), entity);
             }
         } catch (ClassNotFoundException | LinkageError | ArrayStoreException e) { }
     }
 
-    private static void loadJarOrWar(File file, ZipEntry entry, Map<String, EntityDetails> classMap)
+    private static void loadJarOrWar(File file, ZipEntry entry, Map<String, ClassDetails> classMap)
             throws IOException {
         ZipFile zf = new ZipFile(file);
         InputStream entryIs = zf.getInputStream(entry);

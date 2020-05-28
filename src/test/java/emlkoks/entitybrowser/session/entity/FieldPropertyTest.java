@@ -11,17 +11,15 @@ public class FieldPropertyTest {
     @Test
     public void correctGetFieldValue() throws NoSuchFieldException {
         class TestId {
-            @Id
             public long id;
         }
 
         TestId testObject = new TestId();
         testObject.id = 10L;
-        EntityWrapper entityWrapper = new EntityWrapper(testObject);
         Field idField = TestId.class.getField("id");
         FieldProperty fieldProperty = new FieldProperty(idField);
 
-        assertEquals(fieldProperty.getValue(entityWrapper).getValue(), 10L);
+        assertEquals(fieldProperty.getValueOfObj(testObject).getValue(), 10L);
     }
 
     @Test
@@ -85,7 +83,7 @@ public class FieldPropertyTest {
         Field field = Test.class.getField("testField");
         FieldProperty fieldProperty = new FieldProperty(field);
 
-        assertEquals("test", fieldProperty.getValue(entityWrapper).getValue());
+        assertEquals("test", fieldProperty.getValueOf(entityWrapper).getValue());
     }
 
     @Test
@@ -97,7 +95,7 @@ public class FieldPropertyTest {
         Field field = Test.class.getField("testField");
         FieldProperty fieldProperty = new FieldProperty(field);
 
-        assertNull(fieldProperty.getValue(entityWrapper).getValue());
+        assertNull(fieldProperty.getValueOf(entityWrapper).getValue());
     }
 
     @Test

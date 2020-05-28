@@ -3,6 +3,7 @@ package emlkoks.entitybrowser.session.entity;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 import javax.persistence.Id;
 
 import lombok.Getter;
@@ -24,13 +25,17 @@ public class FieldProperty {
         this.name = field.getName();
     }
 
-    public EntityWrapper getValue(EntityWrapper entity) {
-        if (entity.isNull()) {
+    public EntityWrapper getValueOf(EntityWrapper entityWrapper) {
+        if (Objects.isNull(entityWrapper)) {
             return new EntityWrapper(null);
         }
+        return getValueOfObj(entityWrapper.getValue());
+    }
+
+    public EntityWrapper getValueOfObj(Object object) {
         try {
-            return new EntityWrapper(field.get(entity.getValue()));
-        } catch (IllegalAccessException e) {//Never thrown
+            return new EntityWrapper(field.get(object));
+        } catch (IllegalAccessException|NullPointerException e) {
             log.error("Cannot get field value", e);
             return new EntityWrapper(null);
         }

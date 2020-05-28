@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 
 public class EntityFields {
     private List<FieldProperty> fields;
-    private EntityDetails ownerEntity;
+    private ClassDetails ownerClass;
 
-    public EntityFields(EntityDetails ownerEntity) {
-        this.ownerEntity = ownerEntity;
+    public EntityFields(ClassDetails ownerClass) {
+        this.ownerClass = ownerClass;
     }
 
     public List<FieldProperty> get() {
@@ -26,10 +26,10 @@ public class EntityFields {
     private void initFields() {
         fields = Stream.concat(
                 Stream.of(
-                        ownerEntity.getClazz().getDeclaredFields()),
+                        ownerClass.getClazz().getDeclaredFields()),
                 getFieldsFromEntitySuperclass())
                 .filter(this::isNotTransient)
-                .filter(this::isNotFinal)
+                .filter(field -> isNotFinal(field) || ownerClass.isEnum())
                 .filter(this::isNotSerialVersionUid)
                 .map(FieldProperty::new)
                 .filter(Objects::nonNull)
@@ -37,8 +37,11 @@ public class EntityFields {
     }
 
     private Stream<Field> getFieldsFromEntitySuperclass() {
-        return ownerEntity.getSuperEntity()
-                .map(EntityDetails::getClazz)
+        if (ownerClass.isEnum()) {
+            return Stream.empty();
+        }
+        return ownerClass.getSuperEntity()
+                .map(ClassDetails::getClazz)
                 .map(Class::getDeclaredFields)
                 .map(Arrays::stream)
                 .orElse(Stream.empty());

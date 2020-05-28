@@ -48,8 +48,8 @@ public class EntityDetailsController implements Initializable {
         if (deep == MAX_DEEP) {
             return new TreeItem<>("...");
         }
-        if (entity.isNull() || entity.getEntityDetails().isSimplyType()
-                || entity.getEntityDetails().isExcludedType()) {
+        if (entity.isNull() || entity.getClassDetails().isSimplyType()
+                || entity.getClassDetails().isExcludedType()) {
             return getStringTreeItem(entity, fieldName);
         }
         if (entity.isIterable()) {
@@ -68,15 +68,15 @@ public class EntityDetailsController implements Initializable {
             }
         }
         item.setValue(fieldName + " : " + resources.getString("entityDetails.size") + " = " + i
-                + " (" + entityWrapper.getEntityDetails().getFullName() + ")");
+                + " (" + entityWrapper.getClassDetails().getFullName() + ")");
         return item;
     }
 
     private TreeItem<Object> createItemWithChildren(EntityWrapper entity, String fieldName, int deep) {
         TreeItem<Object> item = new TreeItem<>(getTextValue(entity, fieldName));
-        entity.getEntityDetails().getFields().stream()
+        entity.getClassDetails().getFields().stream()
                 .filter(fp -> !fp.isFinal())
-                .map(fp -> createTreeItem(fp.getValue(entity), fp.getName(), deep))
+                .map(fp -> createTreeItem(fp.getValueOf(entity), fp.getName(), deep))
                 .forEach(item.getChildren()::add);
         return item;
     }
@@ -97,7 +97,7 @@ public class EntityDetailsController implements Initializable {
         labelValue.setStyle("-fx-font-weight: bold");
         textFlow.getChildren().addAll(labelFieldName, new Label(" = "), labelValue);
         if (!entity.isNull()) {
-            Label labelCannonicalName = new Label(" (" + entity.getEntityDetails().getFullName() + ")");
+            Label labelCannonicalName = new Label(" (" + entity.getClassDetails().getFullName() + ")");
             textFlow.getChildren().add(labelCannonicalName);
         }
         return textFlow;
