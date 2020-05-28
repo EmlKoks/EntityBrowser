@@ -2,7 +2,7 @@ package emlkoks.entitybrowser.view.controller.main;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
-import emlkoks.entitybrowser.session.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityWrapper;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
 import emlkoks.entitybrowser.session.SearchResults;
@@ -43,7 +43,7 @@ public class ResultsTableController {
 
     public void showResults(SearchResults searchResults) {
         createResultsTable(searchResults.getResults());
-        fillColumns(searchResults.getEntityDetails());
+        fillColumns(searchResults.getClassDetails());
         this.resultsTable.setVisible(true);
         if (Mode.DEBUG.equals(Main.mode)) {
 //            openDetails(connections.get(0));
@@ -62,8 +62,8 @@ public class ResultsTableController {
 
     }
 
-    private void fillColumns(EntityDetails entityDetails) {
-        entityDetails.getFields().stream()
+    private void fillColumns(ClassDetails classDetails) {
+        classDetails.getFields().stream()
                 .map(this::createTableColumn)
                 .forEach(resultsTable.getColumns()::add);
     }
@@ -71,7 +71,7 @@ public class ResultsTableController {
     private TableColumn<EntityWrapper, String> createTableColumn(FieldProperty fieldProperty) {
         TableColumn<EntityWrapper, String> column = new TableColumn<>(fieldProperty.getName());
         column.setCellValueFactory(cellData -> {
-            EntityWrapper cellValue = fieldProperty.getValue(cellData.getValue());
+            EntityWrapper cellValue = fieldProperty.getValueOf(cellData.getValue());
             return new SimpleObjectProperty<>(cellValue.getStringValue());
         });
         return column;

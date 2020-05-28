@@ -1,8 +1,8 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.session.entity.EntityDetails;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
+import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +27,7 @@ public class QueryBuilder {
     private CriteriaQuery cq;
     private List<Predicate> predicates;
 
-    public QueryBuilder(CriteriaBuilder cb, EntityDetails entity, Collection<FieldFilter> fieldFilters) {
+    public QueryBuilder(CriteriaBuilder cb, ClassDetails entity, Collection<FieldFilter> fieldFilters) {
         predicates = new ArrayList<>();
         this.cb = cb;
         cq = cb.createQuery(entity.getClazz());

@@ -2,13 +2,13 @@ package emlkoks.entitybrowser.view.controller.main;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
-import emlkoks.entitybrowser.session.entity.EntityDetails;
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.SearchService;
 import emlkoks.entitybrowser.query.comparator.AbstractComparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.query.comparator.expression.Expression;
+import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
 import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.session.Session;
@@ -46,7 +46,7 @@ public class SearchController {
     private MainWindowController parentController;
 
     private Session session;
-    private EntityDetails selectedEntity;
+    private ClassDetails selectedEntity;
     private ResourceBundle resources;
 
     private SearchService searchService;

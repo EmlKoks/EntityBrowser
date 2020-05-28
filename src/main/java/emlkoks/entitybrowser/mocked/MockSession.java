@@ -1,7 +1,7 @@
 package emlkoks.entitybrowser.mocked;
 
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.session.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity1;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity2;
@@ -24,9 +24,9 @@ public class MockSession extends Session {
     }
 
     private void prepareEntityList() {
-        Map<String, EntityDetails> classMap = new HashMap<>();
-        classMap.put("Test1", new EntityDetails(MockedEntity1.class));
-        classMap.put("Test2", new EntityDetails(MockedEntity2.class));
+        Map<String, ClassDetails> classMap = new HashMap<>();
+        classMap.put("Test1", new ClassDetails(MockedEntity1.class));
+        classMap.put("Test2", new ClassDetails(MockedEntity2.class));
         this.entityList = new EntityList(null);
         this.entityList.setClassMap(classMap);
     }
@@ -43,6 +43,6 @@ public class MockSession extends Session {
         results.add(new MockedEntity1(2, "str2", 2, 0.0,true, true, new Date(), VALUE_2));
         results.add(new MockedEntity1(3, "str3", 3, 0.0,true, true, new Date(), VALUE_3));
         results.add(new MockedEntity1(4, "str4", 4, 0.0,true, true, new Date(), VALUE_3));
-        return new SearchResults(new EntityDetails(MockedEntity1.class), results);
+        return new SearchResults(new ClassDetails(MockedEntity1.class), results);
     }
 }

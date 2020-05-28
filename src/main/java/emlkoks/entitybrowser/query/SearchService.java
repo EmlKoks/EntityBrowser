@@ -1,8 +1,8 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.session.entity.EntityDetails;
 import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.session.Session;
+import emlkoks.entitybrowser.session.entity.ClassDetails;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -14,7 +14,7 @@ public class SearchService {
         this.session = session;
     }
 
-    public SearchResults search(EntityDetails entity, List<FieldFilter> filters) {
+    public SearchResults search(ClassDetails entity, List<FieldFilter> filters) {
         QueryBuilder queryBuilder = new QueryBuilder(session.getCriteriaBuilder(), entity, filters);
         return new SearchResults(entity, find(session.getEntityManager(), queryBuilder));
     }

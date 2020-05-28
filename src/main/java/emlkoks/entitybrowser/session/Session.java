@@ -2,7 +2,7 @@ package emlkoks.entitybrowser.session;
 
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.ConnectionHelper;
-import emlkoks.entitybrowser.session.entity.EntityDetails;
+import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityList;
 
 import java.io.File;
@@ -42,7 +42,7 @@ public class Session {
         }
     }
 
-    public EntityDetails getEntity(String entityName) {
+    public ClassDetails getEntity(String entityName) {
         return entityList.getEntity(entityName);
     }
 
