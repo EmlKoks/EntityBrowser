@@ -28,7 +28,7 @@ public class MockSession extends Session {
         classMap.put("Test1", new ClassDetails(MockedEntity1.class));
         classMap.put("Test2", new ClassDetails(MockedEntity2.class));
         this.entityList = new EntityList(null);
-        this.entityList.setClassMap(classMap);
+//        this.entityList.setClassMap(classMap);
     }
 
     @Override

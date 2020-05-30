@@ -27,7 +27,7 @@ public class Driver {
         String driverUrl = Resources.DRIVERS_DIR_PATH + lib;
         File driverFile = new File(driverUrl);
         if (!driverFile.exists()) {
-            throw new RuntimeException("Cannot find driver file " + driverUrl);
+            throw new DriverNotFoundException("Cannot find driver file " + driverUrl);
         }
         try {
             return driverFile.toURL();

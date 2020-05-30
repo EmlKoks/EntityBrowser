@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+//import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +23,14 @@ public class EntityFields {
         }
         return fields;
     }
+
+//    public Optional<FieldProperty> getFieldByName(String name) {
+//        return get().stream()
+//                .filter(fieldProperty -> fieldProperty.getName().equals(name))
+//                .map(Optional::of)
+//                .findFirst()
+//                .orElse(Optional.empty());
+//    }
 
     private void initFields() {
         fields = Stream.concat(

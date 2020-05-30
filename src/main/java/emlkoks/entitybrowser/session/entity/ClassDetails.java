@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser.session.entity;
 
 import com.google.common.base.Strings;
+import emlkoks.entitybrowser.session.exception.ClassCannotBeNullException;
 import lombok.Getter;
 
 import java.util.Date;
@@ -19,7 +20,7 @@ public class ClassDetails {
 
     public ClassDetails(Class entity) {
         if (Objects.isNull(entity)) {
-            throw new NullPointerException("Entity class is null");
+            throw new ClassCannotBeNullException("Entity class is null");
         }
         clazz = entity;
         fields = new EntityFields(this);

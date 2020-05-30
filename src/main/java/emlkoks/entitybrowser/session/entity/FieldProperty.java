@@ -33,9 +33,12 @@ public class FieldProperty {
     }
 
     public EntityWrapper getValueOfObj(Object object) {
+        if (Objects.isNull(object)) {
+            return new EntityWrapper(null);
+        }
         try {
             return new EntityWrapper(field.get(object));
-        } catch (IllegalAccessException|NullPointerException e) {
+        } catch (IllegalAccessException e) { //Never thrown
             log.error("Cannot get field value", e);
             return new EntityWrapper(null);
         }

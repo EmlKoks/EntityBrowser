@@ -23,6 +23,43 @@ public class FieldPropertyTest {
     }
 
     @Test
+    public void getValueCorrect() throws NoSuchFieldException {
+        class Test {
+            public String testField;
+        }
+        Test test = new Test();
+        test.testField = "test";
+        EntityWrapper entityWrapper = new EntityWrapper(test);
+        Field field = Test.class.getField("testField");
+        FieldProperty fieldProperty = new FieldProperty(field);
+
+        assertEquals("test", fieldProperty.getValueOf(entityWrapper).getValue());
+    }
+
+    @Test
+    public void getValueOfNullEntityWrapper() throws NoSuchFieldException {
+        class Test {
+            public String testField;
+        }
+        EntityWrapper entityWrapper = new EntityWrapper(null);
+        Field field = Test.class.getField("testField");
+        FieldProperty fieldProperty = new FieldProperty(field);
+
+        assertNull(fieldProperty.getValueOf(entityWrapper).getValue());
+    }
+
+    @Test
+    public void getValueOfNull() throws NoSuchFieldException {
+        class Test {
+            public String testField;
+        }
+        Field field = Test.class.getField("testField");
+        FieldProperty fieldProperty = new FieldProperty(field);
+
+        assertNull(fieldProperty.getValueOf(null).getValue());
+    }
+
+    @Test
     public void fieldIsId() throws NoSuchFieldException {
         class TestId {
             @Id
@@ -70,32 +107,6 @@ public class FieldPropertyTest {
         FieldProperty fieldProperty = new FieldProperty(notFinalField);
 
         assertFalse(fieldProperty.isId());
-    }
-
-    @Test
-    public void getValueCorrect() throws NoSuchFieldException {
-        class Test {
-            public String testField;
-        }
-        Test test = new Test();
-        test.testField = "test";
-        EntityWrapper entityWrapper = new EntityWrapper(test);
-        Field field = Test.class.getField("testField");
-        FieldProperty fieldProperty = new FieldProperty(field);
-
-        assertEquals("test", fieldProperty.getValueOf(entityWrapper).getValue());
-    }
-
-    @Test
-    public void getValueOfNull() throws NoSuchFieldException {
-        class Test {
-            public String testField;
-        }
-        EntityWrapper entityWrapper = new EntityWrapper(null);
-        Field field = Test.class.getField("testField");
-        FieldProperty fieldProperty = new FieldProperty(field);
-
-        assertNull(fieldProperty.getValueOf(entityWrapper).getValue());
     }
 
     @Test

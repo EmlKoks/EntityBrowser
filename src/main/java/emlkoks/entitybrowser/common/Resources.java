@@ -61,17 +61,6 @@ public class Resources {
 
     }
 
-    static List<File> driverList() {
-        List<File> driverList = new ArrayList<>();
-        for (File file : new File("./../connection").listFiles()) {
-            String fileName = file.getName();
-            if ("JAR".equals(fileName.substring(fileName.lastIndexOf(".") + 1).toUpperCase())) {
-                driverList.add(file);
-            }
-        }
-        return driverList;
-    }
-
     public static void printClasses(File driver) throws IOException {
         List<String> classNames = new ArrayList<String>();
         ZipInputStream zip = new ZipInputStream(new FileInputStream(driver));

@@ -26,7 +26,7 @@ public class CharacterComparator extends AbstractComparator<Character> {
     }
 
     @Override
-    Node createFieldValueField(Class<?> clazz) {
+    protected Node createFieldValueField(Class<?> clazz) {
         return new TextField();
     }
 

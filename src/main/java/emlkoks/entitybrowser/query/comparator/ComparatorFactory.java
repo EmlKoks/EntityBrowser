@@ -24,7 +24,7 @@ public class ComparatorFactory {
         return getComparator(fieldProperty.getType());
     }
 
-    static AbstractComparator<?> getComparator(Class<?> clazz) {
+    public static AbstractComparator<?> getComparator(Class<?> clazz) {
         return comparators.stream()
                 .filter(comparator -> comparator.canUseForClass(clazz))
                 .findFirst()

@@ -1,9 +1,10 @@
 package emlkoks.entitybrowser.session.entity;
 
 import java.util.Objects;
+
+import emlkoks.entitybrowser.session.exception.ValueCannotBeNullException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 
 @Getter
 @AllArgsConstructor
@@ -33,14 +34,11 @@ public class EntityWrapper {
 
     public String createDetailsTitle() {
         if (isNull()) {
-            throw new NullPointerException("Cannot create details title. Value is null");
+            throw new ValueCannotBeNullException("Cannot create details title. Value is null");
         }
-        try {
-            return classDetails.getSimpleName() + "(Id: " + classDetails.getIdValue(this) + ")";
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-        return classDetails.getSimpleName();
+        Object value = classDetails.getIdValue(this);
+        return classDetails.getSimpleName() + "(Id: " + (Objects.nonNull(value) ? value : "") + ")";
+
     }
 
     public boolean isNull() {

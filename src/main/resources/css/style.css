@@ -1,3 +1,4 @@
-.table-row-cell:empty, .list-cell:empty {
-    -fx-background-color: #f0f0f0;
+.table-row-cell:empty,
+.list-cell:empty {
+  -fx-background-color: #f0f0f0;
 }

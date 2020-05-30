@@ -1,24 +1,25 @@
 package emlkoks.entitybrowser.session.entity;
 
 import emlkoks.entitybrowser.common.LibraryManager;
+import emlkoks.entitybrowser.session.exception.LibraryFileCannotBeNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import lombok.Data;
+import java.util.Objects;
 
 /**
  * Created by EmlKoks on 03.04.17.
  */
-@Data
 public class EntityList {
     private Map<String, ClassDetails> classMap;
 
     public EntityList(File libFile) {
-        if (libFile != null) {
-            classMap = LibraryManager.getEntitesFromLib(libFile);
+        if (Objects.isNull(libFile)) {
+            throw new LibraryFileCannotBeNull();
         }
+        classMap = LibraryManager.getEntitesFromLib(libFile);
     }
 
     public List<Class> getClasses() {

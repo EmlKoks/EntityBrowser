@@ -28,7 +28,7 @@ public class EnumComparator extends AbstractComparator<Enum> {
     }
 
     @Override
-    Node createFieldValueField(Class<?> clazz) {
+    protected Node createFieldValueField(Class<?> clazz) {
         return new ChoiceBox<>(createValueList(clazz));
     }
 

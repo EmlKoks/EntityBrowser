@@ -1,11 +1,21 @@
 package emlkoks.entitybrowser.session.entity;
 
 import org.junit.Test;
+
+import javax.persistence.Id;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class EntityWrapperTest {
+
+    @Test
+    public void createByAllArgsConstructor() {
+        class Test {}
+        ClassDetails details = new ClassDetails(Test.class);
+        EntityWrapper entityWrapper = new EntityWrapper(details, new Test());
+        assertEquals(details, entityWrapper.getClassDetails());
+    }
 
     @Test
     public void getNullStringValue() {
@@ -37,17 +47,29 @@ public class EntityWrapperTest {
         entityWrapper.createDetailsTitle();
     }
 
-//    @Test(expected = NullPointerException.class)//TODO
-//    public void createDetailsTitleForNullId() {
-//        class Test {
-//            @Id
-//            long id;
-//        }
-//        Test test = new Test();
-//        EntityWrapper entityWrapper = new EntityWrapper(test);
-//        System.out.println(entityWrapper.createDetailsTitle());
-//        assertEquals("Test(Id: )");
-//    }
+    @Test
+    public void createDetailsTitleForNullId() {
+        class Test {
+            @Id
+            private Long id;
+        }
+        Test test = new Test();
+        EntityWrapper entityWrapper = new EntityWrapper(test);
+        System.out.println(entityWrapper.createDetailsTitle());
+        assertEquals("Test(Id: )", entityWrapper.createDetailsTitle());
+    }
+    @Test
+    public void createDetailsTitleForNonNullId() {
+        class Test {
+            @Id
+            private Long id;
+        }
+        Test test = new Test();
+        test.id = 4L;
+        EntityWrapper entityWrapper = new EntityWrapper(test);
+        System.out.println(entityWrapper.createDetailsTitle());
+        assertEquals("Test(Id: 4)", entityWrapper.createDetailsTitle());
+    }
 
     @Test
     public void isNull() {

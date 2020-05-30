@@ -40,7 +40,7 @@ public class NumberComparator extends AbstractComparator<Number> {
     }
 
     @Override
-    Node createFieldValueField(Class<?> clazz) {
+    protected Node createFieldValueField(Class<?> clazz) {
         return new NumberTextField(clazz);
     }
 

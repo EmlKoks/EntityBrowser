@@ -37,7 +37,7 @@ public class DateComparator extends AbstractComparator<Date> {
     }
 
     @Override
-    Node createFieldValueField(Class<?> clazz) {
+    protected Node createFieldValueField(Class<?> clazz) {
         return new DatePicker();
     }
 

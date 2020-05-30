@@ -19,13 +19,13 @@ import javax.persistence.criteria.Predicate;
  * Created by EmlKoks on 15.06.19.
  */
 public abstract class AbstractComparator<T> {
-    List<Expression> expressions = new ArrayList<>();
+    protected List<Expression> expressions = new ArrayList<>();
 
     public AbstractComparator() {
         expressions.add(new IsNullExpression());
     }
 
-    Expression[] getExpressions() {
+    public Expression[] getExpressions() {
         return expressions.toArray(new Expression[]{});
     }
 
@@ -58,7 +58,7 @@ public abstract class AbstractComparator<T> {
 
     public abstract boolean canUseForClass(Class<?> clazz);
 
-    abstract Node createFieldValueField(Class<?> clazz);
+    protected abstract Node createFieldValueField(Class<?> clazz);
 
     public abstract Predicate createPredicate(CriteriaBuilder cb, Path<T> attributePath, FieldFilter fieldFilter);
 }

@@ -48,8 +48,8 @@ public class ClassDetailsTest {
     @Test
     public void getFieldsNamesClassWithFields() {
         class Test {
-            String f1;
-            int f2;
+            private String f1;
+            private int f2;
         }
 
         ClassDetails classDetails = new ClassDetails(Test.class);
@@ -69,7 +69,7 @@ public class ClassDetailsTest {
     @Test
     public void getCorrectFieldProperty() {
         class Test {
-            String field;
+            private String field;
         }
         ClassDetails classDetails = new ClassDetails(Test.class);
 
@@ -79,7 +79,7 @@ public class ClassDetailsTest {
     @Test
     public void getWrongFieldProperty() {
         class Test {
-            String field;
+            private String field;
         }
         ClassDetails classDetails = new ClassDetails(Test.class);
 
@@ -89,7 +89,7 @@ public class ClassDetailsTest {
     @Test(expected = NullPointerException.class)
     public void getNullFieldProperty() {
         class Test {
-            String field;
+            private String field;
         }
         ClassDetails classDetails = new ClassDetails(Test.class);
 
@@ -99,7 +99,7 @@ public class ClassDetailsTest {
     @Test(expected = NullPointerException.class)
     public void getEmptyFieldProperty() {
         class Test {
-            String field;
+            private String field;
         }
         ClassDetails classDetails = new ClassDetails(Test.class);
 
@@ -206,7 +206,7 @@ public class ClassDetailsTest {
 
     enum NotSimplyEnumTest {
         A, B;
-        String field;
+        private String field;
     }
 
     @Test
@@ -224,10 +224,10 @@ public class ClassDetailsTest {
     @Test
     public void checkNumberOfFields() {
         class Test {
-            String test1;
-            String test2;
-            String test3;
-            String test4;
+            private String test1;
+            private String test2;
+            private String test3;
+            private String test4;
         }
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertEquals(4, classDetails.getFields().size());
