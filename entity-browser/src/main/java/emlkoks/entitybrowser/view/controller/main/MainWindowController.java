@@ -74,12 +74,12 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void exit() {
+    public void exit() {
         Platform.exit();
     }
 
     @FXML
-    private void showAbout() {
+    public void showAbout() {
         new InformationDialogCreator("About", "Test").show();
     }
 
@@ -95,7 +95,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void createNewSession() {
+    public void createNewSession() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewFile.CHOOSE_CONNECTION.getFile()), resources);
         try {
             loader.load();

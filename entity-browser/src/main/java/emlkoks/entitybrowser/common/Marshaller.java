@@ -14,8 +14,6 @@ public class Marshaller {
             javax.xml.bind.Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
             jaxbMarshaller.marshal(obj, file);
-        } catch (JAXBException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }

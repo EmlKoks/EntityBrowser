@@ -37,7 +37,7 @@ public class UpdateAvailableController implements Initializable {
     }
 
     @FXML
-    private void cancel() {
+    public void cancel() {
         ((Stage)mainPane.getScene().getWindow()).close();
     }
 }

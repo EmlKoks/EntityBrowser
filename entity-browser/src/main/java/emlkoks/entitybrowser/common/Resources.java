@@ -47,8 +47,8 @@ public class Resources {
     }
 
     private static void createHomeDirs() {
-        createDirectory(HOME_DIR_PATH, false);
-        createDirectory(CONF_DIR_PATH, false);
+        new File(HOME_DIR_PATH).mkdirs();
+        new File(CONF_DIR_PATH).mkdirs();
     }
 
     public static File createDirectory(String parent, String name, boolean removeExisting) {
@@ -60,26 +60,30 @@ public class Resources {
 
     public static File createDirectory(String name, boolean removeExisting) {
         File directory = new File(name);
-        if (directory.exists()) {
-            if (removeExisting) {
-                log.debug("Remove directory {} exists.", name);
-                try {
-                    FileUtils.deleteDirectory(directory);
-                } catch (IOException e) {
-                    log.error("Cannot remove directory", e);
-                    e.printStackTrace();
-                }
-            } else {
-                log.debug("File {} exists.", name);
-            }
-        } else {
-            if (directory.mkdirs()) {
-                log.debug("File {} succesfull created.", name);
-            } else {
-                log.debug("File {} not created.", name);
+        if (directory.exists() && removeExisting) {
+            log.debug("Directory to remove {} exists.", name);
+            try {
+                FileUtils.deleteDirectory(directory);
+            } catch (IOException e) {
+                log.error("Cannot remove directory", e);
+                e.printStackTrace();
             }
         }
+        if (directory.mkdirs()) {
+            log.debug("File {} succesfull created.", name);
+        } else {
+            log.debug("File {} not created.", name);
+        }
         return directory;
+    }
+
+    public static File createFile(File parent, String name) throws IOException {
+        File file = new File(parent, name);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        file.createNewFile();
+        return file;
     }
 
     public static boolean isNullOrEmpty(String s) {

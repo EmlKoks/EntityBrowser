@@ -3,16 +3,12 @@ package emlkoks.entitybrowser.session.entity;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
 import org.junit.Test;
 import java.io.File;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class EntityLibraryLoaderTest {
-    private final static String TEST_MODULE = "test-library";
+    public final static String TEST_MODULE = "test-library";
+    public final static String TEST_JAR_PATH = ".." + File.separatorChar + TEST_MODULE + File.separatorChar + "target" + File.separatorChar + TEST_MODULE + ".jar";
 
     @Test(expected = LibraryFileNotFoundException.class)
     public void createWithNull() throws LibraryFileNotFoundException {
@@ -26,7 +22,7 @@ public class EntityLibraryLoaderTest {
 
     @Test
     public void loadTestLib() throws LibraryFileNotFoundException {
-        var file = new File(".." + File.separatorChar + TEST_MODULE + File.separatorChar + "target" + File.separatorChar + TEST_MODULE + ".jar");
+        var file = new File(TEST_JAR_PATH);
         var classes = new EntityLibraryLoader(file).load();
         classes.stream()
                 .map(ClassDetails::getFullName)

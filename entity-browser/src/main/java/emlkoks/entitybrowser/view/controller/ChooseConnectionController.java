@@ -122,7 +122,7 @@ public class ChooseConnectionController implements Initializable {
     }
 
     @FXML
-    private void addNewConnection() {
+    public void addNewConnection() {
         connection = Main.savedConnections.newConnection();
         fillView();
     }
@@ -139,7 +139,7 @@ public class ChooseConnectionController implements Initializable {
     }
 
     @FXML
-    private void deleteConnection() {
+    public void deleteConnection() {
         Optional<ButtonType> result =
                 new ConfirmationDialogCreator(
                         resources.getString("error.title"),
@@ -253,17 +253,17 @@ public class ChooseConnectionController implements Initializable {
     }
 
     @FXML
-    private void addRow() {
+    public void addRow() {
         connection.getProperties().add(new Property());
     }
 
     @FXML
-    private void deleteRow() {
+    public void deleteRow() {
         connection.getProperties().removeAll(propertiesTable.getSelectionModel().getSelectedItems());
     }
 
     @FXML
-    private void copyRow() {
+    public void copyRow() {
 
     }
 
