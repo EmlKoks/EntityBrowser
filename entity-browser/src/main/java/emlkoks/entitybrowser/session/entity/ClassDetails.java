@@ -15,10 +15,10 @@ public class ClassDetails {
     private static final String ENUM_VALUES = "$VALUES";
 
     @Getter
-    protected Class clazz;
+    protected Class<?> clazz;
     protected EntityFields fields;
 
-    public ClassDetails(Class entity) {
+    public ClassDetails(Class<?> entity) {
         if (Objects.isNull(entity)) {
             throw new ClassCannotBeNullException("Entity class is null");
         }

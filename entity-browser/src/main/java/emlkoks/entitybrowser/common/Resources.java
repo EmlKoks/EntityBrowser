@@ -86,10 +86,6 @@ public class Resources {
         return file;
     }
 
-    public static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
-    }
-
     public static void loadResources(Class mainClass) {
         loadDrivers(mainClass);
         loadSavedConnections();

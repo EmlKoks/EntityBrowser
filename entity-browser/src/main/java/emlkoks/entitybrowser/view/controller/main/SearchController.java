@@ -130,7 +130,7 @@ public class SearchController {
         }
         String fieldName = fields.getValue();
         FieldProperty field = session.getEntity(entities.getValue()).getFieldProperty(fieldName);
-        AbstractComparator comparator = ComparatorFactory.getComparator(field);
+        var comparator = ComparatorFactory.getComparator(field);
         List<Node> filterRow = comparator.createFilterRow(field);
         filterRow.add(createDeleteFilter());
         filtersGrid.addRow(filtersGrid.getChildren().size(), filterRow.toArray(new Node[]{}));

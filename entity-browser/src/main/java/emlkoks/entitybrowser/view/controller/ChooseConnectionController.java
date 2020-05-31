@@ -102,7 +102,7 @@ public class ChooseConnectionController implements Initializable {
         driversChoiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             Driver driver = Main.drivers.getDriver(newValue);
             if (Objects.nonNull(driver)) {
-                urlField.setText(driver.getUrl());
+                urlField.setText(driver.getUrlTemplate());
             }
         });
     }
@@ -281,9 +281,9 @@ public class ChooseConnectionController implements Initializable {
     }
 
     private boolean validateConnection() {
-        return !Resources.isNullOrEmpty(driversChoiceBox.getValue())//TODO add assertions
-                && !Resources.isNullOrEmpty(urlField.getText())
-                && !Resources.isNullOrEmpty(userField.getText())
-                && !Resources.isNullOrEmpty(passwordField.getText());
+        return !Strings.isNullOrEmpty(driversChoiceBox.getValue())//TODO add assertions
+                && !Strings.isNullOrEmpty(urlField.getText())
+                && !Strings.isNullOrEmpty(userField.getText())
+                && !Strings.isNullOrEmpty(passwordField.getText());
     }
 }

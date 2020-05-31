@@ -10,14 +10,16 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by EmlKoks on 19.03.17.
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
+@Getter
+@Setter
 public class SavedConnections {
     @XmlElement(name = "connection")
     private ObservableList<Connection> connections = FXCollections.observableArrayList();

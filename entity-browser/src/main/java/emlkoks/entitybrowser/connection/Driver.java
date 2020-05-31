@@ -1,53 +1,51 @@
 package emlkoks.entitybrowser.connection;
 
+import emlkoks.entitybrowser.common.CustomClassLoader;
 import emlkoks.entitybrowser.common.Resources;
 import java.io.File;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlTransient;
-import lombok.Data;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Created by koks on 10.03.17.
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Driver {
     private String name;
-    private String lib;
+    private String libraryPath;
     private String className;
-    private String url;
+    private String urlTemplate;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @XmlTransient
     private boolean wasLoaded = false;
-
-    private URL getLibUrl() {
-        String driverUrl = Resources.DRIVERS_DIR_PATH + lib;
-        File driverFile = new File(driverUrl);
-        if (!driverFile.exists()) {
-            throw new DriverNotFoundException("Cannot find driver file " + driverUrl);
-        }
-        try {
-            return driverFile.toURL();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public void loadDriver() {
         if (wasLoaded) {
             return;
         }
-        try {
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            method.setAccessible(true);
-            method.invoke(ClassLoader.getSystemClassLoader(), getLibUrl());
-            wasLoaded = true;
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+        var classLoader = new CustomClassLoader(this.getClass().getClassLoader());
+        classLoader.addLib(getLibraryFile());
+        wasLoaded = true;
+    }
+
+    private File getLibraryFile() {
+        String driverUrl = Resources.DRIVERS_DIR_PATH + libraryPath;
+        File driverFile = new File(driverUrl);
+        if (!driverFile.exists()) {
+            throw new DriverNotFoundException("Cannot find driver file " + driverUrl);
         }
+        return driverFile;
+    }
+
+    public boolean equalsName(String name) {
+        return Objects.nonNull(this.name) && this.name.equals(name);
     }
 }

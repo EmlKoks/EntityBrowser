@@ -26,13 +26,6 @@ public class Marshaller {
             JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             return clazz.cast(jaxbUnmarshaller.unmarshal(file));
-        } catch (JAXBException e) {
-            try {
-                e.printStackTrace();
-                return clazz.newInstance();
-            } catch (ReflectiveOperationException e1) {
-                e1.printStackTrace();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

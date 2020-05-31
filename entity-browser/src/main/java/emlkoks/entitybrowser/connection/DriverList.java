@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser.connection;
 
+import com.google.common.base.Strings;
 import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.common.Resources;
 import java.util.ArrayList;
@@ -13,26 +14,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DriverList {
     private List<Driver> drivers = new ArrayList<>();
 
-    public DriverList() {
-        initalize();
-    }
-
-    private   void initalize() {
-//        Driver d = new Driver("mysql-connector-java-5.1.41-bin.jar", "com.mysql.jdbc.Driver", "url");
-//        d.setName("MySQL");
-//        drivers.add(d);
-    }
-
     public Driver getDriver(String name) {
-        if (Resources.isNullOrEmpty(name)) {
+        if (Strings.isNullOrEmpty(name)) {
             return null;
         }
-        for (Driver d : drivers) {
-            if (name.equals(d.getName())) {
-                return d;
-            }
-        }
-        return null;
+        return drivers.stream()
+                .filter(driver -> driver.equalsName(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<String> getDriverNames() {

@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser.session.entity;
 
 import com.google.common.collect.Sets;
+import emlkoks.entitybrowser.common.CustomClassLoader;
 import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
 import java.io.File;
@@ -20,7 +21,7 @@ public class EntityLibraryLoader {
     private static Set<String> SUPPORTED_ARCHIVERS = Sets.newHashSet("ear", "war", "jar");
 
     private File file;
-    private EntityClassLoader classLoader;
+    private CustomClassLoader classLoader;
     private Set<ClassDetails> loadedClasses;
 
     public EntityLibraryLoader(File file) throws LibraryFileNotFoundException {
@@ -30,7 +31,7 @@ public class EntityLibraryLoader {
             throw new LibraryFileNotFoundException("File not exists");
         }
         this.file = file;
-        classLoader = new EntityClassLoader(this.getClass().getClassLoader());
+        classLoader = new CustomClassLoader(this.getClass().getClassLoader());
     }
 
     public Set<ClassDetails> load() {

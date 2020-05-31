@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser.view.controller;
 
+import com.google.common.base.Strings;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.common.Resources;
 import emlkoks.entitybrowser.connection.Driver;
@@ -15,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
-
 
 /**
  * Created by EmlKoks on 28.03.17.
@@ -59,9 +59,9 @@ public class NewDriverController implements Initializable {
     @FXML
     public void save() {
         if (lib == null
-                || Resources.isNullOrEmpty(name.getText())
-                || Resources.isNullOrEmpty(clazz.getText())
-                || Resources.isNullOrEmpty(urlTemplate.getText())) {
+                || Strings.isNullOrEmpty(name.getText())
+                || Strings.isNullOrEmpty(clazz.getText())
+                || Strings.isNullOrEmpty(urlTemplate.getText())) {
             new ErrorDialogCreator(
                     resources.getString("error.title"),
                     resources.getString("newDriver.error.emptyFields"))
@@ -83,7 +83,7 @@ public class NewDriverController implements Initializable {
         Driver driver = new Driver();
         driver.setName(name.getText());
         driver.setClassName(clazz.getText());
-        driver.setUrl(urlTemplate.getText());
+        driver.setUrlTemplate(urlTemplate.getText());
         File destLibFile = new File(Resources.DRIVERS_DIR, lib.getName());
         try {
             FileUtils.copyFile(lib, destLibFile);
@@ -91,7 +91,7 @@ public class NewDriverController implements Initializable {
             e.printStackTrace();
             return false;
         }
-        driver.setLib(lib.getName());
+        driver.setLibraryPath(lib.getName());
         Main.drivers.add(driver);
         return true;
     }
