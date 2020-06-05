@@ -1,16 +1,14 @@
 package emlkoks.entitybrowser.session;
 
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.connection.ConnectionHelper;
+import emlkoks.entitybrowser.connection.provider.JpaProvider;
+import emlkoks.entitybrowser.connection.provider.ProviderFactory;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
-
 import java.io.File;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
+import lombok.Getter;
 
 /**
  * Created by EmlKoks on 09.04.17.
@@ -18,13 +16,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 public class Session {
     protected EntityList entityList;
     private Connection connection;
-    private EntityManager entityManager;
+    @Getter
+    private JpaProvider provider;
 
     public Session(Connection connection) {
         this.connection = connection;
         try {
             entityList = new EntityList(new File(connection.getLibraryPath()));
         } catch (LibraryFileNotFoundException exception) {
+            exception.printStackTrace();
             //TODO
         }
     }
@@ -34,24 +34,12 @@ public class Session {
     }
 
     public boolean connect() {
-        EntityManagerFactory emf = ConnectionHelper.createConnection(connection, entityList.getClasses());
-        if (emf != null) {
-            entityManager = emf.createEntityManager();
-            return true;
-        } else {
-            return false;
-        }
+        provider = new ProviderFactory().getProvider(connection);
+        return provider.connect(entityList);
+
     }
 
     public ClassDetails getEntity(String entityName) {
         return entityList.getEntity(entityName);
-    }
-
-    public CriteriaBuilder getCriteriaBuilder() {
-        return entityManager.getCriteriaBuilder();
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
     }
 }

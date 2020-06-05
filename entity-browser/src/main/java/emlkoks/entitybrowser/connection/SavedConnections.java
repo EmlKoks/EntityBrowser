@@ -2,7 +2,6 @@ package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.common.Marshaller;
 import emlkoks.entitybrowser.common.Resources;
-import emlkoks.entitybrowser.common.Util;
 import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +28,7 @@ public class SavedConnections {
         Connection newConnection = new Connection();
         newConnection.setName(getNewConnectionName());
         newConnection.setId(++connectionLastId);
-        newConnection.setProvider(Util.DEFAULT_PROVIDER);
+        newConnection.setProvider(Provider.DEFAULT);
         connections.add(newConnection);
         save();
         return newConnection.clone();
@@ -43,7 +42,10 @@ public class SavedConnections {
         return name;
     }
 
-    public void saveConnection(Connection connection) {
+    public boolean saveConnection(Connection connection) {
+        if (Objects.isNull(connection)) {
+            return false;
+        }
         if (Objects.nonNull(connection.getId())) {
             connections.removeIf(conn -> connection.getId().equals(conn.getId()));
         } else {
@@ -51,6 +53,7 @@ public class SavedConnections {
         }
         connections.add(connection);
         save();
+        return true;
     }
 
     public boolean exists(String name) {
@@ -58,14 +61,15 @@ public class SavedConnections {
                 .anyMatch(connection -> connection.getName().equals(name));
     }
 
-    public void remove(Integer id) {
+    public boolean remove(Integer id) {
         for (Connection connection : connections) {
             if (id.equals(connection.getId())) {
                 connections.remove(connection);
-                break;
+                save();
+                return true;
             }
         }
-        save();
+        return false;
     }
 
     public void setupConnectionLastId() {

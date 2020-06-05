@@ -1,22 +1,22 @@
 package emlkoks.entitybrowser.query;
 
+import emlkoks.entitybrowser.connection.provider.JpaProvider;
 import emlkoks.entitybrowser.session.SearchResults;
-import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 
 public class SearchService {
-    private Session session;
+    private JpaProvider provider;
 
-    public SearchService(Session session) {
-        this.session = session;
+    public SearchService(JpaProvider provider) {
+        this.provider = provider;
     }
 
     public SearchResults search(ClassDetails entity, List<FieldFilter> filters) {
-        QueryBuilder queryBuilder = new QueryBuilder(session.getCriteriaBuilder(), entity, filters);
-        return new SearchResults(entity, find(session.getEntityManager(), queryBuilder));
+        QueryBuilder queryBuilder = new QueryBuilder(provider.getCriteriaBuilder(), entity, filters);
+        return new SearchResults(entity, find(provider.getEntityManager(), queryBuilder));
     }
 
     private List find(EntityManager entityManager, QueryBuilder queryBuilder) {

@@ -1,6 +1,9 @@
 package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.Main;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,5 +55,16 @@ public class Connection implements Cloneable {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean connectionTest() {
+        driver.loadDriver();
+        try {
+            DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

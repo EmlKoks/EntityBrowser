@@ -1,5 +1,6 @@
 package emlkoks.entitybrowser.connection;
 
+import emlkoks.entitybrowser.connection.provider.ProviderProperty;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -28,5 +29,13 @@ public class PropertyTest {
 
         assertEquals("testName", property.getName());
         assertEquals(5L, property.getValue());
+    }
+
+    @Test
+    public void constructorWithProviderProperty() {
+        var property = new Property(ProviderProperty.DRIVER, "testDriver");
+
+        assertEquals(ProviderProperty.DRIVER.getName(), property.getName());
+        assertEquals("testDriver", property.getValue());
     }
 }

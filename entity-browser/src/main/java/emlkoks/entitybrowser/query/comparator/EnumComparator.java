@@ -1,6 +1,5 @@
 package emlkoks.entitybrowser.query.comparator;
 
-import emlkoks.entitybrowser.common.Util;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
 import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;

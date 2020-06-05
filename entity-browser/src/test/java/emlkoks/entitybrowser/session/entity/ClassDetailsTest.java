@@ -2,6 +2,7 @@ package emlkoks.entitybrowser.session.entity;
 
 import org.junit.Test;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 import java.util.HashSet;
@@ -231,5 +232,20 @@ public class ClassDetailsTest {
         }
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertEquals(4, classDetails.getFields().size());
+    }
+
+    @Test
+    public void isEntity() {
+        @Entity
+        class Test { }
+        ClassDetails classDetails = new ClassDetails(Test.class);
+        assertTrue(classDetails.isEntity());
+    }
+
+    @Test
+    public void isNotEntity() {
+        class Test { }
+        ClassDetails classDetails = new ClassDetails(Test.class);
+        assertFalse(classDetails.isEntity());
     }
 }

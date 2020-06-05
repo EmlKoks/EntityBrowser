@@ -3,10 +3,7 @@ package emlkoks.entitybrowser.view.controller;
 import com.google.common.base.Strings;
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
-import emlkoks.entitybrowser.common.Resources;
-import emlkoks.entitybrowser.common.Util;
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.connection.ConnectionHelper;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Property;
 import emlkoks.entitybrowser.connection.Provider;
@@ -67,7 +64,6 @@ public class ChooseConnectionController implements Initializable {
     @FXML private TableColumn<Property, String> valueColumn;
 
     private Connection connection;
-    private File entityLibrary;
     private Session session;
 
 
@@ -109,7 +105,7 @@ public class ChooseConnectionController implements Initializable {
 
     private void initProviders() {
         providersChoiceBox.getItems().addAll(Provider.values());
-        providersChoiceBox.setValue(Util.DEFAULT_PROVIDER);
+        providersChoiceBox.setValue(Provider.DEFAULT);
     }
 
     private void initPropertiesTable() {
@@ -238,7 +234,7 @@ public class ChooseConnectionController implements Initializable {
                     resources.getString("error.title"),
                     resources.getString("chooseConnection.test.wrong.emptyFields"))
                     .show();
-        } else if (!ConnectionHelper.testConnection(connection)) {
+        } else if (connection.connectionTest()) {
             //TODO show dialog with exception details
             new WarningDialogCreator(
                     resources.getString("chooseConnection.test.title"),

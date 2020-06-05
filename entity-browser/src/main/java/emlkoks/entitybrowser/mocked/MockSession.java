@@ -1,12 +1,12 @@
 package emlkoks.entitybrowser.mocked;
 
 import emlkoks.entitybrowser.connection.Connection;
-import emlkoks.entitybrowser.session.entity.ClassDetails;
-import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity1;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity2;
 import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.session.Session;
+import emlkoks.entitybrowser.session.entity.ClassDetails;
+import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
 
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.criteria.CriteriaBuilder;
 
 import static emlkoks.entitybrowser.mocked.entity.ExampleEnum.*;
 
@@ -34,11 +33,6 @@ public class MockSession extends Session {
             e.printStackTrace();
         }
 //        this.entityList.setClassMap(classMap);
-    }
-
-    @Override
-    public CriteriaBuilder getCriteriaBuilder() {
-        return null;
     }
 
     public static SearchResults getSearchResults() {
