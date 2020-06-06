@@ -5,10 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 import static org.junit.Assert.*;
 
 public class EntityListTest {
+    public static String TEST_EMPTY_LIB = "testLibWithoutEntities.jar";
     private File testLibFile;
 
     @Before
@@ -45,5 +47,16 @@ public class EntityListTest {
         assertNotNull(entityList.getEntity("test.TestEntity"));
     }
 
+    @Test
+    public void hasClasses() throws LibraryFileNotFoundException {
+        var entityList = new EntityList(testLibFile);
+        assertTrue(entityList.hasClasses());
+    }
 
+    @Test
+    public void hasNotClasses() throws LibraryFileNotFoundException, URISyntaxException {
+        var libFile = new File(getClass().getClassLoader().getResource(TEST_EMPTY_LIB).toURI());
+        var entityList = new EntityList(libFile);
+        assertFalse(entityList.hasClasses());
+    }
 }

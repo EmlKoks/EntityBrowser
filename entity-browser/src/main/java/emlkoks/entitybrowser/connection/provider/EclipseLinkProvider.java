@@ -13,7 +13,7 @@ public class EclipseLinkProvider extends JpaProvider {
     }
 
     @Override
-    public EntityManagerFactory createEntityManagerFactory(EntityList entityList) {
+    protected EntityManagerFactory createEntityManagerFactory(EntityList entityList) {
         return Persistence.createEntityManagerFactory("EclipseLink", getMapProperties());
     }
 }

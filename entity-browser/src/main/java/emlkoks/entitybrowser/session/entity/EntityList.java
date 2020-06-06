@@ -35,4 +35,8 @@ public class EntityList {
         return classMap.get(entityName);
     }
 
+    public boolean hasClasses() {
+        return !classMap.isEmpty();
+    }
+
 }
