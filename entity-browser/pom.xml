@@ -124,6 +124,12 @@
             <version>1.4.200</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>emlkoks.entitybrowser</groupId>
+            <artifactId>test-library</artifactId>
+            <version>0.2-alpha</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

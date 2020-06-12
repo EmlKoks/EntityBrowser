@@ -32,6 +32,7 @@ public class EntityLibraryLoader {
         }
         this.file = file;
         classLoader = new CustomClassLoader(this.getClass().getClassLoader());
+//        Thread.currentThread().setContextClassLoader(classLoader);
     }
 
     public Set<ClassDetails> load() {
@@ -100,7 +101,7 @@ public class EntityLibraryLoader {
         String classPath = filePath.replace("WEB-INF/", "").replace("classes/", "");
         String className = classPath.replace('/', '.').replace(".class", "");
         try {
-            Class clazz = Class.forName(className, true, classLoader);
+            Class clazz = classLoader.loadClass(className);
             ClassDetails classDetails = new ClassDetails(clazz);
             if (classDetails.isEntity()) {
                 loadedClasses.add(classDetails);

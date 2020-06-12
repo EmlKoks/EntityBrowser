@@ -63,7 +63,7 @@ public class SearchController {
             fields.setValue(fields.getItems().get(0));
             filtersGrid.getChildren().clear();
         });
-        searchService = new SearchService(session.getProvider());
+//        searchService = new SearchService(session.getProvider());
     }
 
     private Session getSession() {

@@ -2,6 +2,7 @@ package emlkoks.entitybrowser.connection.provider;
 
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Driver;
+import emlkoks.entitybrowser.connection.Property;
 import emlkoks.entitybrowser.session.entity.EntityLibraryLoaderTest;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.entity.EntityListTest;
@@ -26,6 +27,14 @@ public class HibernateProviderTest {
     public void createProviderWithoutConnectionDriver() {
         var connection = new Connection();
         connection.setUrl("url");
+        new HibernateProvider(connection);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void createProviderWithEmptyDriverClassName() {
+        var driver = new Driver();
+        var connection = new Connection();
+        connection.setDriver(driver);
         new HibernateProvider(connection);
     }
 
@@ -82,21 +91,38 @@ public class HibernateProviderTest {
         assertTrue(provider.connect(entityList));
     }
 
-//    @Test
-//    public void connectProviderWithNotEmptyLib() throws LibraryFileNotFoundException {
-//        JpaProvider provider = new HibernateProvider(createH2Connection());
-//        var entityList = new EntityList(testLibFile);
-//        assertTrue(provider.connect(entityList));
-//    }
+    @Test
+    public void connectProviderWithNotEmptyLib() throws LibraryFileNotFoundException {
+        JpaProvider provider = new HibernateProvider(createH2Connection());
+        var entityList = new EntityList(testLibFile);
+        assertTrue(provider.connect(entityList));
+    }
 
-    private Connection createH2Connection() {
+    @Test
+    public void getEntityManager() throws LibraryFileNotFoundException {
+        JpaProvider provider = new HibernateProvider(createH2Connection());
+        var entityList = new EntityList(testLibFile);
+        provider.connect(entityList);
+        assertNotNull(provider.getEntityManager());
+    }
+
+    @Test
+    public void getCriteriaBuilder() throws LibraryFileNotFoundException {
+        JpaProvider provider = new HibernateProvider(createH2Connection());
+        var entityList = new EntityList(testLibFile);
+        provider.connect(entityList);
+        assertNotNull(provider.getCriteriaBuilder());
+    }
+
+    public static Connection createH2Connection() {
         var connection = new Connection();
         connection.setDriver(createH2Driver());
-        connection.setUrl("jdbc:h2:~/test");
+        connection.setUrl("jdbc:h2:mem:test");
+        connection.getProperties().add(new Property("hibernate.hbm2ddl.auto", "create"));
         return connection;
     }
 
-    private Driver createH2Driver() {
+    public static Driver createH2Driver() {
         var driver = new Driver();
         driver.setName("H2");
         driver.setClassName("org.h2.Driver");

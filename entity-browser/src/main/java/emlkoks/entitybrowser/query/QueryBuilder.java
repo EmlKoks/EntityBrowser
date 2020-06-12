@@ -7,6 +7,7 @@ import emlkoks.entitybrowser.session.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -32,14 +33,13 @@ public class QueryBuilder {
         this.cb = cb;
         cq = cb.createQuery(entity.getClazz());
         root = cq.from(entity.getClazz());
-        build(fieldFilters);
+        buildPredicates(fieldFilters);
     }
 
-    protected QueryBuilder() {
-    }
-
-    private void build(Collection<FieldFilter> fieldFilters) {
-        fieldFilters.forEach(this::createPredicate);
+    private void buildPredicates(Collection<FieldFilter> fieldFilters) {
+        if (Objects.nonNull(fieldFilters)) {
+            fieldFilters.forEach(this::createPredicate);
+        }
     }
 
     private void createPredicate(FieldFilter fieldFilter) {

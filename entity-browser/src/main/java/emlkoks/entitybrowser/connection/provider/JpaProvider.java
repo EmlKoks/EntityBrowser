@@ -17,7 +17,6 @@ import static emlkoks.entitybrowser.connection.provider.ProviderProperty.*;
 
 public abstract class JpaProvider {
     protected Set<Property> properties = new HashSet<>();
-    @Getter
     protected EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
@@ -34,6 +33,7 @@ public abstract class JpaProvider {
         properties.add(new Property(URL, connection.getUrl()));
         properties.add(new Property(USER, connection.getUser()));
         properties.add(new Property(PASSWORD, connection.getPassword()));
+        properties.addAll(connection.getProperties());
     }
 
     public boolean connect(EntityList entityList) {
