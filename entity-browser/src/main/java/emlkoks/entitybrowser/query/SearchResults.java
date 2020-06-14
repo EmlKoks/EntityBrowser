@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.session;
+package emlkoks.entitybrowser.query;
 
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityWrapper;

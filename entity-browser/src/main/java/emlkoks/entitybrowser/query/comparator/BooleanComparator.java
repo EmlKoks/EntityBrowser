@@ -2,8 +2,8 @@ package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
-import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import emlkoks.entitybrowser.query.comparator.expression.EqualComparation;
+import emlkoks.entitybrowser.query.comparator.expression.NotEqualComparation;
 import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -19,8 +19,8 @@ import javax.persistence.criteria.Predicate;
 public class BooleanComparator extends AbstractComparator<Boolean> {
 
     BooleanComparator() {
-        expressions.add(new EqualExpression());
-        expressions.add(new NotEqualExpression());
+        expressions.add(new EqualComparation());
+        expressions.add(new NotEqualComparation());
     }
 
     @Override

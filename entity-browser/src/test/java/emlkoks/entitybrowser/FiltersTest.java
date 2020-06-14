@@ -2,6 +2,7 @@ package emlkoks.entitybrowser;
 
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.session.Session;
+import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.main.MainWindowController;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,7 @@ public class FiltersTest extends ApplicationTest {
     }
 
 //    @Test
-    public void createSession() {
+    public void createSession() throws LibraryFileNotFoundException {
         Session session = new MockSession();
         mainWindowController.openSession(session);
         System.out.print("asdasd");

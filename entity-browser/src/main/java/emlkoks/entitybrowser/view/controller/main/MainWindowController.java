@@ -4,7 +4,6 @@ import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.mocked.MockSession;
-import emlkoks.entitybrowser.query.comparator.ComparatorManager;
 import emlkoks.entitybrowser.query.comparator.ComparatorNotFoundException;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.ViewFile;
@@ -66,7 +65,7 @@ public class MainWindowController implements Initializable {
                 .forEach(entity -> entity.getFields().stream()
                     .forEach(field -> {
                         try {
-                            ComparatorManager.getExpressionByField(field);
+//                            ComparatorManager.getComparations(field);
                         } catch (ComparatorNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
@@ -87,7 +86,7 @@ public class MainWindowController implements Initializable {
         Connection connection = Main.savedConnections.getConnections()
                 .filtered(c -> "OSP".equals(c.getName()))
                 .get(0);
-        session = new Session(connection);
+//        session = new Session(connection);
         if (session.connect()) {
             openSession(session);
 //            validateEntities(session);
@@ -144,7 +143,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void debugWithMock() {
-        session = new MockSession();
+//        session = new MockSession();
         openSession(session);
         searchController.doSearch();
     }

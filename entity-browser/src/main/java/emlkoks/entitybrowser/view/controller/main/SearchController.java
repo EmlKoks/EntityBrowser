@@ -5,10 +5,9 @@ import emlkoks.entitybrowser.Mode;
 import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.SearchService;
-import emlkoks.entitybrowser.query.comparator.AbstractComparator;
+import emlkoks.entitybrowser.query.SearchResults;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
-import emlkoks.entitybrowser.query.comparator.expression.Expression;
-import emlkoks.entitybrowser.session.SearchResults;
+import emlkoks.entitybrowser.query.comparator.expression.Comparation;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
@@ -63,7 +62,6 @@ public class SearchController {
             fields.setValue(fields.getItems().get(0));
             filtersGrid.getChildren().clear();
         });
-//        searchService = new SearchService(session.getProvider());
     }
 
     private Session getSession() {
@@ -102,7 +100,7 @@ public class SearchController {
         for (int i = 0;i < children.size() / NUMBER_OF_CHILDREN_FILTER_GRID;++i) {
             int firstChildInRow = i * NUMBER_OF_CHILDREN_FILTER_GRID;
             FieldProperty fieldProperty = getFieldProperty(children.get(firstChildInRow));
-            Expression expression = getExpression(children.get(firstChildInRow + 1));
+            Comparation expression = getExpression(children.get(firstChildInRow + 1));
             String value = getFilterValue(children.get(firstChildInRow + 2));
             fieldFilterList.add(new FieldFilter(expression, fieldProperty, value));
         }
@@ -114,9 +112,9 @@ public class SearchController {
         return selectedEntity.getFieldProperty(label.getText());
     }
 
-    private Expression getExpression(Object obj) {
+    private Comparation getExpression(Object obj) {
         ChoiceBox choiceBox = (ChoiceBox) obj;
-        return (Expression) choiceBox.getValue();
+        return (Comparation) choiceBox.getValue();
     }
 
     private String getFilterValue(Object obj) {

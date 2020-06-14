@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
-import lombok.Getter;
 
 import static emlkoks.entitybrowser.connection.provider.ProviderProperty.*;
 

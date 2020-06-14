@@ -1,7 +1,10 @@
 package emlkoks.entitybrowser.connection;
 
+import com.google.common.base.Strings;
 import emlkoks.entitybrowser.Main;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -11,7 +14,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by EmlKoks on 18.03.17.
@@ -26,7 +33,9 @@ public class Connection implements Cloneable {
     private String url;
     private String user;
     private String password;
-    private String libraryPath;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private File libraryFile;
     private Provider provider;
     private ObservableList<Property> properties = FXCollections.observableArrayList();
 
@@ -46,6 +55,33 @@ public class Connection implements Cloneable {
     public void setDriverS(String driverName) {
         driver = Main.drivers.getDriver(driverName);
     }
+
+    public File getLibrary() {
+        return libraryFile;
+    }
+
+    @XmlElement(name = "libraryFile")
+    public String getLibraryPath() {
+        if (Objects.isNull(libraryFile)) {
+            return null;
+        }
+        return libraryFile.getAbsolutePath();
+    }
+
+    public boolean setLibraryPath(String libraryPath) {
+        if (Strings.isNullOrEmpty(libraryPath)) {
+            libraryFile = null;
+            return false;
+        }
+        File library = new File(libraryPath);
+        if (!library.exists()) {
+            libraryFile = null;
+            return false;
+        }
+        libraryFile = library;
+        return true;
+    }
+
 
     @Override
     public Connection clone() {

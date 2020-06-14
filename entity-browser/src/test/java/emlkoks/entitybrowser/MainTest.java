@@ -29,15 +29,20 @@ public class MainTest extends ApplicationTest{
     }
 
 //    @Test //cannot run in github TODO
-    public void testExit() {
-        clickOn("#menuHelp");
-        clickOn("#menuAbout");
-        DialogPane aboutDialog = getTopDialog();
-        FxAssert.verifyThat(aboutDialog.getContentText(), hasText("Test"));
-    }
+//    public void testExit() {
+//        clickOn("#menuHelp");
+//        clickOn("#menuAbout");
+//        DialogPane aboutDialog = getTopDialog();
+//        FxAssert.verifyThat(aboutDialog.getContentText(), hasText("Test"));
+//    }
 
     private DialogPane getTopDialog() {
         List<Window> windows = robotContext().getWindowFinder().listWindows();
         return (DialogPane) windows.get(windows.size()-1).getScene().getRoot();
     }
+
+//    @Test
+//    public void test() {
+//        System.out.println("true = " + true);
+//    }
 }

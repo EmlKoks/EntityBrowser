@@ -1,13 +1,13 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.BetweenExpression;
-import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
-import emlkoks.entitybrowser.query.comparator.expression.LessExpression;
-import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualExpression;
-import emlkoks.entitybrowser.query.comparator.expression.MoreExpression;
-import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualExpression;
-import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import emlkoks.entitybrowser.query.comparator.expression.BetweenComparation;
+import emlkoks.entitybrowser.query.comparator.expression.EqualComparation;
+import emlkoks.entitybrowser.query.comparator.expression.LessComparation;
+import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualComparation;
+import emlkoks.entitybrowser.query.comparator.expression.MoreComparation;
+import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualComparation;
+import emlkoks.entitybrowser.query.comparator.expression.NotEqualComparation;
 import java.util.Date;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
@@ -22,13 +22,13 @@ import javax.persistence.criteria.Predicate;
 public class DateComparator extends AbstractComparator<Date> {
 
     DateComparator() {
-        expressions.add(new EqualExpression());
-        expressions.add(new NotEqualExpression());
-        expressions.add(new MoreExpression());
-        expressions.add(new MoreOrEqualExpression());
-        expressions.add(new LessExpression());
-        expressions.add(new LessOrEqualExpression());
-        expressions.add(new BetweenExpression());
+        expressions.add(new EqualComparation());
+        expressions.add(new NotEqualComparation());
+        expressions.add(new MoreComparation());
+        expressions.add(new MoreOrEqualComparation());
+        expressions.add(new LessComparation());
+        expressions.add(new LessOrEqualComparation());
+        expressions.add(new BetweenComparation());
     }
 
     @Override

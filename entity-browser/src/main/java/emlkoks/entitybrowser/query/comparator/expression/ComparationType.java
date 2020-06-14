@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.query.comparator.expression;
 /**
  * Created by EmlKoks on 11.06.19.
  */
-public enum ExpressionType {
+public enum ComparationType {
     CONTAINS,
     EQUAL,
     NOT_EQUAL,

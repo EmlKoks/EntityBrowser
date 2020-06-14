@@ -4,6 +4,8 @@ import com.sun.javafx.collections.ImmutableObservableList;
 import emlkoks.entitybrowser.Main;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
+
 import static org.junit.Assert.*;
 
 public class ConnectionTest {
@@ -65,11 +67,17 @@ public class ConnectionTest {
     }
 
     @Test
-    public void setLibraryPath() {
+    public void setWrongLibraryPath() {
         var connection = new Connection();
-        connection.setLibraryPath("libraryPath");
-        assertEquals("libraryPath", connection.getLibraryPath());
+        assertFalse(connection.setLibraryPath("libraryPath"));
     }
+
+//    @Test TODO
+//    public void setLibraryPath() throws FileNotFoundException {
+//        var connection = new Connection();
+//        connection.setLibrary("libraryPath");
+//        assertEquals("libraryPath", connection.getLibraryPath());
+//    }
 
     @Test
     public void setProvider() {
@@ -87,14 +95,14 @@ public class ConnectionTest {
     }
 
     @Test
-    public void testClone() {
+    public void testClone() throws FileNotFoundException {
         var connection = new Connection();
         connection.setId(9);
         connection.setName("testName");
         connection.setUrl("url");
         connection.setUser("user");
         connection.setPassword("password");
-        connection.setLibraryPath("libraryPath");
+//        connection.setLibrary("libraryPath");//TODO
         connection.setProvider(Provider.Hibernate);
         connection.setProperties(new ImmutableObservableList<>());
         var clonedConection = connection.clone();

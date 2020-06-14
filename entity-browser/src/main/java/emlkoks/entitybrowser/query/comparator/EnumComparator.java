@@ -1,8 +1,8 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
-import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import emlkoks.entitybrowser.query.comparator.expression.EqualComparation;
+import emlkoks.entitybrowser.query.comparator.expression.NotEqualComparation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -17,8 +17,8 @@ import javax.persistence.criteria.Predicate;
 public class EnumComparator extends AbstractComparator<Enum> {
 
     EnumComparator() {
-        expressions.add(new EqualExpression());
-        expressions.add(new NotEqualExpression());
+        expressions.add(new EqualComparation());
+        expressions.add(new NotEqualComparation());
     }
 
     @Override

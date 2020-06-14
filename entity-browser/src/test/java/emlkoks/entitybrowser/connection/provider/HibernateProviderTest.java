@@ -3,6 +3,7 @@ package emlkoks.entitybrowser.connection.provider;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Property;
+import emlkoks.entitybrowser.connection.Provider;
 import emlkoks.entitybrowser.session.entity.EntityLibraryLoaderTest;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.entity.EntityListTest;
@@ -119,6 +120,16 @@ public class HibernateProviderTest {
         connection.setDriver(createH2Driver());
         connection.setUrl("jdbc:h2:mem:test");
         connection.getProperties().add(new Property("hibernate.hbm2ddl.auto", "create"));
+        return connection;
+    }
+
+    public static Connection createH2ConnectionWithTestLibrary() {
+        var connection = new Connection();
+        connection.setDriver(createH2Driver());
+        connection.setUrl("jdbc:h2:mem:test");
+        connection.getProperties().add(new Property("hibernate.hbm2ddl.auto", "create"));
+        connection.setLibraryPath(EntityLibraryLoaderTest.TEST_JAR_PATH);
+        connection.setProvider(Provider.Hibernate);
         return connection;
     }
 

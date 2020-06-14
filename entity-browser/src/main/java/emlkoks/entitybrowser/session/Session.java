@@ -6,8 +6,9 @@ import emlkoks.entitybrowser.connection.provider.ProviderFactory;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
-import java.io.File;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.Getter;
 
 /**
@@ -19,14 +20,12 @@ public class Session {
     @Getter
     private JpaProvider provider;
 
-    public Session(Connection connection) {
-        this.connection = connection;
-        try {
-            entityList = new EntityList(new File(connection.getLibraryPath()));
-        } catch (LibraryFileNotFoundException exception) {
-            exception.printStackTrace();
-            //TODO
+    public Session(Connection connection) throws LibraryFileNotFoundException {
+        if (Objects.isNull(connection)) {
+            throw new NullPointerException("Connection cannot be null");
         }
+        this.connection = connection;
+        entityList = new EntityList(connection.getLibrary());
     }
 
     public List<String> getClassNames() {

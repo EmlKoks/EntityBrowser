@@ -154,7 +154,7 @@ public class ChooseConnectionController implements Initializable {
         fileChooser.setSelectedExtensionFilter(exFilter);
         File selectedFile = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         if (selectedFile != null) {
-            libraryPathField.setText(selectedFile.getName());
+            libraryPathField.setText(selectedFile.getAbsolutePath());
         } else {
             libraryPathField.setText("");
         }
@@ -162,6 +162,7 @@ public class ChooseConnectionController implements Initializable {
 
     @FXML
     public void connect() {
+        fillConnection();
         if (createSession()) {
             ((Stage) mainPane.getScene().getWindow()).close();
         }
@@ -173,7 +174,6 @@ public class ChooseConnectionController implements Initializable {
     }
 
     private boolean createSession() {
-
         try {
             session = new Session(connection);
             session.connect();
@@ -215,7 +215,7 @@ public class ChooseConnectionController implements Initializable {
 
     @FXML
     public void saveConnection() {
-        fillConnection();
+        fillConnection();//TODO add observable
         if (Strings.isNullOrEmpty(connection.getName())) {
             new WarningDialogCreator(
                     resources.getString("error.title"),
@@ -277,7 +277,7 @@ public class ChooseConnectionController implements Initializable {
     }
 
     private boolean validateConnection() {
-        return !Strings.isNullOrEmpty(driversChoiceBox.getValue())//TODO add assertions
+        return !Strings.isNullOrEmpty(driversChoiceBox.getValue())
                 && !Strings.isNullOrEmpty(urlField.getText())
                 && !Strings.isNullOrEmpty(userField.getText())
                 && !Strings.isNullOrEmpty(passwordField.getText());

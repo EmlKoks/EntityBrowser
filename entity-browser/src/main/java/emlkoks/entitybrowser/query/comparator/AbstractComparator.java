@@ -1,9 +1,9 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.Expression;
-import emlkoks.entitybrowser.query.comparator.expression.ExpressionType;
-import emlkoks.entitybrowser.query.comparator.expression.IsNullExpression;
+import emlkoks.entitybrowser.query.comparator.expression.Comparation;
+import emlkoks.entitybrowser.query.comparator.expression.ComparationType;
+import emlkoks.entitybrowser.query.comparator.expression.IsNullComparation;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,18 +19,18 @@ import javax.persistence.criteria.Predicate;
  * Created by EmlKoks on 15.06.19.
  */
 public abstract class AbstractComparator<T> {
-    protected List<Expression> expressions = new ArrayList<>();
+    protected List<Comparation> expressions = new ArrayList<>();
 
     public AbstractComparator() {
-        expressions.add(new IsNullExpression());
+        expressions.add(new IsNullComparation());
     }
 
-    public Expression[] getExpressions() {
-        return expressions.toArray(new Expression[]{});
+    public Comparation[] getExpressions() {
+        return expressions.toArray(new Comparation[]{});
     }
 
     public List<Node> createFilterRow(FieldProperty field) {
-        ChoiceBox<Expression> comparatorChoiceBox = createComparationTypeChoiceBox();
+        ChoiceBox<Comparation> comparatorChoiceBox = createComparationTypeChoiceBox();
         Node valueField = createFieldValueField(field.getType());
         comparatorChoiceBox.valueProperty().addListener((observable, oldValue, newValue) ->
             valueField.setDisable(isNull(newValue.getType()) || isNotNull(newValue.getType()))
@@ -40,17 +40,17 @@ public abstract class AbstractComparator<T> {
         return new ArrayList<>(Arrays.asList(new Label(field.getName()), comparatorChoiceBox, valueField));
     }
 
-    private boolean isNull(ExpressionType expressionType) {
-        return ExpressionType.IS_NULL.equals(expressionType);
+    private boolean isNull(ComparationType expressionType) {
+        return ComparationType.IS_NULL.equals(expressionType);
     }
 
-    private boolean isNotNull(ExpressionType expressionType) {
-        return ExpressionType.IS_NOT_NULL.equals(expressionType);
+    private boolean isNotNull(ComparationType expressionType) {
+        return ComparationType.IS_NOT_NULL.equals(expressionType);
     }
 
 
-    private ChoiceBox<Expression> createComparationTypeChoiceBox() {
-        ChoiceBox<Expression> expressionChoiceBox = new ChoiceBox<>();
+    private ChoiceBox<Comparation> createComparationTypeChoiceBox() {
+        ChoiceBox<Comparation> expressionChoiceBox = new ChoiceBox<>();
         expressionChoiceBox.getItems().addAll(expressions);
         expressionChoiceBox.setValue(expressionChoiceBox.getItems().get(0));
         return expressionChoiceBox;

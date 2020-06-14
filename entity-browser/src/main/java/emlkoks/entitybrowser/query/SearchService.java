@@ -1,7 +1,6 @@
 package emlkoks.entitybrowser.query;
 
 import emlkoks.entitybrowser.connection.provider.JpaProvider;
-import emlkoks.entitybrowser.session.SearchResults;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 
 import java.util.List;

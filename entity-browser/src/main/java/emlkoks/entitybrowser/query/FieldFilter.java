@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.query.comparator.expression.Expression;
+import emlkoks.entitybrowser.query.comparator.expression.Comparation;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
 import lombok.Value;
 
@@ -9,7 +9,7 @@ import lombok.Value;
  */
 @Value
 public class FieldFilter {
-    private Expression expression;
-    private FieldProperty fieldProperty;
-    private String value;
+    Comparation comparation;
+    FieldProperty fieldProperty;
+    String value;
 }

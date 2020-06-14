@@ -1,8 +1,8 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
-import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import emlkoks.entitybrowser.query.comparator.expression.EqualComparation;
+import emlkoks.entitybrowser.query.comparator.expression.NotEqualComparation;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
@@ -16,8 +16,8 @@ import javax.persistence.criteria.Predicate;
 public class CharacterComparator extends AbstractComparator<Character> {
 
     CharacterComparator() {
-        expressions.add(new EqualExpression());
-        expressions.add(new NotEqualExpression());
+        expressions.add(new EqualComparation());
+        expressions.add(new NotEqualComparation());
     }
 
     @Override
@@ -32,13 +32,13 @@ public class CharacterComparator extends AbstractComparator<Character> {
 
     @Override
     public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        switch (fieldFilter.getExpression().getType()) {
+        switch (fieldFilter.getComparation().getType()) {
             case EQUAL:
                 return cb.equal(attributePath, fieldFilter.getValue());
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             default:
-                throw new ExpressionNotImplementedException(fieldFilter.getExpression());
+                throw new ExpressionNotImplementedException(fieldFilter.getComparation());
         }
     }
 }

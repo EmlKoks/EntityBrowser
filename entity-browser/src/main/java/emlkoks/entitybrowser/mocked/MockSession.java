@@ -3,7 +3,7 @@ package emlkoks.entitybrowser.mocked;
 import emlkoks.entitybrowser.connection.Connection;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity1;
 import emlkoks.entitybrowser.mocked.entity.MockedEntity2;
-import emlkoks.entitybrowser.session.SearchResults;
+import emlkoks.entitybrowser.query.SearchResults;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityList;
@@ -18,7 +18,7 @@ import java.util.Map;
 import static emlkoks.entitybrowser.mocked.entity.ExampleEnum.*;
 
 public class MockSession extends Session {
-    public MockSession() {
+    public MockSession() throws LibraryFileNotFoundException {
         super(new Connection());
         prepareEntityList();
     }

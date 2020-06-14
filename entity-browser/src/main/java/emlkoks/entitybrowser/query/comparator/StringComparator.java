@@ -1,9 +1,9 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.ContainsExpression;
-import emlkoks.entitybrowser.query.comparator.expression.EqualExpression;
-import emlkoks.entitybrowser.query.comparator.expression.NotEqualExpression;
+import emlkoks.entitybrowser.query.comparator.expression.ContainsComparation;
+import emlkoks.entitybrowser.query.comparator.expression.EqualComparation;
+import emlkoks.entitybrowser.query.comparator.expression.NotEqualComparation;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
@@ -17,9 +17,9 @@ import javax.persistence.criteria.Predicate;
 public class StringComparator extends AbstractComparator<String> {
 
     StringComparator() {
-        expressions.add(new ContainsExpression());
-        expressions.add(new EqualExpression());
-        expressions.add(new NotEqualExpression());
+        expressions.add(new ContainsComparation());
+        expressions.add(new EqualComparation());
+        expressions.add(new NotEqualComparation());
     }
 
     @Override
@@ -34,7 +34,7 @@ public class StringComparator extends AbstractComparator<String> {
 
     @Override
     public Predicate createPredicate(CriteriaBuilder cb, Path<String> attributePath, FieldFilter fieldFilter) {
-        switch (fieldFilter.getExpression().getType()) {
+        switch (fieldFilter.getComparation().getType()) {
             case CONTAINS:
                 String value = "%" + fieldFilter.getValue() + "%";
                 return cb.like(attributePath, value);
@@ -43,7 +43,7 @@ public class StringComparator extends AbstractComparator<String> {
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             default:
-                throw new ExpressionNotImplementedException(fieldFilter.getExpression());
+                throw new ExpressionNotImplementedException(fieldFilter.getComparation());
         }
     }
 }
