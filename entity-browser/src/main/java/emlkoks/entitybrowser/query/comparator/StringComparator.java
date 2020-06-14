@@ -1,9 +1,9 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.ContainsComparation;
-import emlkoks.entitybrowser.query.comparator.expression.EqualComparation;
-import emlkoks.entitybrowser.query.comparator.expression.NotEqualComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.ContainsComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.EqualComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.NotEqualComparation;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 

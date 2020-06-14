@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.query.comparator;
 
-import emlkoks.entitybrowser.query.comparator.expression.Comparation;
+import emlkoks.entitybrowser.query.comparator.comparation.Comparation;
 
 public class ExpressionNotImplementedException extends RuntimeException {
 

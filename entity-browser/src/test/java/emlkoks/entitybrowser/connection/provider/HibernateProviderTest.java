@@ -1,6 +1,7 @@
 package emlkoks.entitybrowser.connection.provider;
 
 import emlkoks.entitybrowser.connection.Connection;
+import emlkoks.entitybrowser.connection.ConnectionTest;
 import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Property;
 import emlkoks.entitybrowser.connection.Provider;
@@ -85,7 +86,7 @@ public class HibernateProviderTest {
 
     @Test
     public void connectProviderWithEmptyLib() throws LibraryFileNotFoundException, URISyntaxException {
-        JpaProvider provider = new HibernateProvider(createH2Connection());
+        JpaProvider provider = new HibernateProvider(ConnectionTest.createH2Connection());
         var libFile = new File(getClass().getClassLoader().getResource(EntityListTest.TEST_EMPTY_LIB).toURI());
         var entityList = new EntityList(libFile);
 
@@ -94,14 +95,14 @@ public class HibernateProviderTest {
 
     @Test
     public void connectProviderWithNotEmptyLib() throws LibraryFileNotFoundException {
-        JpaProvider provider = new HibernateProvider(createH2Connection());
+        JpaProvider provider = new HibernateProvider(ConnectionTest.createH2Connection());
         var entityList = new EntityList(testLibFile);
         assertTrue(provider.connect(entityList));
     }
 
     @Test
     public void getEntityManager() throws LibraryFileNotFoundException {
-        JpaProvider provider = new HibernateProvider(createH2Connection());
+        JpaProvider provider = new HibernateProvider(ConnectionTest.createH2Connection());
         var entityList = new EntityList(testLibFile);
         provider.connect(entityList);
         assertNotNull(provider.getEntityManager());
@@ -109,35 +110,21 @@ public class HibernateProviderTest {
 
     @Test
     public void getCriteriaBuilder() throws LibraryFileNotFoundException {
-        JpaProvider provider = new HibernateProvider(createH2Connection());
+        JpaProvider provider = new HibernateProvider(ConnectionTest.createH2Connection());
         var entityList = new EntityList(testLibFile);
         provider.connect(entityList);
         assertNotNull(provider.getCriteriaBuilder());
     }
 
-    public static Connection createH2Connection() {
-        var connection = new Connection();
-        connection.setDriver(createH2Driver());
-        connection.setUrl("jdbc:h2:mem:test");
-        connection.getProperties().add(new Property("hibernate.hbm2ddl.auto", "create"));
-        return connection;
-    }
+
 
     public static Connection createH2ConnectionWithTestLibrary() {
         var connection = new Connection();
-        connection.setDriver(createH2Driver());
+        connection.setDriver(ConnectionTest.createH2Driver());
         connection.setUrl("jdbc:h2:mem:test");
         connection.getProperties().add(new Property("hibernate.hbm2ddl.auto", "create"));
         connection.setLibraryPath(EntityLibraryLoaderTest.TEST_JAR_PATH);
         connection.setProvider(Provider.Hibernate);
         return connection;
     }
-
-    public static Driver createH2Driver() {
-        var driver = new Driver();
-        driver.setName("H2");
-        driver.setClassName("org.h2.Driver");
-        return driver;
-    }
-
 }

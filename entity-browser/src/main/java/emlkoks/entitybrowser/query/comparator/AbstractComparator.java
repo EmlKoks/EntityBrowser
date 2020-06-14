@@ -1,9 +1,9 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.Comparation;
-import emlkoks.entitybrowser.query.comparator.expression.ComparationType;
-import emlkoks.entitybrowser.query.comparator.expression.IsNullComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.Comparation;
+import emlkoks.entitybrowser.query.comparator.comparation.ComparationType;
+import emlkoks.entitybrowser.query.comparator.comparation.IsNullComparation;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
 import java.util.ArrayList;
 import java.util.Arrays;

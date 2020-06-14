@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.query.comparator.expression;
+package emlkoks.entitybrowser.query.comparator.comparation;
 
 import emlkoks.entitybrowser.Main;
 
@@ -11,7 +11,7 @@ public abstract class Comparation {
 
     Comparation(ComparationType comparationType) {
         this.comparationType = comparationType;
-        this.label = Main.resources.getString("expression." + comparationType.name().toLowerCase());
+        this.label = Main.resources.getString("comparation." + comparationType.name().toLowerCase());
     }
 
     public String toString() {

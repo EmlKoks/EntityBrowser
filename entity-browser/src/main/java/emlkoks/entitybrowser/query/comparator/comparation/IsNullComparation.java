@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.query.comparator.expression;
+package emlkoks.entitybrowser.query.comparator.comparation;
 
 public class IsNullComparation extends Comparation {
     public IsNullComparation() {

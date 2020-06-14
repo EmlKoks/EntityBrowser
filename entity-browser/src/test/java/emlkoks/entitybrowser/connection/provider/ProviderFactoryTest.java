@@ -18,7 +18,7 @@ public class ProviderFactoryTest {
         connection.setDriver(driver);
         connection.setUrl("url");
         connection.setProvider(Provider.Hibernate);
-        var jpaProvider = new ProviderFactory().getProvider(connection);
+        var jpaProvider = ProviderFactory.getProvider(connection);
         assertThat(jpaProvider, instanceOf(HibernateProvider.class));
     }
 
@@ -30,13 +30,13 @@ public class ProviderFactoryTest {
         connection.setDriver(driver);
         connection.setUrl("url");
         connection.setProvider(Provider.EclipseLink);
-        var jpaProvider = new ProviderFactory().getProvider(connection);
+        var jpaProvider = ProviderFactory.getProvider(connection);
         assertThat(jpaProvider, instanceOf(EclipseLinkProvider.class));
     }
 
     @Test(expected = RuntimeException.class)
     public void getWrongProvider() {
-        new ProviderFactory().getProvider(new Connection());
+        ProviderFactory.getProvider(new Connection());
     }
 
 }

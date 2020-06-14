@@ -52,7 +52,7 @@ public class QueryBuilder {
         if (fieldFilter.getFieldProperty().hasAnnotation(ManyToMany.class)) {
             log.debug("ManyToMany");
         }
-        AbstractComparator comparator = new ComparatorFactory().getComparator(fieldFilter.getFieldProperty());
+        AbstractComparator comparator = ComparatorFactory.getComparator(fieldFilter.getFieldProperty());
         predicates.add(comparator.createPredicate(cb, getPath(fieldFilter.getFieldProperty()), fieldFilter));
     }
 

@@ -1,13 +1,13 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.expression.BetweenComparation;
-import emlkoks.entitybrowser.query.comparator.expression.EqualComparation;
-import emlkoks.entitybrowser.query.comparator.expression.LessComparation;
-import emlkoks.entitybrowser.query.comparator.expression.LessOrEqualComparation;
-import emlkoks.entitybrowser.query.comparator.expression.MoreComparation;
-import emlkoks.entitybrowser.query.comparator.expression.MoreOrEqualComparation;
-import emlkoks.entitybrowser.query.comparator.expression.NotEqualComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.BetweenComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.EqualComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.LessComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.LessOrEqualComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.MoreComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.MoreOrEqualComparation;
+import emlkoks.entitybrowser.query.comparator.comparation.NotEqualComparation;
 import java.util.Date;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;

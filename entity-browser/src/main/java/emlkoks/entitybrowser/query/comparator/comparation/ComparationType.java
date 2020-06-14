@@ -1,4 +1,4 @@
-package emlkoks.entitybrowser.query.comparator.expression;
+package emlkoks.entitybrowser.query.comparator.comparation;
 
 /**
  * Created by EmlKoks on 11.06.19.

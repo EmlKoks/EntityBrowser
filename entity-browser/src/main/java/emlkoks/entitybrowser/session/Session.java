@@ -33,7 +33,7 @@ public class Session {
     }
 
     public boolean connect() {
-        provider = new ProviderFactory().getProvider(connection);
+        provider = ProviderFactory.getProvider(connection);
         return provider.connect(entityList);
 
     }

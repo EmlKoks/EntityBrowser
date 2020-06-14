@@ -1,9 +1,10 @@
 package emlkoks.entitybrowser.connection.provider;
 
 import emlkoks.entitybrowser.connection.Connection;
-
 import java.util.Objects;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class ProviderFactory {
 
     public JpaProvider getProvider(Connection connection) {

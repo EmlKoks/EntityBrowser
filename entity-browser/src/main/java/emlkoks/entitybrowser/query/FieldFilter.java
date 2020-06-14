@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.query.comparator.expression.Comparation;
+import emlkoks.entitybrowser.query.comparator.comparation.Comparation;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
 import lombok.Value;
 

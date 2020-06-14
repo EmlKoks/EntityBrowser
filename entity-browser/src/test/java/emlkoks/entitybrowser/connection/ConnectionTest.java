@@ -4,9 +4,10 @@ import com.sun.javafx.collections.ImmutableObservableList;
 import emlkoks.entitybrowser.Main;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-
+import static emlkoks.entitybrowser.session.entity.EntityListTest.TEST_EMPTY_LIB;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.spy;
 
 public class ConnectionTest {
 
@@ -67,17 +68,25 @@ public class ConnectionTest {
     }
 
     @Test
+    public void setEmptyLibraryPath() {
+        var connection = new Connection();
+        assertFalse(connection.setLibraryPath(null));
+        assertFalse(connection.setLibraryPath(""));
+    }
+
+    @Test
     public void setWrongLibraryPath() {
         var connection = new Connection();
         assertFalse(connection.setLibraryPath("libraryPath"));
     }
 
-//    @Test TODO
-//    public void setLibraryPath() throws FileNotFoundException {
-//        var connection = new Connection();
-//        connection.setLibrary("libraryPath");
-//        assertEquals("libraryPath", connection.getLibraryPath());
-//    }
+    @Test
+    public void setLibraryPath() {
+        var connection = new Connection();
+        var testFile = getClass().getClassLoader().getResource(TEST_EMPTY_LIB).getPath();
+        assertTrue(connection.setLibraryPath(testFile));
+        assertEquals(testFile, connection.getLibraryPath());
+    }
 
     @Test
     public void setProvider() {
@@ -95,19 +104,56 @@ public class ConnectionTest {
     }
 
     @Test
-    public void testClone() throws FileNotFoundException {
+    public void testClone() {
         var connection = new Connection();
         connection.setId(9);
         connection.setName("testName");
         connection.setUrl("url");
         connection.setUser("user");
         connection.setPassword("password");
-//        connection.setLibrary("libraryPath");//TODO
+        var testFile = getClass().getClassLoader().getResource(TEST_EMPTY_LIB).getPath();
+        connection.setLibraryPath(testFile);
         connection.setProvider(Provider.Hibernate);
         connection.setProperties(new ImmutableObservableList<>());
         var clonedConection = connection.clone();
 
         assertEquals(connection, clonedConection);
         assertNotSame(connection, clonedConection);
+    }
+
+    @Test
+    public void wrongConnectionTest() {
+        var driver = spy(createH2Driver());
+        doNothing().when(driver).loadDriver();
+        var connection = new Connection();
+        connection.setDriver(driver);
+        connection.setUrl("wrongUrl");
+
+        assertFalse(connection.connectionTest());
+    }
+
+    @Test
+    public void connectionTest() {
+        var driver = spy(createH2Driver());
+        doNothing().when(driver).loadDriver();
+        var connection = createH2Connection();
+        connection.setDriver(driver);
+
+        assertTrue(connection.connectionTest());
+    }
+
+    public static Connection createH2Connection() {
+        var connection = new Connection();
+        connection.setDriver(createH2Driver());
+        connection.setUrl("jdbc:h2:mem:test");
+        connection.getProperties().add(new Property("hibernate.hbm2ddl.auto", "create"));
+        return connection;
+    }
+
+    public static Driver createH2Driver() {
+        var driver = new Driver();
+        driver.setName("H2");
+        driver.setClassName("org.h2.Driver");
+        return driver;
     }
 }
