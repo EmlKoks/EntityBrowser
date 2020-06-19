@@ -1,15 +1,17 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.query.comparator.comparation.Comparation;
+import emlkoks.entitybrowser.query.comparator.ComparationType;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Created by EmlKoks on 19.06.19.
  */
-@Value
+@AllArgsConstructor
+@Getter
 public class FieldFilter {
-    Comparation comparation;
+    ComparationType comparationType;
     FieldProperty fieldProperty;
-    String value;
+    Object value;
 }

@@ -1,6 +1,6 @@
 package emlkoks.entitybrowser.query;
 
-import emlkoks.entitybrowser.query.comparator.AbstractComparator;
+import emlkoks.entitybrowser.query.comparator.Comparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
@@ -52,7 +52,7 @@ public class QueryBuilder {
         if (fieldFilter.getFieldProperty().hasAnnotation(ManyToMany.class)) {
             log.debug("ManyToMany");
         }
-        AbstractComparator comparator = ComparatorFactory.getComparator(fieldFilter.getFieldProperty());
+        Comparator comparator = ComparatorFactory.getComparator(fieldFilter.getFieldProperty());
         predicates.add(comparator.createPredicate(cb, getPath(fieldFilter.getFieldProperty()), fieldFilter));
     }
 
@@ -61,14 +61,8 @@ public class QueryBuilder {
     }
 
 
-    public CriteriaQuery getCriteriaQuery() {
-        addPredicatesToCq();
+    public CriteriaQuery buildCriteriaQuery() {
+        cq.where(predicates.toArray(new Predicate[]{}));
         return cq;
-    }
-
-    private void addPredicatesToCq() {
-        for (Predicate p : predicates) {
-            cq.where(p);
-        }
     }
 }

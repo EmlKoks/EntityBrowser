@@ -1,12 +1,6 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.comparation.EqualComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.LessComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.LessOrEqualComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.MoreComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.MoreOrEqualComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.NotEqualComparation;
 import emlkoks.entitybrowser.view.control.field.NumberTextField;
 import javafx.scene.Node;
 
@@ -17,15 +11,15 @@ import javax.persistence.criteria.Predicate;
 /**
  * Created by EmlKoks on 15.06.19.
  */
-public class NumberComparator extends AbstractComparator<Number> {
+public class NumberComparator extends Comparator {
 
     NumberComparator() {
-        expressions.add(new EqualComparation());
-        expressions.add(new NotEqualComparation());
-        expressions.add(new MoreComparation());
-        expressions.add(new MoreOrEqualComparation());
-        expressions.add(new LessComparation());
-        expressions.add(new LessOrEqualComparation());
+        comparationTypes.add(ComparationType.EQUAL);
+        comparationTypes.add(ComparationType.NOT_EQUAL);
+        comparationTypes.add(ComparationType.MORE);
+        comparationTypes.add(ComparationType.MORE_OR_EQUAL);
+        comparationTypes.add(ComparationType.LESS);
+        comparationTypes.add(ComparationType.LESS_OR_EQUAL);
 //        expressions.add(new BetweenExpression());//Remove?
     }
 
@@ -46,13 +40,13 @@ public class NumberComparator extends AbstractComparator<Number> {
 
     @Override
     public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        switch (fieldFilter.getComparation().getType()) {
+        switch (fieldFilter.getComparationType()) {
             case EQUAL:
                 return cb.equal(attributePath, fieldFilter.getValue());
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             default://TODO implement rest expressions
-                throw new ExpressionNotImplementedException(fieldFilter.getComparation());
+                throw new ComparationTypeNotImplementedException(fieldFilter.getComparationType());
         }
     }
 

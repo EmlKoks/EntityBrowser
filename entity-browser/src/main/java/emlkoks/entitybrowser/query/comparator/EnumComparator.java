@@ -1,8 +1,6 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.comparation.EqualComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.NotEqualComparation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -14,11 +12,11 @@ import javax.persistence.criteria.Predicate;
 /**
  * Created by EmlKoks on 15.06.19.
  */
-public class EnumComparator extends AbstractComparator<Enum> {
+public class EnumComparator extends Comparator {
 
     EnumComparator() {
-        expressions.add(new EqualComparation());
-        expressions.add(new NotEqualComparation());
+        comparationTypes.add(ComparationType.EQUAL);
+        comparationTypes.add(ComparationType.NOT_EQUAL);
     }
 
     @Override
@@ -38,7 +36,7 @@ public class EnumComparator extends AbstractComparator<Enum> {
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path<Enum> attributePath, FieldFilter fieldFilter) {
+    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
         return null;//TODO
     }
 

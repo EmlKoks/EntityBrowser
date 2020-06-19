@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class ComparatorFactory {
-    private static Set<AbstractComparator<?>> comparators = Sets.newHashSet(
+    private static Set<Comparator> comparators = Sets.newHashSet(
         new BooleanComparator(),
         new CharacterComparator(),
         new DateComparator(),
@@ -18,13 +18,9 @@ public class ComparatorFactory {
         new NumberComparator(),
         new StringComparator());
 
-    public AbstractComparator<?> getComparator(FieldProperty fieldProperty) {
-        return getComparator(fieldProperty.getType());
-    }
-
-    private AbstractComparator<?> getComparator(Class<?> clazz) {
+    public Comparator getComparator(FieldProperty fieldProperty) {
         return comparators.stream()
-                .filter(comparator -> comparator.canUseForClass(clazz))
+                .filter(comparator -> comparator.canUseForClass(fieldProperty.getType()))
                 .findFirst()
                 .orElse(null);
     }

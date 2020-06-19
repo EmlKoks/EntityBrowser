@@ -1,13 +1,6 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.comparator.comparation.BetweenComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.EqualComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.LessComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.LessOrEqualComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.MoreComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.MoreOrEqualComparation;
-import emlkoks.entitybrowser.query.comparator.comparation.NotEqualComparation;
 import java.util.Date;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
@@ -19,16 +12,16 @@ import javax.persistence.criteria.Predicate;
 /**
  * Created by EmlKoks on 15.06.19.
  */
-public class DateComparator extends AbstractComparator<Date> {
+public class DateComparator extends Comparator {
 
     DateComparator() {
-        expressions.add(new EqualComparation());
-        expressions.add(new NotEqualComparation());
-        expressions.add(new MoreComparation());
-        expressions.add(new MoreOrEqualComparation());
-        expressions.add(new LessComparation());
-        expressions.add(new LessOrEqualComparation());
-        expressions.add(new BetweenComparation());
+        comparationTypes.add(ComparationType.EQUAL);
+        comparationTypes.add(ComparationType.NOT_EQUAL);
+        comparationTypes.add(ComparationType.MORE);
+        comparationTypes.add(ComparationType.MORE_OR_EQUAL);
+        comparationTypes.add(ComparationType.LESS);
+        comparationTypes.add(ComparationType.LESS_OR_EQUAL);
+        comparationTypes.add(ComparationType.BETWEEN);
     }
 
     @Override

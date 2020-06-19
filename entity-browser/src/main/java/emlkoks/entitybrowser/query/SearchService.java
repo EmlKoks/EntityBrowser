@@ -19,7 +19,7 @@ public class SearchService {
     }
 
     private List find(EntityManager entityManager, QueryBuilder queryBuilder) {
-        return entityManager.createQuery(queryBuilder.getCriteriaQuery())
+        return entityManager.createQuery(queryBuilder.buildCriteriaQuery())
                 .setMaxResults(100)
                 .getResultList();
     }

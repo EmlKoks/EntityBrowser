@@ -6,8 +6,8 @@ import emlkoks.entitybrowser.mocked.MockSession;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.SearchService;
 import emlkoks.entitybrowser.query.SearchResults;
+import emlkoks.entitybrowser.query.comparator.ComparationType;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
-import emlkoks.entitybrowser.query.comparator.comparation.Comparation;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
@@ -100,9 +100,9 @@ public class SearchController {
         for (int i = 0;i < children.size() / NUMBER_OF_CHILDREN_FILTER_GRID;++i) {
             int firstChildInRow = i * NUMBER_OF_CHILDREN_FILTER_GRID;
             FieldProperty fieldProperty = getFieldProperty(children.get(firstChildInRow));
-            Comparation expression = getExpression(children.get(firstChildInRow + 1));
+            ComparationType comparationType = getComparationType(children.get(firstChildInRow + 1));
             String value = getFilterValue(children.get(firstChildInRow + 2));
-            fieldFilterList.add(new FieldFilter(expression, fieldProperty, value));
+            fieldFilterList.add(new FieldFilter(comparationType, fieldProperty, value));
         }
         return fieldFilterList;
     }
@@ -112,9 +112,9 @@ public class SearchController {
         return selectedEntity.getFieldProperty(label.getText());
     }
 
-    private Comparation getExpression(Object obj) {
+    private ComparationType getComparationType(Object obj) {
         ChoiceBox choiceBox = (ChoiceBox) obj;
-        return (Comparation) choiceBox.getValue();
+        return (ComparationType) choiceBox.getValue();
     }
 
     private String getFilterValue(Object obj) {
