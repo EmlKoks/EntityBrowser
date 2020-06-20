@@ -32,15 +32,16 @@ public class EntityListTest {
     }
 
     @Test
-    public void getClassNames() throws LibraryFileNotFoundException {
+    public void getClassesDetails() throws LibraryFileNotFoundException {
         var entityList = new EntityList(testLibFile);
-        assertEquals(2, entityList.getClassNames().size());
+        assertEquals(2, entityList.getClassesDetails().size());
     }
 
     @Test
     public void getClassNamesContainsCorrectnames() throws LibraryFileNotFoundException {
         var entityList = new EntityList(testLibFile);
-        assertTrue(entityList.getClassNames().contains("test.TestEntity"));
+        assertTrue(entityList.getClassesDetails().stream()
+                .anyMatch(classDetails -> "test.TestEntity".equals(classDetails.getFullName())));
     }
 
     @Test

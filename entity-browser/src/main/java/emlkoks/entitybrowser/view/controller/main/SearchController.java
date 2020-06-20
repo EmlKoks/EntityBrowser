@@ -7,6 +7,7 @@ import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.query.SearchResults;
 import emlkoks.entitybrowser.query.SearchService;
 import emlkoks.entitybrowser.query.comparator.ComparationType;
+import emlkoks.entitybrowser.query.comparator.Comparator;
 import emlkoks.entitybrowser.query.comparator.ComparatorFactory;
 import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
@@ -14,6 +15,7 @@ import emlkoks.entitybrowser.session.entity.FieldProperty;
 import emlkoks.entitybrowser.view.dialog.ErrorDialogCreator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -37,8 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 public class SearchController {
     private final static int NUMBER_OF_CHILDREN_FILTER_GRID = 4;
 
-    @FXML private ChoiceBox<String> entities;
-    @FXML private ChoiceBox<String> fields;
+    @FXML private ChoiceBox<ClassDetails> entities;
+    @FXML private ChoiceBox<FieldProperty> fields;
     @FXML private BorderPane filtersPane;
     @FXML private GridPane filtersGrid;
 
@@ -56,9 +58,9 @@ public class SearchController {
         filtersPane.prefWidthProperty().bind(parentPane.widthProperty());
         filtersPane.prefHeightProperty().bind(parentPane.heightProperty());
         entities.valueProperty().addListener((observable, oldValue, newValue) -> {
-            selectedEntity = getSession().getEntity(newValue);
+            selectedEntity = newValue;
             fields.getItems().clear();
-            fields.getItems().addAll(selectedEntity.getFieldsNames());
+            fields.getItems().addAll(selectedEntity.getFields());
             fields.setValue(fields.getItems().get(0));
             filtersGrid.getChildren().clear();
         });
@@ -71,7 +73,7 @@ public class SearchController {
     public void updateSession(Session session) {
         this.session = session;
         searchService = new SearchService(session.getProvider());
-        entities.getItems().addAll(session.getClassNames());
+        entities.getItems().addAll(session.getClasses());
         if (Mode.DEBUG.equals(Main.mode)) {
             entities.setValue(entities.getItems().get(0));
         }
@@ -126,12 +128,27 @@ public class SearchController {
         if (entities.getValue() == null) {
             return;
         }
-        String fieldName = fields.getValue();
-        FieldProperty field = session.getEntity(entities.getValue()).getFieldProperty(fieldName);
-        var comparator = ComparatorFactory.getComparator(field);
-        List<Node> filterRow = comparator.createFilterRow(field);
-        filterRow.add(createDeleteFilter());
+        List<Node> filterRow = createFilterRow(fields.getValue());
         filtersGrid.addRow(filtersGrid.getChildren().size(), filterRow.toArray(new Node[]{}));
+    }
+
+    private List<Node> createFilterRow(FieldProperty field) {
+        var comparator = ComparatorFactory.getComparator(field);
+        ChoiceBox<ComparationType> comparatorChoiceBox = buildComparationChoiceBox(comparator);
+        Node valueField = comparator.createFieldValueField(field.getType());
+        comparatorChoiceBox.valueProperty().addListener((observable, oldValue, newValue) ->
+                valueField.setDisable(newValue.isNull() || newValue.isNotNull())
+        );
+        valueField.setDisable(comparatorChoiceBox.getValue().isNull()
+                || comparatorChoiceBox.getValue().isNotNull());
+        return Arrays.asList(new Label(field.getName()), comparatorChoiceBox, valueField ,createDeleteFilter());
+    }
+
+    private ChoiceBox<ComparationType> buildComparationChoiceBox(Comparator comparator) {
+        ChoiceBox<ComparationType> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll(comparator.getComparationTypes());
+        choiceBox.setValue(choiceBox.getItems().get(0));
+        return choiceBox;
     }
 
     private Label createDeleteFilter() {

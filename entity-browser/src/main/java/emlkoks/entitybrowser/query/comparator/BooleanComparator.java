@@ -27,7 +27,7 @@ public class BooleanComparator extends Comparator {
     }
 
     @Override
-    protected Node createFieldValueField(Class<?> clazz) {
+    public Node createFieldValueField(Class<?> clazz) {
         ToggleGroup toggleGroup = new ToggleGroup();
         RadioButton trueButton = new RadioButton(Main.resources.getString("boolean.true"));
         trueButton.setToggleGroup(toggleGroup);

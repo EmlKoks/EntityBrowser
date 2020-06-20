@@ -59,18 +59,18 @@ public class MainWindowController implements Initializable {
 
 
     //TODO validate in background
-    private static void validateEntities(Session session) {
-        session.getClassNames().stream()
-                .map(clazz -> session.getEntity(clazz))
-                .forEach(entity -> entity.getFields().stream()
-                    .forEach(field -> {
-                        try {
-//                            ComparatorManager.getComparations(field);
-                        } catch (ComparatorNotFoundException e) {
-                            System.out.println(e.getMessage());
-                        }
-                    }));
-    }
+//    private static void validateEntities(Session session) {
+//        session.getClassNames().stream()
+//                .map(clazz -> session.getEntity(clazz))
+//                .forEach(entity -> entity.getFields().stream()
+//                    .forEach(field -> {
+//                        try {
+////                            ComparatorManager.getComparations(field);
+//                        } catch (ComparatorNotFoundException e) {
+//                            System.out.println(e.getMessage());
+//                        }
+//                    }));
+//    }
 
     @FXML
     public void exit() {

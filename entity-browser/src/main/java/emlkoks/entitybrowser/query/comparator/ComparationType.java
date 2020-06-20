@@ -14,4 +14,12 @@ public enum ComparationType {
     BETWEEN,
     IS_NULL,
     IS_NOT_NULL;
+
+    public boolean isNull() {
+        return IS_NULL.equals(this);
+    }
+
+    public boolean isNotNull() {
+        return IS_NOT_NULL.equals(this);
+    }
 }

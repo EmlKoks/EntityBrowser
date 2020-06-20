@@ -4,6 +4,7 @@ import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,10 +26,8 @@ public class EntityList {
         return list;
     }
 
-    public List<String> getClassNames() {
-        ArrayList<String> names = new ArrayList<>();
-        classMap.keySet().forEach(x -> names.add(x));
-        return names;
+    public Collection<ClassDetails> getClassesDetails() {
+        return classMap.values();
     }
 
     public ClassDetails getEntity(String entityName) {

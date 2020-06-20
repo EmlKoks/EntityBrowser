@@ -6,7 +6,8 @@ import emlkoks.entitybrowser.connection.provider.ProviderFactory;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
-import java.util.List;
+
+import java.util.Collection;
 import java.util.Objects;
 
 import lombok.Getter;
@@ -28,8 +29,8 @@ public class Session {
         entityList = new EntityList(connection.getLibrary());
     }
 
-    public List<String> getClassNames() {
-        return entityList.getClassNames();
+    public Collection<ClassDetails> getClasses() {
+        return entityList.getClassesDetails();
     }
 
     public boolean connect() {

@@ -24,7 +24,7 @@ public class CharacterComparator extends Comparator {
     }
 
     @Override
-    protected Node createFieldValueField(Class<?> clazz) {
+    public Node createFieldValueField(Class<?> clazz) {
         return new TextField();
     }
 
