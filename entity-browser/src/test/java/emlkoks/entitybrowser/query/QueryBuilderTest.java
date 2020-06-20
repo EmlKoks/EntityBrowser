@@ -7,15 +7,14 @@ import emlkoks.entitybrowser.query.comparator.ComparationType;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
+import java.util.Arrays;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,8 +38,9 @@ public class QueryBuilderTest {
         @Entity
         class Test {
             @Id
-            Long id;
+            private Long id;
         }
+
         connectproviderWithEntity(Test.class);
         ClassDetails classDetails = new ClassDetails(Test.class);
         QueryBuilder queryBuilder = new QueryBuilder(provider.getCriteriaBuilder(), classDetails, null);
@@ -53,13 +53,15 @@ public class QueryBuilderTest {
         @Entity
         class Test {
             @Id
-            Long id;
+            private Long id;
         }
+
         connectproviderWithEntity(Test.class);
         ClassDetails classDetails = new ClassDetails(Test.class);
         FieldProperty idProperty = classDetails.getFieldProperty("id");
         FieldFilter fieldFilter = new FieldFilter(ComparationType.EQUAL, idProperty, 1);
-        QueryBuilder queryBuilder = new QueryBuilder(provider.getCriteriaBuilder(), classDetails, Arrays.asList(fieldFilter));
+        QueryBuilder queryBuilder =
+                new QueryBuilder(provider.getCriteriaBuilder(), classDetails, Arrays.asList(fieldFilter));
         var criteriaQuery = queryBuilder.buildCriteriaQuery();
         assertEquals(Test.class, criteriaQuery.getResultType());
         assertEquals(1, criteriaQuery.getRestriction().getExpressions().size());
@@ -72,8 +74,9 @@ public class QueryBuilderTest {
         @Entity
         class Test {
             @Id
-            Long id;
+            private Long id;
         }
+
         connectproviderWithEntity(Test.class);
         ClassDetails classDetails = new ClassDetails(Test.class);
         FieldProperty idProperty = classDetails.getFieldProperty("id");

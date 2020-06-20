@@ -1,14 +1,15 @@
 package emlkoks.entitybrowser.session.entity;
 
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
-import org.junit.Test;
 import java.io.File;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class EntityLibraryLoaderTest {
-    public final static String TEST_MODULE = "test-library";
-    public final static String TEST_JAR_PATH = ".." + File.separatorChar + TEST_MODULE + File.separatorChar + "target" + File.separatorChar + TEST_MODULE + ".jar";
+    public static final String TEST_MODULE = "test-library";
+    public static final String TEST_JAR_PATH = ".." + File.separatorChar + TEST_MODULE + File.separatorChar
+            + "target" + File.separatorChar + TEST_MODULE + ".jar";
 
     @Test(expected = LibraryFileNotFoundException.class)
     public void createWithNull() throws LibraryFileNotFoundException {

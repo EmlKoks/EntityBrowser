@@ -1,18 +1,14 @@
 package emlkoks.entitybrowser.view.controller.main;
 
-import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.view.ViewFile;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import static org.junit.Assert.*;
 
 public class MainWindowControllerTest  extends ApplicationTest {
     private MainWindowController controller;

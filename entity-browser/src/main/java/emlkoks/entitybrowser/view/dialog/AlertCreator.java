@@ -1,11 +1,10 @@
 package emlkoks.entitybrowser.view.dialog;
 
-import static javafx.scene.control.Alert.AlertType;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 
+import static javafx.scene.control.Alert.AlertType;
 
 /**
  * Created by EmlKoks on 29.05.19.

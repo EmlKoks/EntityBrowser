@@ -2,14 +2,14 @@ package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.Main;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class ComparatorFactoryTest {
 
@@ -21,9 +21,10 @@ public class ComparatorFactoryTest {
     @Test
     public void getBooleanComparator() {
         class Test {
-            Boolean bigBoolean;
-            boolean smallBoolean;
+            private Boolean bigBoolean;
+            private boolean smallBoolean;
         }
+
         var classDetails = new ClassDetails(Test.class);
         assertThat(ComparatorFactory.getComparator(classDetails.getFieldProperty("bigBoolean")),
                 instanceOf(BooleanComparator.class));
@@ -34,9 +35,10 @@ public class ComparatorFactoryTest {
     @Test
     public void getCharacterComparator() {
         class Test {
-            Character bigCharacter;
-            char smallChar;
+            private Character bigCharacter;
+            private char smallChar;
         }
+
         var classDetails = new ClassDetails(Test.class);
         assertThat(ComparatorFactory.getComparator(classDetails.getFieldProperty("bigCharacter")),
                 instanceOf(CharacterComparator.class));
@@ -47,8 +49,9 @@ public class ComparatorFactoryTest {
     @Test
     public void getDateComparator() {
         class Test {
-            Date date;
+            private Date date;
         }
+
         var classDetails = new ClassDetails(Test.class);
         assertThat(ComparatorFactory.getComparator(classDetails.getFieldProperty("date")),
                 instanceOf(DateComparator.class));
@@ -61,8 +64,9 @@ public class ComparatorFactoryTest {
     @Test
     public void getEnumComparator() {
         class Test {
-            TestEnum testEnum;
+            private TestEnum testEnum;
         }
+
         var classDetails = new ClassDetails(Test.class);
         assertThat(ComparatorFactory.getComparator(classDetails.getFieldProperty("testEnum")),
                 instanceOf(EnumComparator.class));
@@ -71,17 +75,18 @@ public class ComparatorFactoryTest {
     @Test
     public void getNumberComparator() {
         class Test {
-            Integer bigInteger;
-            Float bigFloat;
-            Long bigLong;
-            Double bigDouble;
-            Short bigShort;
-            int smallInteger;
-            float smallFloat;
-            long smallLong;
-            double smallDouble;
-            short smallShort;
+            private Integer bigInteger;
+            private Float bigFloat;
+            private Long bigLong;
+            private Double bigDouble;
+            private Short bigShort;
+            private int smallInteger;
+            private float smallFloat;
+            private long smallLong;
+            private double smallDouble;
+            private short smallShort;
         }
+
         var classDetails = new ClassDetails(Test.class);
         assertThat(ComparatorFactory.getComparator(classDetails.getFieldProperty("bigInteger")),
                 instanceOf(NumberComparator.class));
@@ -109,8 +114,9 @@ public class ComparatorFactoryTest {
     @Test
     public void getStringComparator() {
         class Test {
-            String string;
+            private String string;
         }
+
         var classDetails = new ClassDetails(Test.class);
         assertThat(ComparatorFactory.getComparator(classDetails.getFieldProperty("string")),
                 instanceOf(StringComparator.class));

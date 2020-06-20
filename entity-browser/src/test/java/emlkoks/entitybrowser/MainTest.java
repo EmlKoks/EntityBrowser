@@ -1,23 +1,18 @@
 package emlkoks.entitybrowser;
 
 import emlkoks.entitybrowser.view.ViewFile;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.junit.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit.ApplicationTest;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import static org.testfx.matcher.control.LabeledMatchers.hasText;
-
-public class MainTest extends ApplicationTest{
+public class MainTest extends ApplicationTest {
 
     @Override
     public void start(final Stage stage) throws Exception {
@@ -38,7 +33,7 @@ public class MainTest extends ApplicationTest{
 
     private DialogPane getTopDialog() {
         List<Window> windows = robotContext().getWindowFinder().listWindows();
-        return (DialogPane) windows.get(windows.size()-1).getScene().getRoot();
+        return (DialogPane) windows.get(windows.size() - 1).getScene().getRoot();
     }
 
 //    @Test

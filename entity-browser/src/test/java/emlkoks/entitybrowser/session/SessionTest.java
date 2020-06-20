@@ -5,7 +5,8 @@ import emlkoks.entitybrowser.connection.provider.HibernateProviderTest;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class SessionTest {
 

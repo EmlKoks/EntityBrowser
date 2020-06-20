@@ -1,12 +1,13 @@
 package emlkoks.entitybrowser.connection;
 
 import emlkoks.entitybrowser.common.Resources;
-import org.junit.Test;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class DriverTest {
 

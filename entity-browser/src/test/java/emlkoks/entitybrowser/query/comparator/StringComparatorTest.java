@@ -5,24 +5,26 @@ import emlkoks.entitybrowser.connection.provider.HibernateProvider;
 import emlkoks.entitybrowser.connection.provider.JpaProvider;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.session.entity.EntityList;
-import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
-import org.hibernate.jpa.criteria.predicate.LikePredicate;
-import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.criteria.Path;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.criteria.Path;
+import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
+import org.hibernate.jpa.criteria.predicate.LikePredicate;
+import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,8 +36,8 @@ public class StringComparatorTest {
     @Entity
     class TestEntity {
         @Id
-        Long id;
-        String testString;
+        private Long id;
+        private String testString;
     }
 
     @Before
@@ -92,14 +94,16 @@ public class StringComparatorTest {
     @Test
     public void createEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.EQUAL, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.EQUAL, predicate.getComparisonOperator());
     }
 
     @Test
     public void createNotEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.NOT_EQUAL, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.NOT_EQUAL, predicate.getComparisonOperator());
     }
 

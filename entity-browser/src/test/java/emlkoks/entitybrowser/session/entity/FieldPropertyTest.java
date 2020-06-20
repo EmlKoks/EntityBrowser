@@ -1,10 +1,13 @@
 package emlkoks.entitybrowser.session.entity;
 
-import org.junit.Test;
-import javax.persistence.Id;
 import java.lang.reflect.Field;
+import javax.persistence.Id;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class FieldPropertyTest {
 
@@ -27,6 +30,7 @@ public class FieldPropertyTest {
         class Test {
             public String testField;
         }
+
         Test test = new Test();
         test.testField = "test";
         EntityWrapper entityWrapper = new EntityWrapper(test);
@@ -41,6 +45,7 @@ public class FieldPropertyTest {
         class Test {
             public String testField;
         }
+
         EntityWrapper entityWrapper = new EntityWrapper(null);
         Field field = Test.class.getField("testField");
         FieldProperty fieldProperty = new FieldProperty(field);
@@ -53,6 +58,7 @@ public class FieldPropertyTest {
         class Test {
             public String testField;
         }
+
         Field field = Test.class.getField("testField");
         FieldProperty fieldProperty = new FieldProperty(field);
 

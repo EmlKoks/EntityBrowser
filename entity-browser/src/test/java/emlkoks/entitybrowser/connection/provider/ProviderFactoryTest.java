@@ -5,8 +5,8 @@ import emlkoks.entitybrowser.connection.Driver;
 import emlkoks.entitybrowser.connection.Provider;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertThat;
 
 public class ProviderFactoryTest {
 

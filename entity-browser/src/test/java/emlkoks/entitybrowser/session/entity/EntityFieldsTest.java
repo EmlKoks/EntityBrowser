@@ -1,10 +1,10 @@
 package emlkoks.entitybrowser.session.entity;
 
 import emlkoks.entitybrowser.session.exception.ClassCannotBeNullException;
-import org.junit.Test;
 import javax.persistence.Transient;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class EntityFieldsTest {
 
@@ -16,6 +16,7 @@ public class EntityFieldsTest {
     @Test
     public void correctGetFields() {
         class Test { }
+
         EntityFields entityFields = new EntityFields(new ClassDetails(Test.class));
         assertTrue(entityFields.get().isEmpty());
     }
@@ -28,6 +29,7 @@ public class EntityFieldsTest {
             private String transientField;
             private String serialVersionUID;
         }
+
         EntityFields entityFields = new EntityFields(new ClassDetails(Test.class));
         assertTrue(entityFields.get().isEmpty());
     }

@@ -1,10 +1,11 @@
 package emlkoks.entitybrowser.connection;
 
+import java.util.Arrays;
 import org.junit.Test;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 public class DriverListTest {
 
@@ -48,6 +49,7 @@ public class DriverListTest {
 
         assertEquals(Arrays.asList("testDriver", "testDriver2"), driverList.getDriverNames());
     }
+
     @Test
     public void getWrongDriverNames() {
         var driverList = new DriverList();
@@ -62,7 +64,7 @@ public class DriverListTest {
         assertNotEquals(Arrays.asList("testDriverNotInList", "testDriverNotInList2"), driverList.getDriverNames());
     }
 
-    @Test
-    public void add() {
-    }
+//    @Test
+//    public void add() {
+//    }
 }

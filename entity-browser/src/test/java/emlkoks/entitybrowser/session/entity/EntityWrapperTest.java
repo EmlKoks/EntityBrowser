@@ -1,17 +1,20 @@
 package emlkoks.entitybrowser.session.entity;
 
+import java.util.ArrayList;
+import javax.persistence.Id;
 import org.junit.Test;
 
-import javax.persistence.Id;
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class EntityWrapperTest {
 
     @Test
     public void createByAllArgsConstructor() {
         class Test {}
+
         ClassDetails details = new ClassDetails(Test.class);
         EntityWrapper entityWrapper = new EntityWrapper(details, new Test());
         assertEquals(details, entityWrapper.getClassDetails());
@@ -53,17 +56,20 @@ public class EntityWrapperTest {
             @Id
             private Long id;
         }
+
         Test test = new Test();
         EntityWrapper entityWrapper = new EntityWrapper(test);
         System.out.println(entityWrapper.createDetailsTitle());
         assertEquals("Test(Id: )", entityWrapper.createDetailsTitle());
     }
+
     @Test
     public void createDetailsTitleForNonNullId() {
         class Test {
             @Id
             private Long id;
         }
+
         Test test = new Test();
         test.id = 4L;
         EntityWrapper entityWrapper = new EntityWrapper(test);

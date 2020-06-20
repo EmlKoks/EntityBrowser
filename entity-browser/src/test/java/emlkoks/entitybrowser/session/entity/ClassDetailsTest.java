@@ -1,17 +1,20 @@
 package emlkoks.entitybrowser.session.entity;
 
-import org.junit.Test;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ClassDetailsTest {
 
@@ -61,7 +64,7 @@ public class ClassDetailsTest {
         assertEquals(fields, filterJacocoFields(classDetails.getFieldsNames()));
     }
 
-    private Set<String> filterJacocoFields(Set<String>fieldNames) {
+    private Set<String> filterJacocoFields(Set<String> fieldNames) {
         return fieldNames.stream()
                 .filter(name -> !"$jacocoData".equals(name))//Added by JaCoco
                 .collect(Collectors.toSet());
@@ -72,6 +75,7 @@ public class ClassDetailsTest {
         class Test {
             private String field;
         }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
 
         assertEquals("field", classDetails.getFieldProperty("field").getName());
@@ -82,6 +86,7 @@ public class ClassDetailsTest {
         class Test {
             private String field;
         }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
 
         assertNotEquals("wrong", classDetails.getFieldProperty("field").getName());
@@ -92,6 +97,7 @@ public class ClassDetailsTest {
         class Test {
             private String field;
         }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
 
         classDetails.getFieldProperty(null);
@@ -102,6 +108,7 @@ public class ClassDetailsTest {
         class Test {
             private String field;
         }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
 
         classDetails.getFieldProperty("");
@@ -110,6 +117,7 @@ public class ClassDetailsTest {
     @Test
     public void getFieldPropertyFromEmptyClass() {
         class Test { }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
 
         assertNull(classDetails.getFieldProperty("test"));
@@ -121,6 +129,7 @@ public class ClassDetailsTest {
             @Id
             public Long id;
         }
+
         Test test = new Test();
         test.id = 1L;
         ClassDetails classDetails = new ClassDetails(Test.class);
@@ -133,6 +142,7 @@ public class ClassDetailsTest {
             @Id
             public Long id;
         }
+
         Test test = new Test();
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertNull(classDetails.getIdValue(new EntityWrapper(test)));
@@ -144,6 +154,7 @@ public class ClassDetailsTest {
             @Id
             public Long id;
         }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertNull(classDetails.getIdValue(new EntityWrapper(null)));
     }
@@ -151,7 +162,9 @@ public class ClassDetailsTest {
     @Test
     public void getSuperEntity() {
         class TestA {}
+
         class TestB extends TestA { }
+
         ClassDetails classDetails = new ClassDetails(TestB.class);
         assertEquals(TestA.class, classDetails.getSuperEntity().get().getClazz());
     }
@@ -159,6 +172,7 @@ public class ClassDetailsTest {
     @Test
     public void getEnptySuperEntity() {
         class TestA {}
+
         ClassDetails classDetails = new ClassDetails(TestA.class);
         assertTrue(classDetails.getSuperEntity().isEmpty());
     }
@@ -189,6 +203,7 @@ public class ClassDetailsTest {
     @Test
     public void isNotSimplyType() {
         class Test { }
+
         assertFalse(new ClassDetails(Date.class).isSimplyType());
         assertFalse(new ClassDetails(List.class).isSimplyType());
         assertFalse(new ClassDetails(Test.class).isSimplyType());
@@ -218,6 +233,7 @@ public class ClassDetailsTest {
     @Test
     public void getEmptyFields() {
         class Test { }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertTrue(classDetails.getFields().isEmpty());
     }
@@ -230,6 +246,7 @@ public class ClassDetailsTest {
             private String test3;
             private String test4;
         }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertEquals(4, classDetails.getFields().size());
     }
@@ -238,6 +255,7 @@ public class ClassDetailsTest {
     public void isEntity() {
         @Entity
         class Test { }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertTrue(classDetails.isEntity());
     }
@@ -245,6 +263,7 @@ public class ClassDetailsTest {
     @Test
     public void isNotEntity() {
         class Test { }
+
         ClassDetails classDetails = new ClassDetails(Test.class);
         assertFalse(classDetails.isEntity());
     }

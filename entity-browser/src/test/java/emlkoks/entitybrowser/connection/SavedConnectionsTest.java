@@ -1,13 +1,15 @@
 package emlkoks.entitybrowser.connection;
 
+import java.util.Arrays;
+import java.util.List;
 import javafx.collections.FXCollections;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class SavedConnectionsTest {
     private SavedConnections savedConnections;
@@ -67,7 +69,7 @@ public class SavedConnectionsTest {
     @Test
     public void removeNotExistingConnection() {
         var connection = savedConnections.newConnection();
-        assertFalse(savedConnections.remove(connection.getId() +1 ));
+        assertFalse(savedConnections.remove(connection.getId() + 1));
     }
 
     @Test

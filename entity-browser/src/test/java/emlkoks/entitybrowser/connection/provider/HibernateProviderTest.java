@@ -9,13 +9,13 @@ import emlkoks.entitybrowser.session.entity.EntityLibraryLoaderTest;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import emlkoks.entitybrowser.session.entity.EntityListTest;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
+import java.io.File;
+import java.net.URISyntaxException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.net.URISyntaxException;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class HibernateProviderTest {
     private File testLibFile;

@@ -62,7 +62,7 @@ public abstract class Comparator {
             default:
                 return createCustomPredicate(cb, attributePath, fieldFilter);
         }
-    };
+    }
 
     protected abstract Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter);
 }

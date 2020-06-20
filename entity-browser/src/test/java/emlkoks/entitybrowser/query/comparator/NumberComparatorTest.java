@@ -5,24 +5,26 @@ import emlkoks.entitybrowser.connection.provider.HibernateProvider;
 import emlkoks.entitybrowser.connection.provider.JpaProvider;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.session.entity.EntityList;
-import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
-import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.criteria.Path;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.criteria.Path;
+import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
+import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,7 +36,7 @@ public class NumberComparatorTest {
     @Entity
     class TestEntity {
         @Id
-        Long id;
+        private Long id;
     }
 
     @Before
@@ -90,14 +92,16 @@ public class NumberComparatorTest {
     @Test
     public void createEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.EQUAL, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.EQUAL, predicate.getComparisonOperator());
     }
 
     @Test
     public void createNotEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.NOT_EQUAL, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.NOT_EQUAL, predicate.getComparisonOperator());
     }
 
@@ -105,7 +109,8 @@ public class NumberComparatorTest {
     @Test
     public void createGreaterPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.GREATER_THAN, predicate.getComparisonOperator());
     }
 
@@ -113,7 +118,8 @@ public class NumberComparatorTest {
     @Test
     public void createGreaterOrEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.GREATER_THAN_OR_EQUAL, predicate.getComparisonOperator());
     }
 
@@ -121,7 +127,8 @@ public class NumberComparatorTest {
     @Test
     public void createLessPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.LESS, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.LESS_THAN, predicate.getComparisonOperator());
     }
 
@@ -129,7 +136,8 @@ public class NumberComparatorTest {
     @Test
     public void createLessOrEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.LESS_OR_EQUAL, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        var predicate =
+                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.LESS_THAN_OR_EQUAL, predicate.getComparisonOperator());
     }
 

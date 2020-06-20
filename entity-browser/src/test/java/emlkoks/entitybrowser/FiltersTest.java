@@ -5,15 +5,13 @@ import emlkoks.entitybrowser.session.Session;
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
 import emlkoks.entitybrowser.view.ViewFile;
 import emlkoks.entitybrowser.view.controller.main.MainWindowController;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class FiltersTest extends ApplicationTest {
     private MainWindowController mainWindowController;

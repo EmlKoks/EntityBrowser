@@ -1,13 +1,15 @@
 package emlkoks.entitybrowser.session.entity;
 
 import emlkoks.entitybrowser.session.exception.LibraryFileNotFoundException;
+import java.io.File;
+import java.net.URISyntaxException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.net.URISyntaxException;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class EntityListTest {
     public static String TEST_EMPTY_LIB = "testLibWithoutEntities.jar";
