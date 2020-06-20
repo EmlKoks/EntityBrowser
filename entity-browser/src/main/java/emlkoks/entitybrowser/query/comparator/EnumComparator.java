@@ -36,7 +36,7 @@ public class EnumComparator extends Comparator {
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+    protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
         return null;//TODO
     }
 

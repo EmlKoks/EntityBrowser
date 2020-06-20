@@ -51,6 +51,9 @@ public abstract class JpaProvider {
 
     public EntityManager getEntityManager() {
         if (Objects.isNull(entityManager)) {
+            if (Objects.isNull(entityManagerFactory)) {
+                throw new ProviderNotConnectedException();
+            }
             entityManager = entityManagerFactory.createEntityManager();
         }
         return entityManager;

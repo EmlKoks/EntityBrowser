@@ -38,7 +38,14 @@ public class BooleanComparator extends Comparator {
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        return null;//TODO
+    protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+        switch (fieldFilter.getComparationType()) {
+            case EQUAL:
+                return cb.equal(attributePath, fieldFilter.getValue());
+            case NOT_EQUAL:
+                return cb.notEqual(attributePath, fieldFilter.getValue());
+            default:
+                throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
+        }
     }
 }

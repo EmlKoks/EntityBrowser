@@ -30,7 +30,7 @@ public class StringComparator extends Comparator {
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+    protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
         switch (fieldFilter.getComparationType()) {
             case CONTAINS:
                 String value = "%" + fieldFilter.getValue() + "%";
@@ -40,7 +40,7 @@ public class StringComparator extends Comparator {
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             default:
-                throw new ComparationTypeNotImplementedException(fieldFilter.getComparationType());
+                throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
         }
     }
 }

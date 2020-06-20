@@ -16,8 +16,8 @@ public class NumberComparator extends Comparator {
     NumberComparator() {
         comparationTypes.add(ComparationType.EQUAL);
         comparationTypes.add(ComparationType.NOT_EQUAL);
-        comparationTypes.add(ComparationType.MORE);
-        comparationTypes.add(ComparationType.MORE_OR_EQUAL);
+        comparationTypes.add(ComparationType.GREATER);
+        comparationTypes.add(ComparationType.GREATER_OR_EQUAL);
         comparationTypes.add(ComparationType.LESS);
         comparationTypes.add(ComparationType.LESS_OR_EQUAL);
 //        expressions.add(new BetweenExpression());//Remove?
@@ -39,14 +39,22 @@ public class NumberComparator extends Comparator {
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+    protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
         switch (fieldFilter.getComparationType()) {
             case EQUAL:
                 return cb.equal(attributePath, fieldFilter.getValue());
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
-            default://TODO implement rest expressions
-                throw new ComparationTypeNotImplementedException(fieldFilter.getComparationType());
+            case GREATER:
+                //TODO
+            case GREATER_OR_EQUAL:
+                //TODO
+            case LESS:
+                //TODO
+            case LESS_OR_EQUAL:
+                //TODO
+            default:
+                throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
         }
     }
 

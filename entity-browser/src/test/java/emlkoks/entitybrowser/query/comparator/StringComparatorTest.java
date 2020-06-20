@@ -6,9 +6,9 @@ import emlkoks.entitybrowser.connection.provider.JpaProvider;
 import emlkoks.entitybrowser.query.FieldFilter;
 import emlkoks.entitybrowser.session.entity.EntityList;
 import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
+import org.hibernate.jpa.criteria.predicate.LikePredicate;
 import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.Entity;
@@ -26,8 +26,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class NumberComparatorTest {
-    private Comparator comparator = new NumberComparator();
+public class StringComparatorTest {
+    private Comparator comparator = new StringComparator();
     private JpaProvider provider;
     private Path fieldPath;
 
@@ -35,6 +35,7 @@ public class NumberComparatorTest {
     class TestEntity {
         @Id
         Long id;
+        String testString;
     }
 
     @Before
@@ -44,34 +45,28 @@ public class NumberComparatorTest {
         when(entityList.getClasses()).thenReturn(Arrays.asList(TestEntity.class));
         when(entityList.hasClasses()).thenReturn(true);
         provider.connect(entityList);
-        fieldPath = UtilClass.buildPath(provider.getCriteriaBuilder(), TestEntity.class, "id");
+        fieldPath = UtilClass.buildPath(provider.getCriteriaBuilder(), TestEntity.class, "testString");
     }
-
 
     @Test
     public void canUseForClass() {
-        assertTrue(comparator.canUseForClass(int.class));
-        assertTrue(comparator.canUseForClass(float.class));
-        assertTrue(comparator.canUseForClass(long.class));
-        assertTrue(comparator.canUseForClass(double.class));
-        assertTrue(comparator.canUseForClass(short.class));
-        assertTrue(comparator.canUseForClass(Integer.class));
-        assertTrue(comparator.canUseForClass(Float.class));
-        assertTrue(comparator.canUseForClass(Long.class));
-        assertTrue(comparator.canUseForClass(Double.class));
-        assertTrue(comparator.canUseForClass(Short.class));
-        assertTrue(comparator.canUseForClass(BigInteger.class));
-        assertTrue(comparator.canUseForClass(BigDecimal.class));
+        assertTrue(comparator.canUseForClass(String.class));
     }
 
     @Test
     public void canNotUseForClass() {
         assertFalse(comparator.canUseForClass(Date.class));
-        assertFalse(comparator.canUseForClass(Boolean.class));
-        assertFalse(comparator.canUseForClass(String.class));
         assertFalse(comparator.canUseForClass(List.class));
         assertFalse(comparator.canUseForClass(Set.class));
+        assertFalse(comparator.canUseForClass(Integer.class));
+        assertFalse(comparator.canUseForClass(Float.class));
+        assertFalse(comparator.canUseForClass(Long.class));
+        assertFalse(comparator.canUseForClass(Double.class));
+        assertFalse(comparator.canUseForClass(Short.class));
+        assertFalse(comparator.canUseForClass(BigInteger.class));
+        assertFalse(comparator.canUseForClass(BigDecimal.class));
     }
+
 
     @Test
     public void createNullPredicate() {
@@ -88,6 +83,13 @@ public class NumberComparatorTest {
     }
 
     @Test
+    public void createContainsPredicate() {
+        var fieldFilter = new FieldFilter(ComparationType.CONTAINS, null, null);
+        var predicate = comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        assertThat(predicate, instanceOf(LikePredicate.class));
+    }
+
+    @Test
     public void createEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.EQUAL, null, null);
         var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
@@ -101,47 +103,33 @@ public class NumberComparatorTest {
         assertEquals(ComparisonPredicate.ComparisonOperator.NOT_EQUAL, predicate.getComparisonOperator());
     }
 
-    @Ignore("TODO")
-    @Test
-    public void createGreaterPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
-        assertEquals(ComparisonPredicate.ComparisonOperator.GREATER_THAN, predicate.getComparisonOperator());
-    }
-
-    @Ignore("TODO")
-    @Test
-    public void createGreaterOrEqualPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
-        assertEquals(ComparisonPredicate.ComparisonOperator.GREATER_THAN_OR_EQUAL, predicate.getComparisonOperator());
-    }
-
-    @Ignore("TODO")
-    @Test
-    public void createLessPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.LESS, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
-        assertEquals(ComparisonPredicate.ComparisonOperator.LESS_THAN, predicate.getComparisonOperator());
-    }
-
-    @Ignore("TODO")
-    @Test
-    public void createLessOrEqualPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.LESS_OR_EQUAL, null, null);
-        var predicate = (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
-        assertEquals(ComparisonPredicate.ComparisonOperator.LESS_THAN_OR_EQUAL, predicate.getComparisonOperator());
-    }
-
     @Test(expected = ComparationTypeNotAllowedException.class)
-    public void createWrongPredicateForContains() {
-        var fieldFilter = new FieldFilter(ComparationType.CONTAINS, null, null);
+    public void createWrongPredicateForBetween() {
+        var fieldFilter = new FieldFilter(ComparationType.BETWEEN, null, null);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 
     @Test(expected = ComparationTypeNotAllowedException.class)
-    public void createWrongPredicateForBetween() {
-        var fieldFilter = new FieldFilter(ComparationType.BETWEEN, null, null);
+    public void createWrongPredicateForGreater() {
+        var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
+        comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+    }
+
+    @Test(expected = ComparationTypeNotAllowedException.class)
+    public void createWrongPredicateForLess() {
+        var fieldFilter = new FieldFilter(ComparationType.LESS, null, null);
+        comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+    }
+
+    @Test(expected = ComparationTypeNotAllowedException.class)
+    public void createWrongPredicateForGreaterOrEqual() {
+        var fieldFilter = new FieldFilter(ComparationType.GREATER_OR_EQUAL, null, null);
+        comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+    }
+
+    @Test(expected = ComparationTypeNotAllowedException.class)
+    public void createWrongPredicateForLessOrEqual() {
+        var fieldFilter = new FieldFilter(ComparationType.LESS_OR_EQUAL, null, null);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 }

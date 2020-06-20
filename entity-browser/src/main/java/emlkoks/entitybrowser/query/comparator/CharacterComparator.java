@@ -29,14 +29,14 @@ public class CharacterComparator extends Comparator {
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+    protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
         switch (fieldFilter.getComparationType()) {
             case EQUAL:
                 return cb.equal(attributePath, fieldFilter.getValue());
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             default:
-                throw new ComparationTypeNotImplementedException(fieldFilter.getComparationType());
+                throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
         }
     }
 }

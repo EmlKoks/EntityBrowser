@@ -17,8 +17,8 @@ public class DateComparator extends Comparator {
     DateComparator() {
         comparationTypes.add(ComparationType.EQUAL);
         comparationTypes.add(ComparationType.NOT_EQUAL);
-        comparationTypes.add(ComparationType.MORE);
-        comparationTypes.add(ComparationType.MORE_OR_EQUAL);
+        comparationTypes.add(ComparationType.GREATER);
+        comparationTypes.add(ComparationType.GREATER_OR_EQUAL);
         comparationTypes.add(ComparationType.LESS);
         comparationTypes.add(ComparationType.LESS_OR_EQUAL);
         comparationTypes.add(ComparationType.BETWEEN);
@@ -35,7 +35,7 @@ public class DateComparator extends Comparator {
     }
 
     @Override
-    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+    protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
         return null;//TODO
     }
 }

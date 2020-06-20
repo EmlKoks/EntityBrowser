@@ -22,10 +22,6 @@ public abstract class Comparator {
         comparationTypes.add(ComparationType.IS_NULL);
     }
 
-    public ComparationType[] getComparationTypes() {
-        return comparationTypes.toArray(new ComparationType[]{});
-    }
-
     public List<Node> createFilterRow(FieldProperty field) {
         ChoiceBox<ComparationType> comparatorChoiceBox = createComparationTypeChoiceBox();
         Node valueField = createFieldValueField(field.getType());
@@ -34,7 +30,7 @@ public abstract class Comparator {
         );
         valueField.setDisable(isNull(comparatorChoiceBox.getValue())
                 || isNotNull(comparatorChoiceBox.getValue()));
-        return new ArrayList<>(Arrays.asList(new Label(field.getName()), comparatorChoiceBox, valueField));
+        return Arrays.asList(new Label(field.getName()), comparatorChoiceBox, valueField);
     }
 
     private boolean isNull(ComparationType comparationType) {
@@ -57,5 +53,16 @@ public abstract class Comparator {
 
     protected abstract Node createFieldValueField(Class<?> clazz);
 
-    public abstract Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter);
+    public Predicate createPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
+        switch (fieldFilter.getComparationType()) {
+            case IS_NULL:
+                return cb.isNull(attributePath);
+            case IS_NOT_NULL:
+                return cb.isNotNull(attributePath);
+            default:
+                return createCustomPredicate(cb, attributePath, fieldFilter);
+        }
+    };
+
+    protected abstract Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter);
 }
