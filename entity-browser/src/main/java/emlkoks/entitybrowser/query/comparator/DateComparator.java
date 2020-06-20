@@ -26,7 +26,7 @@ public class DateComparator extends Comparator {
 
     @Override
     public boolean canUseForClass(Class<?> clazz) {
-        return Date.class.isAssignableFrom(clazz);
+        return Date.class.isAssignableFrom(clazz); //TODO add other data types like DataTime LocalDataTime
     }
 
     @Override
@@ -36,6 +36,23 @@ public class DateComparator extends Comparator {
 
     @Override
     protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        return null;//TODO
+        switch (fieldFilter.getComparationType()) {
+            case EQUAL:
+                return cb.equal(attributePath, fieldFilter.getValue());
+            case NOT_EQUAL:
+                return cb.notEqual(attributePath, fieldFilter.getValue());
+            case GREATER:
+                //TODO
+            case GREATER_OR_EQUAL:
+                //TODO
+            case LESS:
+                //TODO
+            case LESS_OR_EQUAL:
+                //TODO
+            case BETWEEN:
+                //TODO
+            default:
+                throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
+        }
     }
 }

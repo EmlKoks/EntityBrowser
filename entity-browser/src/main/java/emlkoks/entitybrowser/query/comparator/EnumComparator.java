@@ -37,8 +37,13 @@ public class EnumComparator extends Comparator {
 
     @Override
     protected Predicate createCustomPredicate(CriteriaBuilder cb, Path attributePath, FieldFilter fieldFilter) {
-        return null;//TODO
+        switch (fieldFilter.getComparationType()) {
+            case EQUAL:
+                return cb.equal(attributePath, fieldFilter.getValue());
+            case NOT_EQUAL:
+                return cb.notEqual(attributePath, fieldFilter.getValue());
+            default:
+                throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
+        }
     }
-
-
 }

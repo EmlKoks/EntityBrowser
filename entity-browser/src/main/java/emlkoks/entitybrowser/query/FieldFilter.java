@@ -11,7 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class FieldFilter {
-    ComparationType comparationType;
-    FieldProperty fieldProperty;
-    Object value;
+    private ComparationType comparationType;
+    private FieldProperty fieldProperty;
+    private Object value;
 }
