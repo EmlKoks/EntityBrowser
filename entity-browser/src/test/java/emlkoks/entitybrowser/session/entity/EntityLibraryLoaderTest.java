@@ -28,6 +28,6 @@ public class EntityLibraryLoaderTest {
         classes.stream()
                 .map(ClassDetails::getFullName)
                 .forEach(System.out::println);
-        assertEquals(2, classes.size());
+        assertEquals(7, classes.size());
     }
 }

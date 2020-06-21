@@ -1,54 +1,37 @@
 package emlkoks.entitybrowser.query.comparator;
 
-import emlkoks.entitybrowser.connection.ConnectionTest;
-import emlkoks.entitybrowser.connection.provider.HibernateProvider;
 import emlkoks.entitybrowser.connection.provider.JpaProvider;
+import emlkoks.entitybrowser.connection.provider.TestProvider;
 import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.session.entity.EntityList;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.criteria.Path;
 import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
 import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import test.EntityWithInteger;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class NumberComparatorTest {
     private Comparator comparator = new NumberComparator();
     private JpaProvider provider;
     private Path fieldPath;
 
-    @Entity
-    class TestEntity {
-        @Id
-        private Long id;
-    }
-
     @Before
     public void init() {
-        provider = new HibernateProvider(ConnectionTest.createH2Connection());
-        var entityList = mock(EntityList.class);
-        when(entityList.getClasses()).thenReturn(Arrays.asList(TestEntity.class));
-        when(entityList.hasClasses()).thenReturn(true);
-        provider.connect(entityList);
-        fieldPath = UtilClass.buildPath(provider.getCriteriaBuilder(), TestEntity.class, "id");
+        provider = new TestProvider(EntityWithInteger.class).getProvider();
+        fieldPath = UtilClass.buildPath(provider.getCriteriaBuilder(), EntityWithInteger.class, "testInteger");
     }
-
 
     @Test
     public void canUseForClass() {

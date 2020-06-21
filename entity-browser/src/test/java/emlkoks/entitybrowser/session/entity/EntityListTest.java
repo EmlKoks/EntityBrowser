@@ -28,26 +28,26 @@ public class EntityListTest {
     @Test
     public void getClasses() throws LibraryFileNotFoundException {
         var entityList = new EntityList(testLibFile);
-        assertEquals(2, entityList.getClasses().size());
+        assertEquals(7, entityList.getClasses().size());
     }
 
     @Test
     public void getClassesDetails() throws LibraryFileNotFoundException {
         var entityList = new EntityList(testLibFile);
-        assertEquals(2, entityList.getClassesDetails().size());
+        assertEquals(7, entityList.getClassesDetails().size());
     }
 
     @Test
     public void getClassNamesContainsCorrectnames() throws LibraryFileNotFoundException {
         var entityList = new EntityList(testLibFile);
         assertTrue(entityList.getClassesDetails().stream()
-                .anyMatch(classDetails -> "test.TestEntity".equals(classDetails.getFullName())));
+                .anyMatch(classDetails -> "test.IdEntity".equals(classDetails.getFullName())));
     }
 
     @Test
     public void getEntity() throws LibraryFileNotFoundException {
         var entityList = new EntityList(testLibFile);
-        assertNotNull(entityList.getEntity("test.TestEntity"));
+        assertNotNull(entityList.getEntity("test.IdEntity"));
     }
 
     @Test
