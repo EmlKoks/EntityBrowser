@@ -6,19 +6,19 @@ import emlkoks.entitybrowser.session.entity.ClassDetails;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.IdEntity;
+import test.EntityWithInteger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SearchServiceTest {
     private TestProvider provider;
-    private ClassDetails classDetails = new ClassDetails(IdEntity.class);
+    private ClassDetails classDetails = new ClassDetails(EntityWithInteger.class);
     private SearchService searchService;
 
     @Before
     public void initalize() {
-        provider = new TestProvider(IdEntity.class);
+        provider = new TestProvider(EntityWithInteger.class);
         searchService = new SearchService(provider.getProvider());
     }
 
@@ -27,7 +27,6 @@ public class SearchServiceTest {
         var transaction = provider.getProvider().getEntityManager().getTransaction();
         if (transaction.isActive()) {
             transaction.rollback();
-            transaction.begin();
         }
     }
 

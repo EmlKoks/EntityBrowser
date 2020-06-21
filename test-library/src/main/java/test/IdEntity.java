@@ -1,14 +1,6 @@
 package test;
 
-import lombok.Setter;
+public interface IdEntity {
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
-@Setter
-public class IdEntity {
-
-    @Id
-    private Long id;
+    void setId(Long id);
 }

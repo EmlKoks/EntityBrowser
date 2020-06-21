@@ -11,7 +11,7 @@ import java.util.Set;
 import javax.persistence.criteria.Path;
 import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
 import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import test.EntityWithBoolean;
 
@@ -22,14 +22,15 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class BooleanComparatorTest {
-    private Comparator comparator = new BooleanComparator();
-    private JpaProvider provider;
-    private Path fieldPath;
+    private static Comparator comparator;
+    private static JpaProvider provider;
+    private static Path fieldPath;
 
-    @Before
-    public void init() {
+    @BeforeClass
+    public static void init() {
         provider = new TestProvider(EntityWithBoolean.class).getProvider();
         fieldPath = UtilClass.buildPath(provider.getCriteriaBuilder(), EntityWithBoolean.class, "testBoolean");
+        comparator = new BooleanComparator();
     }
 
     @Test

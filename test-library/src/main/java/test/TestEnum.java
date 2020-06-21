@@ -1,5 +1,5 @@
 package test;
 
 public enum  TestEnum {
-    A, B
+    A, B, C
 }

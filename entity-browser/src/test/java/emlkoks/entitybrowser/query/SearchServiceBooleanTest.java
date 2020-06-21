@@ -1,15 +1,13 @@
-package emlkoks.entitybrowser.query.comparator;
+package emlkoks.entitybrowser.query;
 
 import emlkoks.entitybrowser.connection.provider.TestProvider;
-import emlkoks.entitybrowser.query.FieldFilter;
-import emlkoks.entitybrowser.query.SearchService;
+import emlkoks.entitybrowser.query.comparator.ComparationType;
 import emlkoks.entitybrowser.session.entity.ClassDetails;
 import emlkoks.entitybrowser.session.entity.FieldProperty;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import test.EntityWithBoolean;
-
-import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 

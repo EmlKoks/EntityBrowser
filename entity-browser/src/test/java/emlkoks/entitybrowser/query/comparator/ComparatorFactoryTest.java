@@ -18,6 +18,18 @@ public class ComparatorFactoryTest {
         Main.resources = ResourceBundle.getBundle("lang.lang", new Locale("pl"));
     }
 
+    @Test(expected = ComparatorNotFoundException.class)
+    public void notFoundComparator() {
+        class Test {
+            class NewType { }
+
+            private NewType newType;
+        }
+
+        var classDetails = new ClassDetails(Test.class);
+        ComparatorFactory.getComparator(classDetails.getFieldProperty("newType"));
+    }
+
     @Test
     public void getBooleanComparator() {
         class Test {

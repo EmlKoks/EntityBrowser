@@ -20,7 +20,7 @@ public class NumberComparator extends Comparator {
         comparationTypes.add(ComparationType.GREATER_OR_EQUAL);
         comparationTypes.add(ComparationType.LESS);
         comparationTypes.add(ComparationType.LESS_OR_EQUAL);
-//        expressions.add(new BetweenExpression());//Remove?
+        comparationTypes.add(ComparationType.BETWEEN);
     }
 
     @Override
@@ -46,13 +46,17 @@ public class NumberComparator extends Comparator {
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             case GREATER:
-                //TODO
+                return cb.greaterThan(attributePath, (Comparable) fieldFilter.getValue());
             case GREATER_OR_EQUAL:
-                //TODO
+                return cb.greaterThanOrEqualTo(attributePath, (Comparable) fieldFilter.getValue());
             case LESS:
-                //TODO
+                return cb.lessThan(attributePath, (Comparable) fieldFilter.getValue());
             case LESS_OR_EQUAL:
-                //TODO
+                return cb.lessThanOrEqualTo(attributePath, (Comparable) fieldFilter.getValue());
+            case BETWEEN:
+                var from = (Comparable) fieldFilter.getValue(0);
+                var to = (Comparable) fieldFilter.getValue(1);
+                return cb.between(attributePath, from, to);
             default:
                 throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
         }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
 import org.junit.Before;
 import org.junit.Test;
-import test.IdEntity;
+import test.EntityWithInteger;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,17 +20,17 @@ public class QueryBuilderTest {
 
     @Before
     public void init() {
-        provider = new TestProvider(IdEntity.class).getProvider();
-        classDetails = new ClassDetails(IdEntity.class);
+        provider = new TestProvider(EntityWithInteger.class).getProvider();
+        classDetails = new ClassDetails(EntityWithInteger.class);
         idProperty = classDetails.getFieldProperty("id");
     }
 
     @Test
     public void getCriteriaQueryWithoutFilters() {
-        ClassDetails classDetails = new ClassDetails(IdEntity.class);
+        ClassDetails classDetails = new ClassDetails(EntityWithInteger.class);
         QueryBuilder queryBuilder = new QueryBuilder(provider.getCriteriaBuilder(), classDetails, null);
         var criteriaQuery = queryBuilder.buildCriteriaQuery();
-        assertEquals(IdEntity.class, criteriaQuery.getResultType());
+        assertEquals(EntityWithInteger.class, criteriaQuery.getResultType());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class QueryBuilderTest {
         QueryBuilder queryBuilder =
                 new QueryBuilder(provider.getCriteriaBuilder(), classDetails, Arrays.asList(fieldFilter));
         var criteriaQuery = queryBuilder.buildCriteriaQuery();
-        assertEquals(IdEntity.class, criteriaQuery.getResultType());
+        assertEquals(EntityWithInteger.class, criteriaQuery.getResultType());
         assertEquals(1, criteriaQuery.getRestriction().getExpressions().size());
         var predicate = (ComparisonPredicate) criteriaQuery.getRestriction().getExpressions().get(0);
         assertEquals(ComparisonPredicate.ComparisonOperator.EQUAL, predicate.getComparisonOperator());
@@ -52,7 +52,7 @@ public class QueryBuilderTest {
         QueryBuilder queryBuilder = new QueryBuilder(provider.getCriteriaBuilder(), classDetails,
                 Arrays.asList(fieldFilter, fieldFilter2));
         var criteriaQuery = queryBuilder.buildCriteriaQuery();
-        assertEquals(IdEntity.class, criteriaQuery.getResultType());
+        assertEquals(EntityWithInteger.class, criteriaQuery.getResultType());
         assertEquals(2, criteriaQuery.getRestriction().getExpressions().size());
         var predicate1 = (ComparisonPredicate) criteriaQuery.getRestriction().getExpressions().get(0);
         assertEquals(ComparisonPredicate.ComparisonOperator.EQUAL, predicate1.getComparisonOperator());

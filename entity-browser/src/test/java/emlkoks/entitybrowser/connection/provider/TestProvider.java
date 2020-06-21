@@ -2,12 +2,11 @@ package emlkoks.entitybrowser.connection.provider;
 
 import emlkoks.entitybrowser.connection.ConnectionTest;
 import emlkoks.entitybrowser.session.entity.EntityList;
-import lombok.Getter;
-import test.IdEntity;
-
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
+import lombok.Getter;
+import test.IdEntity;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.when;
 public class TestProvider {
     @Getter
     private JpaProvider provider;
-    private Class entityClass;
+    private Class<? extends IdEntity> entityClass;
 
     public TestProvider(Class<? extends IdEntity> testedClass) {
         entityClass = testedClass;
@@ -44,8 +43,8 @@ public class TestProvider {
                 .mapToObj(i -> {
                     IdEntity entity = null;
                     try {
-                        entity = (IdEntity) entityClass.newInstance();
-                    } catch (InstantiationException|IllegalAccessException e) {
+                        entity = entityClass.newInstance();
+                    } catch (InstantiationException | IllegalAccessException e) {
                         e.printStackTrace();
                     }
                     entity.setId(i);

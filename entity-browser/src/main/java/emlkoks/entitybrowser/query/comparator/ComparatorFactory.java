@@ -22,6 +22,6 @@ public class ComparatorFactory {
         return comparators.stream()
                 .filter(comparator -> comparator.canUseForClass(fieldProperty.getType()))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new ComparatorNotFoundException(fieldProperty.getType()));
     }
 }

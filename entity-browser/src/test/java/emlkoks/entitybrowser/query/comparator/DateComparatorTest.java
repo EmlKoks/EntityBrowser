@@ -9,9 +9,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.criteria.Path;
+
+import org.hibernate.jpa.criteria.predicate.BetweenPredicate;
 import org.hibernate.jpa.criteria.predicate.ComparisonPredicate;
 import org.hibernate.jpa.criteria.predicate.NullnessPredicate;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import test.EntityWithDate;
@@ -23,14 +25,15 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class DateComparatorTest {
-    private Comparator comparator = new DateComparator();
-    private JpaProvider provider;
-    private Path fieldPath;
+    private static Comparator comparator;
+    private static JpaProvider provider;
+    private static Path fieldPath;
 
-    @Before
-    public void init() {
+    @BeforeClass
+    public static void init() {
         provider = new TestProvider(EntityWithDate.class).getProvider();
         fieldPath = UtilClass.buildPath(provider.getCriteriaBuilder(), EntityWithDate.class, "testDate");
+        comparator = new DateComparator();
     }
 
     @Test
@@ -84,7 +87,6 @@ public class DateComparatorTest {
         assertEquals(ComparisonPredicate.ComparisonOperator.NOT_EQUAL, predicate.getComparisonOperator());
     }
 
-    @Ignore("TODO")
     @Test
     public void createGreaterPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
@@ -93,16 +95,14 @@ public class DateComparatorTest {
         assertEquals(ComparisonPredicate.ComparisonOperator.GREATER_THAN, predicate.getComparisonOperator());
     }
 
-    @Ignore("TODO")
     @Test
     public void createGreaterOrEqualPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.GREATER_OR_EQUAL, null, null);
         var predicate =
                 (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.GREATER_THAN_OR_EQUAL, predicate.getComparisonOperator());
     }
 
-    @Ignore("TODO")
     @Test
     public void createLessPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.LESS, null, null);
@@ -111,7 +111,6 @@ public class DateComparatorTest {
         assertEquals(ComparisonPredicate.ComparisonOperator.LESS_THAN, predicate.getComparisonOperator());
     }
 
-    @Ignore("TODO")
     @Test
     public void createLessOrEqualPredicate() {
         var fieldFilter = new FieldFilter(ComparationType.LESS_OR_EQUAL, null, null);
@@ -120,13 +119,11 @@ public class DateComparatorTest {
         assertEquals(ComparisonPredicate.ComparisonOperator.LESS_THAN_OR_EQUAL, predicate.getComparisonOperator());
     }
 
-    @Ignore("TODO")
     @Test
     public void createBetweenPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.BETWEEN, null, null);
-        var predicate =
-                (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
-//        assertEquals(ComparisonPredicate.ComparisonOperator., predicate.getComparisonOperator());TODO
+        var fieldFilter = new FieldFilter(ComparationType.BETWEEN, null, 1, 2);
+        var predicate = comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
+        assertThat(predicate, instanceOf(BetweenPredicate.class));
     }
 
     @Test(expected = ComparationTypeNotAllowedException.class)

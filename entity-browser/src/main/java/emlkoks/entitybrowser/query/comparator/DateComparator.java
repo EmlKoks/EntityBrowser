@@ -1,6 +1,9 @@
 package emlkoks.entitybrowser.query.comparator;
 
 import emlkoks.entitybrowser.query.FieldFilter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
@@ -26,7 +29,9 @@ public class DateComparator extends Comparator {
 
     @Override
     public boolean canUseForClass(Class<?> clazz) {
-        return Date.class.isAssignableFrom(clazz); //TODO add other data types like DataTime LocalDataTime
+        return Date.class.isAssignableFrom(clazz)
+                || LocalDate.class.isAssignableFrom(clazz)
+                || LocalDateTime.class.isAssignableFrom(clazz); //TODO add other data types like DataTime
     }
 
     @Override
@@ -42,15 +47,17 @@ public class DateComparator extends Comparator {
             case NOT_EQUAL:
                 return cb.notEqual(attributePath, fieldFilter.getValue());
             case GREATER:
-                //TODO
+                return cb.greaterThan(attributePath, (Comparable) fieldFilter.getValue());
             case GREATER_OR_EQUAL:
-                //TODO
+                return cb.greaterThanOrEqualTo(attributePath, (Comparable) fieldFilter.getValue());
             case LESS:
-                //TODO
+                return cb.lessThan(attributePath, (Comparable) fieldFilter.getValue());
             case LESS_OR_EQUAL:
-                //TODO
+                return cb.lessThanOrEqualTo(attributePath, (Comparable) fieldFilter.getValue());
             case BETWEEN:
-                //TODO
+                var from = (Comparable) fieldFilter.getValue(0);
+                var to = (Comparable) fieldFilter.getValue(1);
+                return cb.between(attributePath, from, to);
             default:
                 throw new ComparationTypeNotAllowedException(fieldFilter.getComparationType(), this);
         }

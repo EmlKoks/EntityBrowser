@@ -5,7 +5,7 @@ package emlkoks.entitybrowser.query.comparator;
  */
 public class ComparatorNotFoundException extends RuntimeException {
 
-    ComparatorNotFoundException(String message) {
-        super(message);
+    ComparatorNotFoundException(Class<?> type) {
+        super("Not found Comparator for type " + type.getName());
     }
 }

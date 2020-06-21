@@ -1,9 +1,18 @@
 package test;
 
+import java.time.LocalDate;
 import javax.persistence.Entity;
-import java.util.Date;
+import javax.persistence.Id;
+import lombok.Setter;
 
 @Entity
-public class EntityWithDate extends IdEntity{
-    private Date testDate;
+@Setter
+public class EntityWithDate implements IdEntity {
+    @Id
+    private Long id;
+    private LocalDate testDate;
+
+    public EntityWithDate(LocalDate testDate) {
+        this.testDate = testDate;
+    }
 }
