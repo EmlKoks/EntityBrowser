@@ -30,6 +30,9 @@ public class SessionTest {
     public void connectSesion() throws LibraryFileNotFoundException {
         var session = new Session(HibernateProviderTest.createH2ConnectionWithTestLibrary());
         assertTrue(session.connect());
+        assertNotNull(session.getProvider());
+        assertNotNull(session.getClasses());
+        assertNotNull(session.getEntity("test.EntityWithInteger"));
     }
 
 }

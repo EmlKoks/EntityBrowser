@@ -3,6 +3,7 @@ package emlkoks.entitybrowser.query.comparator;
 import emlkoks.entitybrowser.connection.provider.JpaProvider;
 import emlkoks.entitybrowser.connection.provider.TestProvider;
 import emlkoks.entitybrowser.query.FieldFilter;
+import emlkoks.entitybrowser.session.entity.FieldProperty;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -20,11 +21,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class CharacterComparatorTest {
     private static Comparator comparator;
     private static JpaProvider provider;
     private static Path fieldPath;
+    private FieldProperty fieldProperty = mock(FieldProperty.class);
 
     @BeforeClass
     public static void init() {
@@ -56,21 +59,21 @@ public class CharacterComparatorTest {
 
     @Test
     public void createNullPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.IS_NULL, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.IS_NULL, fieldProperty);
         var predicate = comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertThat(predicate, instanceOf(NullnessPredicate.class));
     }
 
     @Test
     public void createNotNullPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.IS_NOT_NULL, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.IS_NOT_NULL, fieldProperty);
         var predicate = comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertTrue(predicate.isNegated());
     }
 
     @Test
     public void createEqualPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.EQUAL, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.EQUAL, fieldProperty);
         var predicate =
                 (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.EQUAL, predicate.getComparisonOperator());
@@ -78,7 +81,7 @@ public class CharacterComparatorTest {
 
     @Test
     public void createNotEqualPredicate() {
-        var fieldFilter = new FieldFilter(ComparationType.NOT_EQUAL, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.NOT_EQUAL, fieldProperty);
         var predicate =
                 (ComparisonPredicate) comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
         assertEquals(ComparisonPredicate.ComparisonOperator.NOT_EQUAL, predicate.getComparisonOperator());
@@ -86,37 +89,37 @@ public class CharacterComparatorTest {
 
     @Test(expected = ComparationTypeNotAllowedException.class)
     public void createWrongPredicateForContains() {
-        var fieldFilter = new FieldFilter(ComparationType.CONTAINS, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.CONTAINS, fieldProperty);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 
     @Test(expected = ComparationTypeNotAllowedException.class)
     public void createWrongPredicateForBetween() {
-        var fieldFilter = new FieldFilter(ComparationType.BETWEEN, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.BETWEEN, fieldProperty);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 
     @Test(expected = ComparationTypeNotAllowedException.class)
     public void createWrongPredicateForGreater() {
-        var fieldFilter = new FieldFilter(ComparationType.GREATER, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.GREATER, fieldProperty);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 
     @Test(expected = ComparationTypeNotAllowedException.class)
     public void createWrongPredicateForLess() {
-        var fieldFilter = new FieldFilter(ComparationType.LESS, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.LESS, fieldProperty);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 
     @Test(expected = ComparationTypeNotAllowedException.class)
     public void createWrongPredicateForGreaterOrEqual() {
-        var fieldFilter = new FieldFilter(ComparationType.GREATER_OR_EQUAL, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.GREATER_OR_EQUAL, fieldProperty);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 
     @Test(expected = ComparationTypeNotAllowedException.class)
     public void createWrongPredicateForLessOrEqual() {
-        var fieldFilter = new FieldFilter(ComparationType.LESS_OR_EQUAL, null, null);
+        var fieldFilter = new FieldFilter(ComparationType.LESS_OR_EQUAL, fieldProperty);
         comparator.createPredicate(provider.getCriteriaBuilder(), fieldPath, fieldFilter);
     }
 

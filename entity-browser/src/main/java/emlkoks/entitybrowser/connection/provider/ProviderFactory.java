@@ -16,7 +16,8 @@ public class ProviderFactory {
                 return new HibernateProvider(connection);
             case EclipseLink:
                 return new EclipseLinkProvider(connection);
+            default:
+                throw new RuntimeException("Provider not found");
         }
-        throw new RuntimeException();
     }
 }

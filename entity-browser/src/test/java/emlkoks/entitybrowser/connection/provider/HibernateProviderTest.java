@@ -108,6 +108,12 @@ public class HibernateProviderTest {
         assertNotNull(provider.getEntityManager());
     }
 
+    @Test(expected = ProviderNotConnectedException.class)
+    public void getEntityManagerBeforeConnection() {
+        JpaProvider provider = new HibernateProvider(ConnectionTest.createH2Connection());
+        assertNotNull(provider.getEntityManager());
+    }
+
     @Test
     public void getCriteriaBuilder() throws LibraryFileNotFoundException {
         JpaProvider provider = new HibernateProvider(ConnectionTest.createH2Connection());
